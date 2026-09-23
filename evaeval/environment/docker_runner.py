@@ -50,20 +50,73 @@ class DockerRunner:
     def is_docker_active(self) -> bool:
         return self._docker_available and self.container_id is not None
 
+    def validate_container_isolation(self, extra_volumes: Optional[List[str]] = None) -> None:
+        """Enforce strict sandbox security and anti-tamper invariants.
+
+        Invariants enforced:
+        1. Non-root user: Container must run under an unprivileged user (not root/0).
+        2. Network disabled: Container network must be strictly 'none'.
+        3. Cgroup caps: Memory, CPU, and PID limits must be defined and enforced.
+        4. No Docker socket: /var/run/docker.sock or docker daemon pipes must NEVER be mounted.
+        5. Workspace mounted rw but scoring volume absent: Only workspace is rw; scoring volume absent.
+        """
+        # 1. Non-root user check
+        user_str = str(self.config.user).strip().lower()
+        if user_str in ("0", "root", "0:0"):
+            raise PermissionError("SECURITY VIOLATION: Agent container must run as a non-root user.")
+
+        # 2. Network disabled check
+        if self.config.network != "none":
+            raise PermissionError(f"SECURITY VIOLATION: Network isolation violated: network={self.config.network} (must be 'none').")
+
+        # 3. Cgroup caps check
+        if not self.config.mem or self.config.cpus <= 0 or self.config.pids_limit <= 0:
+            raise ValueError("SECURITY VIOLATION: Cgroup caps (mem, cpus, pids_limit) must be strictly defined.")
+
+        # 4. No Docker socket check
+        forbidden_mounts = ["docker.sock", "/var/run/docker.sock", "docker_engine"]
+        all_mounts = [str(self.workspace_dir)] + (extra_volumes or [])
+        for m in all_mounts:
+            for forbidden in forbidden_mounts:
+                if forbidden in m:
+                    raise PermissionError(f"SECURITY VIOLATION: Docker socket mounting is strictly forbidden: '{m}'")
+
+        # 5. Scoring volume absent check
+        forbidden_scoring_targets = ["hidden_scorer", "eval_harness", "scoring_volume", "test_gt"]
+        for m in all_mounts:
+            for forbidden in forbidden_scoring_targets:
+                if forbidden in m and "/workspace" not in m:
+                    raise PermissionError(f"SECURITY VIOLATION: Scoring volume must be absent from agent sandbox: '{m}'")
+
+    def build_docker_run_args(self) -> List[str]:
+        """Construct canonical docker run command enforcing all security locks."""
+        self.validate_container_isolation()
+        cmd = [
+            "docker", "run", "-d",
+            "--user", self.config.user,
+            "--network", self.config.network,
+            "--memory", self.config.mem,
+            f"--cpus={self.config.cpus}",
+            f"--pids-limit={self.config.pids_limit}",
+        ]
+        if self.config.no_new_privileges:
+            cmd.extend(["--security-opt", "no-new-privileges:true"])
+        for cap in self.config.cap_drop:
+            cmd.append(f"--cap-drop={cap}")
+        cmd.extend([
+            "-v", f"{str(self.workspace_dir)}:/workspace:rw",
+            "-w", "/workspace",
+            self.config.image,
+            "tail", "-f", "/dev/null",
+        ])
+        return cmd
+
     def start(self) -> None:
         """Start container if Docker is available, else prepare workspace."""
+        self.validate_container_isolation()
         if self._docker_available:
             try:
-                cmd = [
-                    "docker", "run", "-d",
-                    "--network", self.config.network,
-                    "--memory", self.config.mem,
-                    f"--cpus={self.config.cpus}",
-                    "-v", f"{str(self.workspace_dir)}:/workspace",
-                    "-w", "/workspace",
-                    self.config.image,
-                    "tail", "-f", "/dev/null",
-                ]
+                cmd = self.build_docker_run_args()
                 proc = subprocess.run(cmd, capture_output=True, text=True, check=True)
                 self.container_id = proc.stdout.strip()
             except Exception:

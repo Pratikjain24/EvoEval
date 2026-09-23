@@ -7,12 +7,18 @@ services:
       dockerfile: docker/Dockerfile.sandbox
     image: evo-sandbox:1.0
     container_name: evo_sandbox
+    user: "1000:1000"
     network_mode: "none"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
     deploy:
       resources:
         limits:
           cpus: "2.0"
           memory: 4096M
+          pids: 256
     volumes:
       - ../experiments/sandbox_ws:/workspace:rw
 

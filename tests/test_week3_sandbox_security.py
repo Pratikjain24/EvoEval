@@ -472,3 +472,97 @@ index e69de29..0000000
     assert eval_score.ground_truth_score == 0.0
     assert eval_score.tamper_report.is_tampered is True
 
+
+def test_locked_sandbox_anti_tamper_isolation_invariants(temp_workspace: Path):
+    """Quality Gate: Locked sandbox isolation requirements.
+    
+    1. Non-root user: Container runs as unprivileged user (1000:1000 / evaluser), root rejected.
+    2. Network disabled: network="none" strictly enforced; non-none rejected.
+    3. Cgroup caps: CPU, memory, and pids limits enforced.
+    4. No Docker socket: /var/run/docker.sock mounting strictly rejected; docker commands blocked.
+    5. Workspace mounted rw but scoring volume absent: Only workspace is rw; scoring volume absent.
+    """
+    cfg = SandboxConfig(
+        image="evo-sandbox:1.0",
+        user="1000:1000",
+        mem="4g",
+        cpus=2.0,
+        pids_limit=256,
+        network="none",
+        no_new_privileges=True,
+        cap_drop=["ALL"],
+    )
+    monitor = SafetyMonitor(strict_mode=True)
+    runner = DockerRunner(config=cfg, workspace_dir=temp_workspace, safety_monitor=monitor)
+
+    # 1. Non-root user validation
+    assert runner.config.user == "1000:1000"
+    runner_root = DockerRunner(
+        config=SandboxConfig(user="0"),
+        workspace_dir=temp_workspace,
+    )
+    with pytest.raises(PermissionError, match="non-root user"):
+        runner_root.validate_container_isolation()
+
+    runner_root_name = DockerRunner(
+        config=SandboxConfig(user="root"),
+        workspace_dir=temp_workspace,
+    )
+    with pytest.raises(PermissionError, match="non-root user"):
+        runner_root_name.validate_container_isolation()
+
+    # 2. Network disabled validation
+    assert runner.config.network == "none"
+    runner_bridge = DockerRunner(
+        config=SandboxConfig(network="bridge"),
+        workspace_dir=temp_workspace,
+    )
+    with pytest.raises(PermissionError, match="Network isolation violated"):
+        runner_bridge.validate_container_isolation()
+
+    # 3. Cgroup caps validation
+    args = runner.build_docker_run_args()
+    assert "--user" in args and "1000:1000" in args
+    assert "--network" in args and "none" in args
+    assert "--memory" in args and "4g" in args
+    assert f"--cpus={runner.config.cpus}" in args
+    assert f"--pids-limit={runner.config.pids_limit}" in args
+    assert "--security-opt" in args and "no-new-privileges:true" in args
+    assert "--cap-drop=ALL" in args
+
+    runner_nocap = DockerRunner(
+        config=SandboxConfig(cpus=0.0),
+        workspace_dir=temp_workspace,
+    )
+    with pytest.raises(ValueError, match="Cgroup caps"):
+        runner_nocap.validate_container_isolation()
+
+    # 4. No Docker socket validation
+    with pytest.raises(PermissionError, match="Docker socket"):
+        runner.validate_container_isolation(extra_volumes=["/var/run/docker.sock:/var/run/docker.sock"])
+
+    with pytest.raises(PermissionError, match="Docker socket"):
+        runner.validate_container_isolation(extra_volumes=["docker.sock"])
+
+    # SafetyMonitor blocks commands touching docker.sock or docker CLI
+    res = runner.exec_command("docker run -v /:/host alpine cat /host/etc/shadow")
+    assert res["blocked"] is True
+    assert res["exit_code"] == 126
+    assert "SECURITY BLOCK" in res["stderr"]
+
+    res_sock = runner.exec_command("curl --unix-socket /var/run/docker.sock http://localhost/containers/json")
+    assert res_sock["blocked"] is True
+    assert res_sock["exit_code"] == 126
+
+    # 5. Workspace mounted rw but scoring volume absent
+    workspace_mount = f"{str(temp_workspace)}:/workspace:rw"
+    assert any(workspace_mount in arg for arg in args)
+    # Ensure no hidden scorer or evaluation harness volume is present in args
+    assert not any("hidden_scorer" in arg for arg in args)
+    assert not any("eval_harness" in arg for arg in args)
+    assert not any("scoring_volume" in arg for arg in args)
+
+    with pytest.raises(PermissionError, match="Scoring volume must be absent"):
+        runner.validate_container_isolation(extra_volumes=["/data/eval_harness:/eval_harness:ro"])
+
+

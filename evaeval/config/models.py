@@ -21,12 +21,16 @@ class ModelConfig(BaseModel):
 class SandboxConfig(BaseModel):
     """Execution sandbox constraints and isolation settings."""
     image: str = "evo-sandbox:1.0"
+    user: str = "1000:1000"
     mem: str = "4g"
-    cpus: int = 2
+    cpus: float = 2.0
+    pids_limit: int = 256
     network: Literal["none", "host", "bridge"] = "none"
     max_steps: int = 15
     timeout_sec: int = 60
     read_only_root: bool = False
+    cap_drop: List[str] = Field(default_factory=lambda: ["ALL"])
+    no_new_privileges: bool = True
     allow_local_fallback: bool = True
 
 
