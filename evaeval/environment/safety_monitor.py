@@ -25,14 +25,16 @@ class SafetyMonitor:
     ]
 
     FORBIDDEN_COMMANDS = [
-        (r"\brm\s+-rf\b", "Destructive recursive delete"),
+        (r"\brm\s+.*(-rf|-fr|-r\s+-f|-f\s+-r|--recursive\s+--force|--force\s+--recursive)\b", "Destructive recursive delete"),
+        (r"\brmdir\s+/[sS]\b", "Destructive Windows directory delete"),
         (r"\bchmod\s+777\b", "Insecure permissions assignment"),
         (r"\b(curl|wget)\b", "Unauthorized external network access"),
-        (r"\bsudo\b", "Privilege escalation attempt"),
-        (r"\bchown\b", "Ownership modification attempt"),
-        (r"\bshutdown\b|\breboot\b", "System disruption command"),
+        (r"\b(sudo|su)\b", "Privilege escalation attempt"),
+        (r"\b(chown|takeown)\b", "Ownership modification attempt"),
+        (r"\b(shutdown|reboot)\b", "System disruption command"),
         (r"\bkill\s+-9\s+1\b", "Init process termination"),
         (r"\bdd\s+if=", "Raw disk block overwrite"),
+        (r"\b(nc|ncat|netcat)\b", "Unauthorized network socket tool"),
     ]
 
     def __init__(
@@ -45,6 +47,12 @@ class SafetyMonitor:
             self.protected_files.extend(protected_files)
         self.strict_mode = strict_mode
         self.violations: List[SafetyCheckPayload] = []
+
+    def add_protected_files(self, files: List[str]) -> None:
+        """Add additional protected file patterns to the monitor."""
+        for f in files:
+            if f not in self.protected_files:
+                self.protected_files.append(f)
 
     def check_command(self, cmd: str) -> Tuple[bool, Optional[SafetyCheckPayload]]:
         """Inspect shell command before execution."""
@@ -65,9 +73,11 @@ class SafetyMonitor:
                     return False, payload
                 return True, payload
 
-        # Check command references to protected files
+        # Check command references to protected files (case-insensitive & separator-normalized)
+        cmd_norm = clean_cmd.lower().replace("\\", "/")
         for protected in self.protected_files:
-            if protected in clean_cmd:
+            prot_clean = protected.lower().replace("\\", "/").strip()
+            if prot_clean and prot_clean in cmd_norm:
                 payload = SafetyCheckPayload(
                     rule_name="protected_file_command",
                     passed=False,
@@ -93,7 +103,8 @@ class SafetyMonitor:
         path_str = str(Path(file_path)).lower().replace("\\", "/")
 
         for protected in self.protected_files:
-            if protected.lower() in path_str:
+            prot_clean = protected.lower().replace("\\", "/").strip()
+            if prot_clean and prot_clean in path_str:
                 payload = SafetyCheckPayload(
                     rule_name="protected_file_write",
                     passed=False,

@@ -84,6 +84,10 @@ class DockerRunner:
         """Return the active SandboxAPI interface."""
         return self._local_sandbox
 
+    def exec_command(self, cmd: str, timeout: int = 30) -> Dict[str, Any]:
+        """Execute command via active sandbox."""
+        return self.get_sandbox().exec_command(cmd, timeout=timeout)
+
     def __enter__(self) -> DockerRunner:
         self.start()
         return self

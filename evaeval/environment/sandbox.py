@@ -28,10 +28,19 @@ class LocalSandbox:
         self.safety_monitor = safety_monitor or SafetyMonitor()
         self.max_file_size_bytes = max_file_size_bytes
 
-    def _resolve_safe_path(self, relative_path: str) -> Path:
+    def _resolve_safe_path(self, relative_path: str | Path) -> Path:
         """Resolve path and ensure it remains strictly within workspace boundary."""
-        # Normalize and remove leading slashes
-        clean_rel = os.path.normpath(relative_path).lstrip("/\\")
+        p = Path(relative_path)
+        if p.is_absolute():
+            try:
+                target = p.resolve()
+                target.relative_to(self.workspace_dir)
+                return target
+            except ValueError:
+                raise SandboxConfinementError(
+                    f"Path traversal detected: absolute path '{relative_path}' escapes workspace '{self.workspace_dir}'"
+                )
+        clean_rel = os.path.normpath(str(relative_path)).lstrip("/\\")
         target = (self.workspace_dir / clean_rel).resolve()
         try:
             target.relative_to(self.workspace_dir)
@@ -40,6 +49,11 @@ class LocalSandbox:
                 f"Path traversal detected: '{relative_path}' escapes workspace '{self.workspace_dir}'"
             )
         return target
+
+    def get_diff(self) -> str:
+        """Return git diff of changes in the sandbox workspace."""
+        res = self.exec_command("git diff", timeout=10)
+        return res.get("stdout", "") if res.get("exit_code") == 0 else ""
 
     def exec_command(self, cmd: str, timeout: int = 30) -> Dict[str, Any]:
         """Execute a shell command inside the workspace directory."""

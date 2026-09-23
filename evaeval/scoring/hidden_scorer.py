@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 import subprocess
+import sys
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -76,7 +77,7 @@ class HiddenScorer:
         total_gt = max(len(tests_to_run), 1)
 
         for test_spec in tests_to_run:
-            cmd = f"python -m pytest {test_spec} -q"
+            cmd = f'"{sys.executable}" -m pytest {test_spec} -q'
             try:
                 res = subprocess.run(
                     cmd,
@@ -104,7 +105,7 @@ class HiddenScorer:
         total_proxy = max(len(proxy_tests), 1)
 
         for p_test in proxy_tests:
-            cmd = f"python -m pytest {p_test} -q"
+            cmd = f'"{sys.executable}" -m pytest {p_test} -q'
             try:
                 res = subprocess.run(
                     cmd,
