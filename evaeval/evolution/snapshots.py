@@ -1,8 +1,7 @@
-"""Agent state snapshots and git/content-addressable versioning."""
-
 from __future__ import annotations
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from evaeval.adapters.base import AgentState
@@ -36,11 +35,61 @@ class SnapshotManager:
         data = state.model_dump_json()
         return hashlib.sha256(data.encode("utf-8")).hexdigest()
 
+    def init_git_repo(self) -> bool:
+        """Initialize git tracking on the agent state directory for diffable auditing."""
+        git_dir = self.root_dir / ".git"
+        if not git_dir.exists():
+            try:
+                subprocess.run(["git", "init"], cwd=str(self.root_dir), capture_output=True, check=True)
+                subprocess.run(["git", "config", "user.name", "EvoEval Agent"], cwd=str(self.root_dir), capture_output=True)
+                subprocess.run(["git", "config", "user.email", "agent@evoeval.org"], cwd=str(self.root_dir), capture_output=True)
+                return True
+            except Exception:
+                return False
+        return True
+
+    def create_git_tag(self, version_tag: str, message: Optional[str] = None) -> bool:
+        """Stage, commit, and create an annotated git tag (e.g. agent_v0, agent_v1)."""
+        try:
+            self.init_git_repo()
+            subprocess.run(["git", "add", "."], cwd=str(self.root_dir), capture_output=True)
+            subprocess.run(
+                ["git", "commit", "-m", f"Checkpoint {version_tag}"],
+                cwd=str(self.root_dir),
+                capture_output=True,
+            )
+            msg = message or f"EvoEval agent checkpoint {version_tag}"
+            proc = subprocess.run(
+                ["git", "tag", "-f", "-a", version_tag, "-m", msg],
+                cwd=str(self.root_dir),
+                capture_output=True,
+                text=True,
+            )
+            return proc.returncode == 0
+        except Exception:
+            return False
+
+    def list_git_tags(self) -> List[str]:
+        """List git tags created in the agent state repository."""
+        try:
+            res = subprocess.run(
+                ["git", "tag", "-l"],
+                cwd=str(self.root_dir),
+                capture_output=True,
+                text=True,
+            )
+            if res.returncode == 0:
+                return [t.strip() for t in res.stdout.strip().splitlines() if t.strip()]
+        except Exception:
+            pass
+        return []
+
     def create_snapshot(
         self,
         cycle: int,
         state: AgentState,
         metadata: Optional[Dict[str, Any]] = None,
+        create_git_tag: bool = True,
     ) -> str:
         """Create a versioned checkpoint tagged agent_v{cycle}."""
         version_tag = f"agent_v{cycle}"
@@ -67,6 +116,10 @@ class SnapshotManager:
         }
         self._manifest["latest"] = version_tag
         self._save_manifest()
+
+        if create_git_tag:
+            self.create_git_tag(version_tag, message=f"Evolution cycle {cycle} state")
+
         return version_tag
 
     def load_snapshot(self, version_tag: str) -> Optional[AgentState]:

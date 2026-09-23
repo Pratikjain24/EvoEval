@@ -1,6 +1,5 @@
-"""Group G4: Reflection & Self-Patching Agent Adapter."""
-
 from __future__ import annotations
+import sys
 import time
 from typing import Any, Dict, Optional
 from evaeval.adapters.base import (
@@ -66,12 +65,13 @@ class ReflectionAgentAdapter(AgentAdapter):
             pass
 
         # Execute
-        exec_res = sandbox.exec_command("python -m pytest || true", timeout=25)
+        pytest_cmd = f'"{sys.executable}" -m pytest -q'
+        exec_res = sandbox.exec_command(pytest_cmd, timeout=25)
         tool_records.append(
             ToolCallRecord(
                 tool_name="exec_command",
-                arguments={"cmd": "python -m pytest || true"},
-                output=exec_res.get("stdout", "")[:500],
+                arguments={"cmd": pytest_cmd},
+                output=exec_res.get("stdout", "")[:500] or exec_res.get("stderr", "")[:500],
                 exit_code=exec_res.get("exit_code", 0),
                 duration_ms=int(exec_res.get("duration_ms", 120)),
             )
