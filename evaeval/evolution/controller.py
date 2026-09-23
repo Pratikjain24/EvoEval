@@ -1,6 +1,7 @@
 """Evolution Controller: orchestrates the between-cycles self-evolution loop."""
 
 from __future__ import annotations
+import hashlib
 import uuid
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -63,7 +64,8 @@ class EvolutionController:
         )
 
         initial_state = agent.get_state()
-        proposal_id = f"prop_{cycle}_{uuid.uuid4().hex[:6]}"
+        prop_hash = hashlib.sha256(f"{seed}_{agent.group}_{cycle}".encode("utf-8")).hexdigest()[:6]
+        proposal_id = f"prop_{cycle}_{prop_hash}"
 
         # 2. Agent proposes evolution
         outcome = agent.apply_evolution(feedback)

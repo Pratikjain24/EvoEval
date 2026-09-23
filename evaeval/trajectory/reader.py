@@ -65,3 +65,31 @@ class TrajectoryReader:
     def count(self, **kwargs) -> int:
         """Count matching events without loading everything in memory."""
         return sum(1 for _ in self.stream(**kwargs))
+
+    def compute_deterministic_bytes(
+        self,
+        include_run_id: bool = False,
+        normalize_timing: bool = True,
+    ) -> bytes:
+        """Serialize deterministic projection of all events to canonical bytes."""
+        from evaeval.trajectory.hashing import compute_deterministic_trajectory_bytes
+        return compute_deterministic_trajectory_bytes(
+            self.load_all(),
+            include_run_id=include_run_id,
+            normalize_timing=normalize_timing,
+        )
+
+    def compute_deterministic_hash(
+        self,
+        algorithm: str = "sha256",
+        include_run_id: bool = False,
+        normalize_timing: bool = True,
+    ) -> str:
+        """Compute cryptographic hash of the deterministic trajectory projection."""
+        from evaeval.trajectory.hashing import compute_deterministic_trajectory_hash
+        return compute_deterministic_trajectory_hash(
+            self.load_all(),
+            algorithm=algorithm,
+            include_run_id=include_run_id,
+            normalize_timing=normalize_timing,
+        )
