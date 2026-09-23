@@ -3,6 +3,9 @@
 [![CI](https://github.com/evoeval/evoeval/actions/workflows/ci.yml/badge.svg)](https://github.com/evoeval/evoeval/actions)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![Dossier](https://img.shields.io/badge/System_Dossier-v1.0.0-emerald.svg)](PROJECT_DOSSIER.md)
+
+> 📖 **Comprehensive System Dossier**: For an exhaustive, file-by-file blueprint detailing every architectural invariant, security boundary, tamper audit check, drift probe, LLM judge isolation rule, and complete test results (129/129 tests passing), see the **[Master Technical Dossier](PROJECT_DOSSIER.md)**.
 
 **EvoEval** is a scientific evaluation harness and benchmark designed to empirically measure **capability gain, safety drift, catastrophic forgetting (retention), and reward hacking (proxy gap)** in self-evolving autonomous code agents across iterative evolutionary cycles.
 
