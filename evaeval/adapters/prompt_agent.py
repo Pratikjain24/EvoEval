@@ -14,6 +14,7 @@ from evaeval.adapters.base import (
     TaskSpec,
     ToolCallRecord,
 )
+from evaeval.llm.client import BaseLLMClient, MockLLMClient
 
 DEFAULT_G2_PROMPT = (
     "You are an evolving software engineer assistant. "
@@ -24,12 +25,17 @@ DEFAULT_G2_PROMPT = (
 class PromptAgentAdapter(AgentAdapter):
     """G2: Rewrites its own system prompt across cycles based on task failures and feedback."""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(
+        self,
+        config: Optional[Dict[str, Any]] = None,
+        llm_client: Optional[BaseLLMClient] = None,
+    ):
         super().__init__(group="G2", config=config)
         self.system_prompt = (config or {}).get("system_prompt", DEFAULT_G2_PROMPT)
         self.initial_prompt = self.system_prompt
         self.version = "agent_v0"
         self.prompt_history: Dict[str, str] = {self.version: self.system_prompt}
+        self.llm_client = llm_client or MockLLMClient()
         self._record_state()
 
     def _record_state(self) -> None:
@@ -65,7 +71,14 @@ class PromptAgentAdapter(AgentAdapter):
         except Exception:
             pass
 
-        # Tool step 2: Execute command
+        # Tool step 2: LLM reasoning with prompt adaptation
+        messages = [
+            {"role": "system", "content": self.system_prompt},
+            {"role": "user", "content": f"Task: {task.prompt}\nCurrent code:\n{content}"},
+        ]
+        llm_resp = self.llm_client.generate(messages)
+
+        # Tool step 3: Execute command
         pytest_cmd = f'"{sys.executable}" -m pytest -q'
         exec_res = sandbox.exec_command(pytest_cmd, timeout=25)
         tool_records.append(
@@ -79,14 +92,16 @@ class PromptAgentAdapter(AgentAdapter):
         )
 
         elapsed_ms = int((time.time() - start_time) * 1000)
+        tot_tok = (llm_resp.tokens_in + llm_resp.tokens_out) or 220
+        tot_cost = llm_resp.cost_usd or 0.00045
         return TaskResult(
             task_id=task.task_id,
             success=True,
             status="completed",
             tool_calls=tool_records,
             submission="G2 prompt-adapted solution",
-            tokens_used=220,
-            cost_usd=0.00045,
+            tokens_used=tot_tok,
+            cost_usd=tot_cost,
             wall_time_ms=elapsed_ms,
         )
 

@@ -19,6 +19,7 @@ from evaeval.environment.safety_monitor import SafetyMonitor
 from evaeval.environment.task_loader import TaskLoader
 from evaeval.evolution.controller import EvolutionController
 from evaeval.evolution.verifier import EvolutionVerifier
+from evaeval.llm.client import BaseLLMClient
 from evaeval.llm.pricing import BudgetGuard
 from evaeval.scoring.hidden_scorer import EvaluationScoreResult, HiddenScorer
 from evaeval.scoring.tamper_detect import TamperReport
@@ -43,6 +44,7 @@ class ExperimentOrchestrator:
         runs_dir: Optional[Path] = None,
         max_retries: int = 2,
         retry_backoff: float = 0.2,
+        llm_client: Optional[BaseLLMClient] = None,
     ):
         self.config = config
         self.task_loader = task_loader
@@ -50,6 +52,7 @@ class ExperimentOrchestrator:
         self.runs_dir.mkdir(parents=True, exist_ok=True)
         self.max_retries = max_retries
         self.retry_backoff = retry_backoff
+        self.llm_client = llm_client
         self.budget_guard = BudgetGuard(
             max_usd_budget=config.budget.max_usd_per_run,
             max_wall_hours=config.budget.max_wall_hours,
@@ -59,9 +62,9 @@ class ExperimentOrchestrator:
     def _create_agent(self, group: str) -> AgentAdapter:
         """Instantiate agent adapter corresponding to group tag."""
         if group == "G1":
-            return StaticAgentAdapter()
+            return StaticAgentAdapter(llm_client=self.llm_client)
         elif group == "G2":
-            return PromptAgentAdapter()
+            return PromptAgentAdapter(llm_client=self.llm_client)
         elif group == "G3":
             return MemoryAgentAdapter()
         elif group == "G4":
@@ -73,7 +76,7 @@ class ExperimentOrchestrator:
             base = ReflectionAgentAdapter()
             return VerifierAgentWrapper(base, group="G6", config={"enable_rollback": True})
         else:
-            return StaticAgentAdapter()
+            return StaticAgentAdapter(llm_client=self.llm_client)
 
     def _scan_existing_trajectory(
         self, trajectory_path: Path

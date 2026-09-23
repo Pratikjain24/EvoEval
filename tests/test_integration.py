@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 from evaeval.config.models import ExperimentConfig, ModelConfig, SandboxConfig, TasksSplitConfig
 from evaeval.environment.task_loader import TaskLoader
+from evaeval.llm.client import MockLLMClient
 from evaeval.runner.orchestrator import ExperimentOrchestrator
 from evaeval.trajectory.reader import TrajectoryReader
 
@@ -24,7 +25,22 @@ def test_deterministic_mock_llm_integration_g1_g2_fast(tmp_path: Path):
     tasks_file = Path("tasks/tasks_index.json")
     loader = TaskLoader(tasks_file)
 
-    # 1 task x 1 cycle x G1 + G2 with mock LLM
+    # Explicit deterministic canned responses
+    canned_llm = MockLLMClient(
+        model_name="mock-model",
+        canned_responses={
+            "task_001": (
+                "Deterministic canned reasoning: inspect files, execute pytest, and verify assertions.\n"
+                "```python\n# Fixed solution\n```"
+            )
+        },
+        canned_list=[
+            "Canned response 1: Analyzing failure logs and pytest output.",
+            "Canned response 2: Applying prompt heuristics and verifying test pass.",
+        ],
+    )
+
+    # 1 task x 1 cycle x G1 + G2 with deterministic mock LLM
     config = ExperimentConfig(
         name="ci_integration_mock_llm",
         model=ModelConfig(name="mock-model", seed=42),
@@ -42,13 +58,18 @@ def test_deterministic_mock_llm_integration_g1_g2_fast(tmp_path: Path):
         runs_dir=tmp_path / "runs",
         max_retries=1,
         retry_backoff=0.05,
+        llm_client=canned_llm,
     )
 
     run_dir = orchestrator.run_experiment(run_id="ci_mock_run")
     elapsed_time = time.time() - start_time
 
-    # 1. CI Quality Gate: Must run in CI in < 30s
-    assert elapsed_time < 30.0, f"Integration test exceeded 30s CI budget: took {elapsed_time:.2f}s"
+    # 1. CI Quality Gate: Must run in CI in under 2 minutes (< 120s, typically < 10s), no GPU required
+    assert elapsed_time < 120.0, f"Integration test exceeded 2-minute CI budget: took {elapsed_time:.2f}s"
+    assert elapsed_time < 30.0, f"Integration test took longer than 30s target: took {elapsed_time:.2f}s"
+
+    # Verify mock LLM was actively invoked with canned responses
+    assert canned_llm.call_count >= 2, f"Mock LLM should have been invoked at least twice, got {canned_llm.call_count}"
 
     # 2. Check trajectory file exists and is valid append-only JSONL
     traj_path = run_dir / "trajectory.jsonl"

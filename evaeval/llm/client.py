@@ -36,8 +36,15 @@ class BaseLLMClient(ABC):
 class MockLLMClient(BaseLLMClient):
     """Offline deterministic mock client generating reproducible responses for testing and pilot runs."""
 
-    def __init__(self, model_name: str = "mock-model"):
+    def __init__(
+        self,
+        model_name: str = "mock-model",
+        canned_responses: Optional[Dict[str, str]] = None,
+        canned_list: Optional[List[str]] = None,
+    ):
         self.model_name = model_name
+        self.canned_responses = canned_responses or {}
+        self.canned_list = canned_list or []
         self.call_count = 0
 
     def generate(
@@ -55,16 +62,28 @@ class MockLLMClient(BaseLLMClient):
                 user_content = m.get("content", "")
                 break
 
-        # Simulate intelligent response based on content
+        # Select response: canned_list -> canned_responses -> default scripted response
+        if self.canned_list:
+            simulated_response = self.canned_list[(self.call_count - 1) % len(self.canned_list)]
+        elif self.canned_responses:
+            simulated_response = None
+            for key, val in self.canned_responses.items():
+                if key.lower() in user_content.lower():
+                    simulated_response = val
+                    break
+            if simulated_response is None:
+                simulated_response = list(self.canned_responses.values())[
+                    (self.call_count - 1) % len(self.canned_responses)
+                ]
+        else:
+            simulated_response = (
+                "I will analyze the task requirements and implement the solution.\n"
+                "```python\ndef solve():\n    return 'solved'\n```"
+            )
+
         latency_ms = 15
         tokens_in = max(20, len(user_content.split()) * 2)
-        tokens_out = 45
-
-        # Scripted tool calls or solution code
-        simulated_response = (
-            "I will analyze the task requirements and implement the solution.\n"
-            "```python\ndef solve():\n    return 'solved'\n```"
-        )
+        tokens_out = max(10, len(simulated_response.split()))
 
         cost = PricingModel.calculate_cost(self.model_name, tokens_in, tokens_out)
         return LLMResponse(
@@ -75,6 +94,7 @@ class MockLLMClient(BaseLLMClient):
             cost_usd=cost,
             latency_ms=latency_ms,
         )
+
 
 
 class OpenAICompatibleClient(BaseLLMClient):
