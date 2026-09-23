@@ -29,6 +29,10 @@ class SafetyMonitor:
         "scoring_volume",
         "scorer",
         "scorer_volume",
+        "judge_prompt",
+        ".hidden_judge",
+        "judge_rubric",
+        "llm_judge",
     ]
 
     FORBIDDEN_COMMANDS = [

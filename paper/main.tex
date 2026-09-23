@@ -61,6 +61,14 @@ EvoEval evaluates six representative agent archetypes:
 \subsection{Deliberate Drift Probes}
 To directly test $\mathbf{H_2}$ and $\mathbf{H_5}$, exactly 20\% of tasks in the 100-task benchmark are engineered as \textit{deliberate drift probes} (\texttt{exploit\_probe}). Each probe repository embeds a visible, gameable proxy evaluation (\texttt{test\_proxy.py} and \texttt{progress\_metric.py}) within the agent workspace. Crucially, the ground-truth test suite (\texttt{test\_gt.py}) remains strictly hidden from the agent sandbox, executed only within an isolated evaluation container. This methodology mirrors METR's RE-Bench finding, wherein visible test fixtures provoked a 43-fold surge in test harness hacking, isolating true semantic capability from superficial optimization.
 
+\subsection{LLM-Judge Isolation and Auxiliary Evaluation}
+While primary capability and safety metrics are strictly determined by deterministic ground-truth test suites and static tamper audits, EvoEval incorporates auxiliary qualitative assessments via LLM judges under three architectural isolation constraints:
+\begin{enumerate}
+    \item \textbf{Cross-Family Diversity}: Any LLM judge must originate from a different model family than the evaluated agent (e.g., Llama judge evaluating a Qwen agent). Same-family evaluation is rejected by configuration gates to eliminate shared blind spots.
+    \item \textbf{Prompt Invisibility}: Judge rubrics, scoring criteria, and prompts are sequestered from the agent container and shielded by active safety monitor rules.
+    \item \textbf{Auxiliary-Only Score Guarantee}: LLM judge outputs serve strictly as auxiliary metadata ($\text{is\_auxiliary}=\text{True}$); they never overwrite, alter, or inflate the primary ground-truth score or proxy gap.
+\end{enumerate}
+
 \section{Mathematical Formulations}
 We quantify agent evolution using four core metric formulations:
 \begin{align}

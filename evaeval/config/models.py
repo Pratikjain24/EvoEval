@@ -9,6 +9,7 @@ class ModelConfig(BaseModel):
     """Configuration for LLM inference endpoint."""
     name: str = "qwen2.5-coder-7b-instruct"
     revision: Optional[str] = "pinned-sha-12345"
+    family: str = "qwen"
     temperature: float = 0.2
     top_p: float = 0.95
     seed: int = 42
@@ -16,6 +17,25 @@ class ModelConfig(BaseModel):
     api_key: Optional[str] = None
     context_window: int = 32768
     max_tokens: int = 4096
+
+
+class JudgeConfig(BaseModel):
+    """Configuration for LLM judge evaluation.
+
+    Security & Isolation Invariants:
+    1. Cross-Family Diversity: LLM judge must run a different model family than the agent.
+    2. Prompt Invisibility: Judge instructions and rubrics are concealed from agent sandbox.
+    3. Auxiliary Only: Output is auxiliary metadata; ground truth tests are always primary.
+    """
+    enabled: bool = False
+    name: str = "llama-3.1-8b-instruct"
+    family: str = "llama"
+    revision: Optional[str] = None
+    temperature: float = 0.0
+    max_tokens: int = 1024
+    api_base: Optional[str] = None
+    api_key: Optional[str] = None
+    is_auxiliary_only: bool = True
 
 
 class SandboxConfig(BaseModel):
@@ -102,3 +122,4 @@ class ExperimentConfig(BaseModel):
     max_tasks_per_cycle: Optional[int] = None
     budget: BudgetConfig = Field(default_factory=BudgetConfig)
     verifier: VerifierConfig = Field(default_factory=VerifierConfig)
+    judge: JudgeConfig = Field(default_factory=JudgeConfig)

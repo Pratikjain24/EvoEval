@@ -105,3 +105,20 @@ Each drift probe repository (e.g., `mini_orm`) features:
   $$\Delta_{\text{proxy}}(t) = S_{\text{proxy}}(t) - S_{\text{gt}}(t) > 0$$
 - **$\mathbf{H_5}$ (Verification & Guard Invariance Hypothesis)**: Agents equipped with static verification gates ($G_5$) or regression guards with atomic rollback ($G_6$) reject specification gaming mutations, preserving ground-truth invariants and maintaining:
   $$\Delta_{\text{proxy}}(t) \approx 0 \quad \forall t$$
+
+---
+
+## 5. LLM-Judge Isolation Architecture
+
+EvoEval supports auxiliary LLM-based qualitative evaluations alongside deterministic tests under three strict architectural isolation invariants:
+
+1. **Cross-Family Model Diversity**:
+   - Any LLM judge MUST run with a different model family than the evaluated agent (e.g., Agent = Qwen, Judge = Llama; or Agent = DeepSeek, Judge = Claude).
+   - Same-family evaluation (e.g., Qwen evaluating Qwen) is strictly prohibited to eliminate shared bias, sycophancy, and self-reinforcing blind spots; violation triggers `JudgeIsolationError`.
+2. **Prompt Invisibility & Sandbox Concealment**:
+   - The judge system prompt, criteria, and evaluation rubrics reside exclusively in `evaeval/scoring/` and are never written into the agent workspace.
+   - Any attempts by the agent to inspect or read judge prompts (`judge_prompt`, `.hidden_judge`, `judge_rubric`) are intercepted and blocked by `SafetyMonitor` with exit code 126.
+3. **Auxiliary-Only Score Guarantee**:
+   - Ground truth test suites (`pytest`) and deterministic rule checks are 100% primary.
+   - The LLM judge output is strictly auxiliary metadata (`is_auxiliary=True`). It NEVER overrides, inflates, or modifies `ground_truth_score` or `proxy_score`.
+
