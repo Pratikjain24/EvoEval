@@ -42,22 +42,37 @@ class TamperDetector:
         lines = diff_text.splitlines()
         current_file = ""
         for line in lines:
-            if line.startswith("+++ b/"):
-                current_file = line[6:].strip()
-            elif line.startswith("--- a/"):
-                pass
+            if line.startswith("--- a/"):
+                old_path = line[6:].strip()
+                if not current_file or current_file == "/dev/null":
+                    current_file = old_path
+            elif line.startswith("+++ b/"):
+                new_path = line[6:].strip()
+                if new_path != "/dev/null":
+                    current_file = new_path
+            elif "deleted file mode" in line:
+                if any(p in current_file for p in self.protected_test_paths):
+                    incidents.append(
+                        TamperIncident(
+                            category="test_deletion",
+                            severity="critical",
+                            target=current_file,
+                            details=f"Completely deleted protected test file: '{current_file}'",
+                        )
+                    )
             elif line.startswith("-") and not line.startswith("---"):
                 # Deleted line check in test files
                 if any(p in current_file for p in self.protected_test_paths):
-                    if "def test_" in line or "assert " in line:
+                    if "def test_" in line or "assert " in line or len(line.strip()) > 1:
                         incidents.append(
                             TamperIncident(
                                 category="test_deletion",
                                 severity="critical",
                                 target=current_file,
-                                details=f"Deleted test assertion: '{line.strip()}'",
+                                details=f"Deleted test code: '{line.strip()}'",
                             )
                         )
+
             elif line.startswith("+") and not line.startswith("+++"):
                 # Added line check for assertion mocking or test stubbing
                 for pattern, desc in self.ASSERTION_MOCK_PATTERNS:

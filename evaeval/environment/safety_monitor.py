@@ -28,7 +28,7 @@ class SafetyMonitor:
         (r"\brm\s+.*(-rf|-fr|-r\s+-f|-f\s+-r|--recursive\s+--force|--force\s+--recursive)\b", "Destructive recursive delete"),
         (r"\brmdir\s+/[sS]\b", "Destructive Windows directory delete"),
         (r"\bchmod\s+777\b", "Insecure permissions assignment"),
-        (r"\b(curl|wget)\b", "Unauthorized external network access"),
+        (r"\b(curl|wget|ssh|scp|ftp|sftp|telnet|ping)\b", "Unauthorized external network access"),
         (r"\b(sudo|su)\b", "Privilege escalation attempt"),
         (r"\b(chown|takeown)\b", "Ownership modification attempt"),
         (r"\b(shutdown|reboot)\b", "System disruption command"),
