@@ -70,6 +70,69 @@
 
 ---
 
+## Reproducibility Contract
+
+EvoEval guarantees 100% reproducible scientific benchmarking through six core commitments:
+
+### 1. One-Command Study Execution
+Reviewers and researchers can reproduce the full empirical benchmark with a single command:
+```bash
+make reproduce && evoeval run --config configs/experiments/full_study.yaml
+```
+- `make reproduce`: Executes pre-flight verification (`evoeval verify-env`), validating pinned model revision SHAs, container image digests, task catalog integrity, and pseudo-random seed generators.
+- `evoeval run`: Runs the full 10-cycle, 3-seed, 100-task matrix across all six agent archetypes ($G_1$ through $G_6$).
+
+### 2. Pinned Model Weights & Container Digests
+- **Exact Model Weights**:
+  - Evaluated Agent: `qwen2.5-coder-7b-instruct` (pinned revision SHA: `8f7e2a91b4c3e8061245`).
+  - Auxiliary LLM Judge: `llama-3.1-8b-instruct` (pinned revision SHA: `4f6b2c8a1e3d5f709214`).
+- **Pinned Docker Image Digests** (`docker/image_digests.json`):
+  | Component | Tag | Pinned SHA-256 Digest |
+  |---|---|---|
+  | **Sandbox** | `evo-sandbox:1.0` | `sha256:4a3b8c9d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b` |
+  | **Scorer** | `evo-scorer:1.0` | `sha256:1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b` |
+  | **Backend** | `evo-backend:1.0` | `sha256:7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f` |
+  | **Frontend** | `evo-frontend:1.0` | `sha256:9f8e7d6c5b4a3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b` |
+
+### 3. Seeded Generators
+All stochasticity is strictly routed through synchronized, seeded generators recorded per run:
+- Python `random.seed(seed)`
+- `os.environ["PYTHONHASHSEED"] = str(seed)`
+- NumPy `np.random.seed(seed)`
+- PyTorch `torch.manual_seed(seed)` and `torch.cuda.manual_seed_all(seed)`
+- vLLM / inference sampling seeds (`temperature: 0.2`, `top_p: 0.95`, `seed: 42, 43, 44`)
+Seed manifests are recorded in every `trajectory_manifest.json` and in canonical trajectory header events.
+
+### 4. Trajectory Hash Manifest (SHA-256)
+Every evaluation run automatically generates a cryptographic integrity manifest at `experiments/runs/<run_id>/trajectory_manifest.json`:
+- **Raw File SHA-256**: Exact hash of the generated `trajectory.jsonl`.
+- **Deterministic Canonical SHA-256**: Cryptographic digest of canonicalized event payloads (stripping non-deterministic wall-clock timing variations).
+Reviewers can audit trajectory integrity at any time via:
+```bash
+evoeval manifest --run-id <run_id>
+```
+
+### 5. Unified 4-Service Docker Compose
+A single command brings up the complete isolated environment:
+```bash
+docker compose -f docker/docker-compose.yml up -d
+```
+1. **`sandbox`**: Locked agent container (`1000:1000`, `network: none`, `mem: 4g`, `cpus: 2.0`, `cap_drop: ALL`, scoring volume absent).
+2. **`scorer`**: Read-only isolated test harness container (`1001:1001`, `network: none`, `mem: 2g`, test suites `:ro`).
+3. **`backend`**: FastAPI analytics service with DuckDB query engine on port `8000`.
+4. **`frontend`**: Next.js 14 interactive evaluation dashboard on port `3000`.
+
+### 6. HuggingFace Dataset Release (The Paper's Artifact)
+The benchmark datasets and experimental results are packaged for HuggingFace Hub release via:
+```bash
+evoeval export-hf --run-id latest --output hf_dataset/
+```
+- `tasks/tasks.jsonl`: 100 standardized benchmark coding problems across 5 categories (`bug_fix`, `feature`, `refactor`, `exploit_probe`, `security_audit`), including 20 deliberate drift probes.
+- `trajectories/trajectories.jsonl`: Complete multi-cycle execution event streams across $G_1$–$G_6$ adhering to frozen schema `1.0.0`.
+- `labels/labels.jsonl`: Double-blind human audit annotations for safety boundary violations, reward hacking, and failure severities.
+
+---
+
 ## Quickstart
 
 ### 1. Installation

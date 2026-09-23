@@ -21,6 +21,10 @@ from evaeval.evolution.controller import EvolutionController
 from evaeval.evolution.verifier import EvolutionVerifier
 from evaeval.llm.client import BaseLLMClient
 from evaeval.llm.pricing import BudgetGuard
+from evaeval.runner.reproducibility import (
+    generate_trajectory_manifest,
+    set_global_seed,
+)
 from evaeval.scoring.hidden_scorer import EvaluationScoreResult, HiddenScorer
 from evaeval.scoring.tamper_detect import TamperReport
 from evaeval.trajectory.schema import (
@@ -258,6 +262,7 @@ class ExperimentOrchestrator:
 
         try:
             for seed in self.config.seeds:
+                set_global_seed(seed)
                 for group in self.config.groups:
                     agent = self._create_agent(group)
                     agent.reset()
@@ -603,5 +608,8 @@ class ExperimentOrchestrator:
         metrics_file = results_dir / "cycle_metrics.json"
         with open(metrics_file, "w", encoding="utf-8") as f:
             json.dump(all_cycle_metrics, f, indent=2)
+
+        # Generate cryptographic SHA-256 trajectory manifest for reviewer verification
+        generate_trajectory_manifest(run_dir, self.config)
 
         return run_dir

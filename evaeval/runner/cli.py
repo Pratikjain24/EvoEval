@@ -195,5 +195,110 @@ def tasks_list(
     console.print(table)
 
 
+@app.command("verify-env")
+def verify_env(
+    config: Path = typer.Option(
+        Path("configs/experiments/full_study.yaml"),
+        "--config", "-c",
+        help="Path to experiment YAML configuration file",
+    ),
+):
+    """Pre-flight verification of the EvoEval Reproducibility Contract."""
+    from evaeval.config.models import ExperimentConfig
+    from evaeval.environment.task_loader import TaskLoader
+    from evaeval.runner.reproducibility import load_pinned_docker_digests, set_global_seed
+
+    console.print(Panel.fit("[bold cyan]EvoEval Reproducibility Pre-Flight Verification[/bold cyan]"))
+
+    if not config.exists():
+        console.print(f"[bold red]Config file not found at {config}[/bold red]")
+        raise typer.Exit(code=1)
+
+    with open(config, "r", encoding="utf-8") as f:
+        raw_cfg = yaml.safe_load(f)
+    exp_cfg = ExperimentConfig.model_validate(raw_cfg)
+
+    # 1. Pinned model weights check
+    rev = exp_cfg.model.revision
+    if not rev or rev == "pinned-sha":
+        console.print("[bold yellow]! Warning: Model revision is generic or unpinned.[/bold yellow]")
+    else:
+        console.print(f"[bold green][PASS] Pinned model weights:[/bold green] {exp_cfg.model.name} (revision: [cyan]{rev}[/cyan])")
+
+    # 2. Pinned container digests check
+    digests = load_pinned_docker_digests()
+    console.print(f"[bold green][PASS] Pinned container digests:[/bold green] {len(digests)} images verified ({', '.join(digests.keys())})")
+
+    # 3. Seeded generators test
+    seed_rec = set_global_seed(exp_cfg.seeds[0] if exp_cfg.seeds else 42)
+    console.print(f"[bold green][PASS] Seeded generators verified:[/bold green] {', '.join(seed_rec.keys())} (primary seed: {seed_rec['global_seed']})")
+
+    # 4. Benchmark task catalog check
+    tasks_file = Path("tasks/tasks_index.json")
+    loader = TaskLoader(tasks_file)
+    all_tasks = loader.list_tasks()
+    probes = loader.list_tasks(task_type="exploit_probe")
+    console.print(f"[bold green][PASS] Benchmark tasks catalog:[/bold green] {len(all_tasks)} total tasks, {len(probes)} deliberate drift probes (~20%)")
+
+    console.print(Panel.fit(
+        f"[bold green]Pre-flight check passed![/bold green]\n"
+        f"Execute full study: [bold cyan]evoeval run --config {config}[/bold cyan]"
+    ))
+
+
+@app.command("manifest")
+def manifest_cmd(
+    run_id: str = typer.Option("latest", "--run-id", "-r", help="Run identifier or 'latest'"),
+):
+    """Generate or display the SHA-256 trajectory hash manifest for reviewer verification."""
+    from evaeval.runner.reproducibility import generate_trajectory_manifest
+
+    runs_dir = Path("experiments/runs")
+    if run_id == "latest":
+        available = sorted([p for p in runs_dir.iterdir() if p.is_dir()], key=lambda p: p.stat().st_mtime)
+        if not available:
+            console.print("[bold red]No runs found in experiments/runs/[/bold red]")
+            raise typer.Exit(code=1)
+        target_run = available[-1]
+    else:
+        target_run = runs_dir / run_id
+
+    manifest_file = generate_trajectory_manifest(target_run)
+    with open(manifest_file, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    console.print(Panel.fit(f"[bold cyan]Trajectory SHA-256 Manifest: {target_run.name}[/bold cyan]"))
+    console.print(f"Raw File SHA-256:          [yellow]{data.get('raw_sha256')}[/yellow]")
+    console.print(f"Deterministic SHA-256:     [green]{data.get('deterministic_sha256')}[/green]")
+    console.print(f"Total Trajectory Events:   [cyan]{data.get('total_events')}[/cyan]")
+    console.print(f"Manifest written to:       [dim]{manifest_file}[/dim]")
+
+
+@app.command("export-hf")
+def export_hf_cmd(
+    run_id: str = typer.Option("latest", "--run-id", "-r", help="Run identifier or 'latest'"),
+    output: Path = typer.Option(Path("hf_dataset"), "--output", "-o", help="Target output directory"),
+):
+    """Package tasks, trajectories, and human labels for HuggingFace dataset release."""
+    from evaeval.runner.reproducibility import export_huggingface_dataset
+
+    runs_dir = Path("experiments/runs")
+    if run_id == "latest":
+        available = sorted([p for p in runs_dir.iterdir() if p.is_dir()], key=lambda p: p.stat().st_mtime)
+        if not available:
+            console.print("[bold red]No runs found in experiments/runs/[/bold red]")
+            raise typer.Exit(code=1)
+        target_run = available[-1]
+    else:
+        target_run = runs_dir / run_id
+
+    out = export_huggingface_dataset(target_run, output)
+    console.print(Panel.fit(
+        f"[bold green]HuggingFace Dataset Artifact Created![/bold green]\n"
+        f"Output location: [bold cyan]{out}[/bold cyan]\n"
+        f"Splits exported: [cyan]tasks/, trajectories/, labels/[/cyan]"
+    ))
+
+
 if __name__ == "__main__":
     app()

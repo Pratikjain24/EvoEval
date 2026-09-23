@@ -1,9 +1,18 @@
-.PHONY: setup test lint run-pilot dashboard-backend dashboard-frontend clean
+.PHONY: setup test lint run-pilot run-full reproduce docker-up dashboard-backend dashboard-frontend clean
 
 PYTHON ?= python
 
 setup:
 	uv pip install -e ".[dev]"
+
+reproduce:
+	$(PYTHON) -m evaeval.runner.cli verify-env --config configs/experiments/full_study.yaml
+
+run-full:
+	evoeval run --config configs/experiments/full_study.yaml
+
+docker-up:
+	docker compose -f docker/docker-compose.yml up -d
 
 test:
 	pytest tests/ -v --durations=10

@@ -44,14 +44,33 @@ services:
       - ../experiments/sandbox_ws:/eval_harness/workspace:ro
       - ../tests/hidden_gt:/eval_harness/tests:ro
 
-  dashboard-backend:
+  backend:
     build:
       context: ..
       dockerfile: docker/Dockerfile.sandbox
-    container_name: evo_dashboard_backend
+    image: evo-backend:1.0
+    container_name: evo_backend
     command: python -m uvicorn evaeval.dashboard_backend.main:app --host 0.0.0.0 --port 8000
     ports:
       - "8000:8000"
     volumes:
       - ..:/app
     working_dir: /app
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    image: evo-frontend:1.0
+    container_name: evo_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+
+  # Alias for backward compatibility
+  dashboard-backend:
+    extends:
+      service: backend
