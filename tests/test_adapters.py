@@ -41,6 +41,14 @@ def test_g1_static_agent():
     assert g1.version == "agent_v0"
 
 
+def test_g1_single_task_manual_loop(tmp_path):
+    from scripts.manual_run_single_task import run_single_task_manual
+
+    traj_path = run_single_task_manual(task_id="task_001", run_dir_name="test_single_loop")
+    assert traj_path.exists()
+    assert traj_path.stat().st_size > 0
+
+
 def test_g2_prompt_agent():
     g2 = PromptAgentAdapter()
     assert g2.group == "G2"
