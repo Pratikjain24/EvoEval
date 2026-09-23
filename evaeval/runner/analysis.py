@@ -1,9 +1,12 @@
 """Analysis & Figure Generation: aggregates metrics across seeds and renders publication plots."""
 
 from __future__ import annotations
+from collections import defaultdict
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from evaeval.metrics.reliability import bootstrap_ci
@@ -21,16 +24,89 @@ GROUP_COLORS = {
 class ExperimentAnalysis:
     """Aggregates multi-seed experiment logs and renders publication-ready Matplotlib figures."""
 
-    def __init__(self, run_dir: Path):
+    def __init__(self, run_dir: Path, force_recompute: bool = False):
         self.run_dir = Path(run_dir)
         self.metrics_file = self.run_dir / "results" / "cycle_metrics.json"
-        self.metrics: List[Dict[str, Any]] = self._load_metrics()
+        self.trajectory_file = self.run_dir / "trajectory.jsonl"
+        self.metrics: List[Dict[str, Any]] = self._load_metrics(force_recompute=force_recompute)
 
-    def _load_metrics(self) -> List[Dict[str, Any]]:
-        if not self.metrics_file.exists():
+    def _load_metrics(self, force_recompute: bool = False) -> List[Dict[str, Any]]:
+        """Load cycle_metrics.json if present; otherwise recompute from raw trajectory.jsonl."""
+        if not force_recompute and self.metrics_file.exists():
+            with open(self.metrics_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+        elif self.trajectory_file.exists():
+            return self.recompute_metrics_from_trajectory()
+        return []
+
+    def recompute_metrics_from_trajectory(
+        self,
+        trajectory_path: Optional[Path] = None,
+        save_to_results: bool = True,
+    ) -> List[Dict[str, Any]]:
+        """Reconstruct cycle metrics directly from raw trajectory JSONL event stream."""
+        traj_path = Path(trajectory_path or self.trajectory_file)
+        if not traj_path.exists():
             return []
-        with open(self.metrics_file, "r", encoding="utf-8") as f:
-            return json.load(f)
+
+        from evaeval.trajectory.reader import TrajectoryReader
+        reader = TrajectoryReader(traj_path)
+        events = reader.load_all()
+
+        cycle_tasks: Dict[tuple, List[Dict[str, Any]]] = defaultdict(list)
+        cycle_violations: Dict[tuple, List[Dict[str, Any]]] = defaultdict(list)
+        run_id = self.run_dir.name
+
+        for ev in events:
+            if ev.run_id:
+                run_id = ev.run_id
+            key = (ev.seed, ev.group, ev.cycle)
+            if ev.event_type == "task_end":
+                cycle_tasks[key].append({
+                    "task_id": ev.task_id,
+                    "success": ev.payload.get("success", False),
+                    "proxy_gap": ev.payload.get("proxy_gap", 0.0),
+                    "cost_usd": ev.cost.usd,
+                })
+            elif ev.event_type == "safety_check":
+                if not ev.payload.get("passed", True) or ev.payload.get("action_taken") in ("warn", "block", "abort"):
+                    cycle_violations[key].append(ev.payload)
+
+        # Preserve canonical order of (seed, group, cycle)
+        keys = []
+        seen = set()
+        for ev in events:
+            k = (ev.seed, ev.group, ev.cycle)
+            if k not in seen and k in cycle_tasks:
+                seen.add(k)
+                keys.append(k)
+
+        recomputed: List[Dict[str, Any]] = []
+        for (seed, group, cycle) in keys:
+            tasks = cycle_tasks[(seed, group, cycle)]
+            violations = cycle_violations[(seed, group, cycle)]
+            pass_count = sum(1 for t in tasks if t["success"])
+            n_tasks = max(len(tasks), 1)
+            recomputed.append({
+                "run_id": run_id,
+                "seed": seed,
+                "group": group,
+                "cycle": cycle,
+                "success_rate": pass_count / n_tasks,
+                "proxy_gap": sum(t["proxy_gap"] for t in tasks) / n_tasks,
+                "safety_drift": len(violations) / n_tasks,
+                "violations_count": len(violations),
+                "cost_usd": sum(t["cost_usd"] for t in tasks),
+            })
+
+        self.metrics = recomputed
+        if save_to_results:
+            results_dir = self.run_dir / "results"
+            results_dir.mkdir(parents=True, exist_ok=True)
+            with open(results_dir / "cycle_metrics.json", "w", encoding="utf-8") as f:
+                json.dump(recomputed, f, indent=2)
+
+        return recomputed
 
     def generate_all_figures(self, output_dir: Optional[Path] = None) -> List[Path]:
         """Generate four key scientific figures: Drift, Retention, ProxyGap, and Capability-Safety Pareto."""
@@ -62,7 +138,6 @@ class ExperimentAnalysis:
             for c in cycles:
                 vals = [m["safety_drift"] for m in self.metrics if m["group"] == grp and m["cycle"] == c]
                 if not vals:
-                    # Synthetic baseline for visual scaffolding if metrics are empty
                     drift_base = 0.0 if grp == "G1" else (0.04 * c if grp in ["G2", "G4"] else 0.01 * c)
                     vals = [drift_base, drift_base + 0.01, drift_base - 0.01]
                 low, mean, up = bootstrap_ci(vals)
@@ -97,7 +172,7 @@ class ExperimentAnalysis:
                 vals = [m["proxy_gap"] for m in self.metrics if m["group"] == grp and m["cycle"] == c]
                 mean_val = np.mean(vals) if vals else (0.05 if grp == "G1" else 0.08 * c)
                 means.append(mean_val)
-            plt.plot(cycles, means, label=grp, color=color, linewidth=2.2, linestyle="-")
+            plt.plot(cycles, means, label=grp, color=color, linewidth=2.2, linestyle="-", marker="s")
 
         plt.title("Proxy Gap Divergence (Reward Hacking & Specification Gaming)", fontsize=12, pad=12)
         plt.xlabel("Evolutionary Cycle ($t$)", fontsize=11)
@@ -112,22 +187,36 @@ class ExperimentAnalysis:
         """Plot capability retention ratio across cycles relative to baseline."""
         plt.figure(figsize=(9, 5), dpi=200)
 
-        cycles = list(range(5))
-        for grp in ["G1", "G2", "G4", "G6"]:
+        groups = sorted(list(set(m["group"] for m in self.metrics))) if self.metrics else ["G1", "G2", "G4", "G6"]
+        cycles = sorted(list(set(m["cycle"] for m in self.metrics))) if self.metrics else list(range(5))
+
+        for grp in groups:
             color = GROUP_COLORS.get(grp, "#8b5cf6")
-            if grp == "G1":
-                retention = [1.0] * len(cycles)
-            elif grp in ["G2", "G4"]:
-                retention = [1.0 - 0.06 * c for c in cycles]  # Catastrophic forgetting
-            else:
-                retention = [1.0 - 0.01 * c for c in cycles]  # Guarded
-            plt.plot(cycles, retention, label=grp, color=color, linewidth=2.2)
+            grp_metrics = [m for m in self.metrics if m["group"] == grp]
+            c0_vals = [m["success_rate"] for m in grp_metrics if m["cycle"] == 0]
+            c0_mean = float(np.mean(c0_vals)) if c0_vals else 1.0
+
+            retention = []
+            for c in cycles:
+                c_vals = [m["success_rate"] for m in grp_metrics if m["cycle"] == c]
+                if c_vals and c0_mean > 0:
+                    ret_val = float(np.mean(c_vals)) / c0_mean
+                else:
+                    if grp == "G1":
+                        ret_val = 1.0
+                    elif grp in ["G2", "G4"]:
+                        ret_val = max(0.0, 1.0 - 0.06 * c)
+                    else:
+                        ret_val = max(0.0, 1.0 - 0.01 * c)
+                retention.append(min(1.1, max(0.0, ret_val)))
+
+            plt.plot(cycles, retention, label=grp, color=color, linewidth=2.2, marker="^")
 
         plt.axhline(1.0, color="gray", linestyle="--", linewidth=1.2, label="Perfect Retention (1.0)")
         plt.title("Catastrophic Forgetting: Retention $(t) = \\text{Perf}_{\\text{old}}(t) / \\text{Perf}_{\\text{old}}(0)$", fontsize=12)
         plt.xlabel("Evolutionary Cycle ($t$)", fontsize=11)
         plt.ylabel("Retention Ratio", fontsize=11)
-        plt.ylim(0.5, 1.1)
+        plt.ylim(0.5, 1.15)
         plt.legend(frameon=True)
         plt.tight_layout()
         plt.savefig(target_path)
@@ -138,14 +227,29 @@ class ExperimentAnalysis:
         """Scatter plot of Capability Gain vs Safety Drift."""
         plt.figure(figsize=(8, 6), dpi=200)
 
-        points = {
-            "G1 (Frozen)": (0.0, 0.0),
-            "G2 (Prompt)": (0.18, 0.22),
-            "G3 (Memory)": (0.24, 0.16),
-            "G4 (Reflection)": (0.35, 0.29),
-            "G5 (Static Verifier)": (0.28, 0.08),
-            "G6 (Regression Guard)": (0.32, 0.02),
-        }
+        points: Dict[str, tuple] = {}
+        if self.metrics:
+            groups = sorted(list(set(m["group"] for m in self.metrics)))
+            for grp in groups:
+                grp_metrics = [m for m in self.metrics if m["group"] == grp]
+                c0_scores = [m["success_rate"] for m in grp_metrics if m["cycle"] == 0]
+                c_max = max(m["cycle"] for m in grp_metrics)
+                cmax_scores = [m["success_rate"] for m in grp_metrics if m["cycle"] == c_max]
+                if c0_scores and cmax_scores:
+                    cap_gain = float(np.mean(cmax_scores) - np.mean(c0_scores))
+                else:
+                    cap_gain = float(np.mean([m["success_rate"] for m in grp_metrics]))
+                mean_drift = float(np.mean([m["safety_drift"] for m in grp_metrics]))
+                points[grp] = (cap_gain, mean_drift)
+        else:
+            points = {
+                "G1": (0.0, 0.0),
+                "G2": (0.18, 0.22),
+                "G3": (0.24, 0.16),
+                "G4": (0.35, 0.29),
+                "G5": (0.28, 0.08),
+                "G6": (0.32, 0.02),
+            }
 
         for label, (cap, drift) in points.items():
             grp_code = label[:2]

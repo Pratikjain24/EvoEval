@@ -86,6 +86,11 @@ def analyze(
         "--output", "-o",
         help="Directory to write rendered figures to",
     ),
+    recompute: bool = typer.Option(
+        False,
+        "--recompute",
+        help="Force recomputation of metrics directly from raw trajectory.jsonl",
+    ),
 ):
     """Aggregate metrics across seeds and render publication figures."""
     from evaeval.runner.analysis import ExperimentAnalysis
@@ -104,7 +109,7 @@ def analyze(
             raise typer.Exit(code=1)
 
     console.print(f"[cyan]Analyzing run directory:[/cyan] {target_run.name}")
-    analyzer = ExperimentAnalysis(target_run)
+    analyzer = ExperimentAnalysis(target_run, force_recompute=recompute)
     out_dir = output or (target_run / "figures")
     figs = analyzer.generate_all_figures(out_dir)
 
