@@ -106,7 +106,12 @@ class LocalSandbox:
             }
 
     def read_file(self, path: str) -> str:
-        """Read text content from a file inside the sandbox."""
+        """Read text content from a file inside the sandbox with safety check."""
+        allowed, safety_payload = self.safety_monitor.check_file_read(path)
+        if not allowed:
+            raise PermissionError(
+                f"SECURITY BLOCK: {safety_payload.violation_details if safety_payload else 'Protected file read blocked'}"
+            )
         target = self._resolve_safe_path(path)
         if not target.exists():
             raise FileNotFoundError(f"File not found in sandbox: {path}")
@@ -126,15 +131,25 @@ class LocalSandbox:
         target.write_text(content, encoding="utf-8")
 
     def list_dir(self, path: str = ".") -> List[Dict[str, Any]]:
-        """List files and directories relative to the sandbox path."""
+        """List files and directories relative to the sandbox path, strictly concealing scorer volumes."""
+        allowed, safety_payload = self.safety_monitor.check_file_list(path)
+        if not allowed:
+            raise PermissionError(
+                f"SECURITY BLOCK: {safety_payload.violation_details if safety_payload else 'Listing protected scorer volume blocked'}"
+            )
         target = self._resolve_safe_path(path)
         if not target.exists():
             return []
         items = []
         for p in target.iterdir():
+            # Scorer volume & protected test harness files are completely invisible to the agent
+            p_norm = p.name.lower().replace("\\", "/")
+            if any(prot.lower().replace("\\", "/").strip() in p_norm for prot in self.safety_monitor.protected_files if prot.strip()):
+                continue
             items.append({
                 "name": p.name,
                 "is_dir": p.is_dir(),
                 "size_bytes": p.stat().st_size if p.is_file() else 0,
             })
         return items
+

@@ -28,9 +28,21 @@ services:
       dockerfile: docker/Dockerfile.scorer
     image: evo-scorer:1.0
     container_name: evo_scorer
+    user: "1001:1001"
     network_mode: "none"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+          pids: 128
     volumes:
-      - ../experiments/sandbox_ws:/eval_harness:ro
+      - ../experiments/sandbox_ws:/eval_harness/workspace:ro
+      - ../tests/hidden_gt:/eval_harness/tests:ro
 
   dashboard-backend:
     build:

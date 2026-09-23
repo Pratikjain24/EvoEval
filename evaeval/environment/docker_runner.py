@@ -60,6 +60,10 @@ class DockerRunner:
         4. No Docker socket: /var/run/docker.sock or docker daemon pipes must NEVER be mounted.
         5. Workspace mounted rw but scoring volume absent: Only workspace is rw; scoring volume absent.
         """
+        # 0. Image separation check
+        if self.config.image == self.config.scorer_image:
+            raise PermissionError("SECURITY VIOLATION: Agent container cannot run using the dedicated scorer image.")
+
         # 1. Non-root user check
         user_str = str(self.config.user).strip().lower()
         if user_str in ("0", "root", "0:0"):
@@ -82,11 +86,91 @@ class DockerRunner:
                     raise PermissionError(f"SECURITY VIOLATION: Docker socket mounting is strictly forbidden: '{m}'")
 
         # 5. Scoring volume absent check
-        forbidden_scoring_targets = ["hidden_scorer", "eval_harness", "scoring_volume", "test_gt"]
+        forbidden_scoring_targets = ["hidden_scorer", "eval_harness", "scoring_volume", "test_gt", "scorer", "/scorer"]
         for m in all_mounts:
             for forbidden in forbidden_scoring_targets:
                 if forbidden in m and "/workspace" not in m:
                     raise PermissionError(f"SECURITY VIOLATION: Scoring volume must be absent from agent sandbox: '{m}'")
+
+    def validate_scorer_isolation(
+        self,
+        mounts: List[str],
+        image: Optional[str] = None,
+        user: Optional[str] = None,
+    ) -> None:
+        """Enforce separate scorer image and read-only test mounts (METR RE-Bench pattern).
+
+        Invariants enforced:
+        1. Separate image: Scorer must use dedicated scorer image (e.g. evo-scorer:1.0).
+        2. Dedicated unprivileged user: Scorer runs as unprivileged user (1001:1001 or scorer).
+        3. Strictly read-only mounts: ALL volumes mounted into scorer container must be :ro.
+           Any :rw mount is rejected to prevent test tampering during evaluation.
+        4. Network disabled: Scorer network must be strictly 'none'.
+        """
+        target_image = image or self.config.scorer_image
+        if target_image == self.config.image:
+            raise PermissionError(
+                f"SECURITY VIOLATION: Scorer must run in a separate image ('{self.config.scorer_image}'), not agent image ('{self.config.image}')."
+            )
+
+        target_user = str(user or self.config.scorer_user).strip().lower()
+        if target_user in ("0", "root", "0:0"):
+            raise PermissionError("SECURITY VIOLATION: Scorer container must run as a non-root user.")
+
+        if self.config.network != "none":
+            raise PermissionError(f"SECURITY VIOLATION: Scorer network must be 'none', got '{self.config.network}'.")
+
+        # Check that every single mount is strictly read-only (:ro)
+        for m in mounts:
+            clean_m = m.strip()
+            if not clean_m.endswith(":ro"):
+                raise PermissionError(
+                    f"SECURITY VIOLATION: Scorer mounts must be strictly read-only (:ro). Disallowed mount: '{m}'"
+                )
+
+    def build_scorer_docker_args(
+        self,
+        test_spec: str,
+        workspace_dir: Optional[Path] = None,
+        tests_dir: Optional[Path] = None,
+    ) -> List[str]:
+        """Construct docker run command executing the isolated read-only scorer container.
+
+        METR RE-Bench isolation pattern:
+        - Separate image: evo-scorer:1.0 (distinct from agent's evo-sandbox:1.0).
+        - Tests mounted strictly read-only (:ro).
+        - Evaluated workspace mounted strictly read-only (:ro).
+        - Network disabled (none).
+        - Dedicated unprivileged scorer user (1001:1001).
+        """
+        ws = Path(workspace_dir or self.workspace_dir).resolve()
+        mounts = [f"{str(ws)}:/eval_harness/workspace:ro"]
+        if tests_dir:
+            t_dir = Path(tests_dir).resolve()
+            mounts.append(f"{str(t_dir)}:/eval_harness/tests:ro")
+
+        self.validate_scorer_isolation(mounts)
+
+        cmd = [
+            "docker", "run", "--rm",
+            "--user", self.config.scorer_user,
+            "--network", self.config.network,
+            "--memory", self.config.scorer_mem,
+            f"--cpus={self.config.cpus}",
+            f"--pids-limit={self.config.pids_limit}",
+        ]
+        if self.config.no_new_privileges:
+            cmd.extend(["--security-opt", "no-new-privileges:true"])
+        for cap in self.config.cap_drop:
+            cmd.append(f"--cap-drop={cap}")
+        for m in mounts:
+            cmd.extend(["-v", m])
+        cmd.extend([
+            "-w", "/eval_harness",
+            self.config.scorer_image,
+            "pytest", test_spec, "-q",
+        ])
+        return cmd
 
     def build_docker_run_args(self) -> List[str]:
         """Construct canonical docker run command enforcing all security locks."""

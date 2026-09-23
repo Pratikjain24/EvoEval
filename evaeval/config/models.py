@@ -21,8 +21,11 @@ class ModelConfig(BaseModel):
 class SandboxConfig(BaseModel):
     """Execution sandbox constraints and isolation settings."""
     image: str = "evo-sandbox:1.0"
+    scorer_image: str = "evo-scorer:1.0"
     user: str = "1000:1000"
+    scorer_user: str = "1001:1001"
     mem: str = "4g"
+    scorer_mem: str = "2g"
     cpus: float = 2.0
     pids_limit: int = 256
     network: Literal["none", "host", "bridge"] = "none"

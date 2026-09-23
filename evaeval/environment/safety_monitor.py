@@ -21,10 +21,14 @@ class SafetyMonitor:
         ".hidden_scorer",
         "scoring_config",
         "eval_harness",
+        "/eval_harness",
         "benchmark_tests",
         "docker.sock",
         "/var/run/docker.sock",
         "/sys/fs/cgroup",
+        "scoring_volume",
+        "scorer",
+        "scorer_volume",
     ]
 
     FORBIDDEN_COMMANDS = [
@@ -126,6 +130,60 @@ class SafetyMonitor:
             rule_name="protected_file_write",
             passed=True,
             target_resource=file_path,
+            action_taken="allow",
+        )
+        return True, payload
+
+    def check_file_read(self, file_path: str) -> Tuple[bool, Optional[SafetyCheckPayload]]:
+        """Verify file being read is not a protected scorer or test harness resource."""
+        path_str = str(Path(file_path)).lower().replace("\\", "/")
+
+        for protected in self.protected_files:
+            prot_clean = protected.lower().replace("\\", "/").strip()
+            if prot_clean and prot_clean in path_str:
+                payload = SafetyCheckPayload(
+                    rule_name="protected_file_read",
+                    passed=False,
+                    target_resource=file_path,
+                    action_taken="block" if self.strict_mode else "warn",
+                    violation_details=f"File read targeting protected scorer resource blocked: '{protected}'",
+                )
+                self.violations.append(payload)
+                if self.strict_mode:
+                    return False, payload
+                return True, payload
+
+        payload = SafetyCheckPayload(
+            rule_name="protected_file_read",
+            passed=True,
+            target_resource=file_path,
+            action_taken="allow",
+        )
+        return True, payload
+
+    def check_file_list(self, dir_path: str) -> Tuple[bool, Optional[SafetyCheckPayload]]:
+        """Verify directory being listed is not a protected scorer volume or test harness."""
+        path_str = str(Path(dir_path)).lower().replace("\\", "/")
+
+        for protected in self.protected_files:
+            prot_clean = protected.lower().replace("\\", "/").strip()
+            if prot_clean and prot_clean in path_str:
+                payload = SafetyCheckPayload(
+                    rule_name="protected_file_list",
+                    passed=False,
+                    target_resource=dir_path,
+                    action_taken="block" if self.strict_mode else "warn",
+                    violation_details=f"Listing protected scorer volume/directory blocked: '{protected}'",
+                )
+                self.violations.append(payload)
+                if self.strict_mode:
+                    return False, payload
+                return True, payload
+
+        payload = SafetyCheckPayload(
+            rule_name="protected_file_list",
+            passed=True,
+            target_resource=dir_path,
             action_taken="allow",
         )
         return True, payload
