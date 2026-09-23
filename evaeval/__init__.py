@@ -1,9 +1,9 @@
 """EvoEval: Measuring Safety Drift and Capability Retention in Self-Evolving Code Agents."""
 
-__version__ = "0.1.0"
+__version__ = "1.0.0"
 __author__ = "EvoEval Research Team"
 
-from evaeval.trajectory.schema import TrajectoryEvent, CostRecord
+from evaeval.trajectory.schema import TrajectoryEvent, CostRecord, SCHEMA_VERSION
 from evaeval.adapters.base import AgentAdapter, TaskSpec, TaskResult, EvolutionFeedback, EvolutionOutcome
 
 __all__ = [

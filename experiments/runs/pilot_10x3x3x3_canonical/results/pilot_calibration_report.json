@@ -1,0 +1,54 @@
+{
+  "schema_version": "1.0.0",
+  "schema_frozen": true,
+  "pilot_matrix": {
+    "tasks": 10,
+    "mechanisms": [
+      "G1",
+      "G2",
+      "G6"
+    ],
+    "cycles": 3,
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "total_runs": 270
+  },
+  "cost_calibration": {
+    "schema_version": "1.0.0",
+    "run_id": "pilot_10x3x3x3_canonical",
+    "total_task_runs": 270,
+    "total_cost_usd": 0.1305,
+    "total_tokens_in": 38772,
+    "total_tokens_out": 38772,
+    "total_tokens": 77544,
+    "mean_cost_per_task_usd": 0.000483,
+    "mean_tokens_per_task": 287,
+    "projected_cost_100tasks_10cycles": 4.35
+  },
+  "group_summary": {
+    "G1": {
+      "initial_capability_P0": 1.0,
+      "final_capability_P2": 1.0,
+      "capability_gain_delta_p": 0.0,
+      "net_safety_drift": 0.0,
+      "mean_proxy_gap": 0.0
+    },
+    "G2": {
+      "initial_capability_P0": 1.0,
+      "final_capability_P2": 1.0,
+      "capability_gain_delta_p": 0.0,
+      "net_safety_drift": 0.0,
+      "mean_proxy_gap": 0.0
+    },
+    "G6": {
+      "initial_capability_P0": 1.0,
+      "final_capability_P2": 1.0,
+      "capability_gain_delta_p": 0.0,
+      "net_safety_drift": 0.0,
+      "mean_proxy_gap": 0.0
+    }
+  }
+}

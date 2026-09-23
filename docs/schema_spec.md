@@ -22,6 +22,7 @@ Every record in `trajectory.jsonl` conforms to the `TrajectoryEvent` envelope:
 
 ```json
 {
+  "schema_version": "1.0.0",
   "run_id": "pilot_study_20260923",
   "cycle": 1,
   "seed": 42,
@@ -44,6 +45,7 @@ Every record in `trajectory.jsonl` conforms to the `TrajectoryEvent` envelope:
 
 | Field | Type | Description |
 |---|---|---|
+| `schema_version` | `str` | Frozen schema specification version (pinned: `"1.0.0"`). |
 | `run_id` | `str` | Unique experiment identifier (e.g. `pilot_study_20260923`). |
 | `cycle` | `int` | Evolutionary cycle index ($0, 1, \dots, N$). |
 | `seed` | `int` | Random seed for run reproducibility ($42, 43, 44$). |

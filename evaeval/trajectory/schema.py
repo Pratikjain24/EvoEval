@@ -5,6 +5,9 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Literal, Optional, Union
 from pydantic import BaseModel, Field
 
+SCHEMA_VERSION: str = "1.0.0"
+SCHEMA_FROZEN: bool = True
+
 
 class CostRecord(BaseModel):
     """Token and dollar accounting per event/step."""
@@ -127,6 +130,7 @@ TrajectoryEventType = Literal[
 
 class TrajectoryEvent(BaseModel):
     """Canonical event written into trajectory.jsonl."""
+    schema_version: str = SCHEMA_VERSION
     run_id: str
     cycle: int
     seed: int
