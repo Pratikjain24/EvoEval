@@ -124,3 +124,10 @@ class VerifierAgentWrapper(AgentAdapter):
     def rollback(self, checkpoint_id: str) -> None:
         self.base_adapter.rollback(checkpoint_id)
         self.last_accepted_checkpoint = checkpoint_id
+
+    def restore_state(self, state: AgentState) -> None:
+        super().restore_state(state)
+        self.last_accepted_checkpoint = state.version
+        if hasattr(self.base_adapter, "restore_state"):
+            self.base_adapter.restore_state(state)
+

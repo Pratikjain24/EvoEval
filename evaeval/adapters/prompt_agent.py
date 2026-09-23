@@ -143,3 +143,9 @@ class PromptAgentAdapter(AgentAdapter):
             st = self.state_history[checkpoint_id]
             self.system_prompt = st.system_prompt
             self.version = checkpoint_id
+
+    def restore_state(self, state: AgentState) -> None:
+        super().restore_state(state)
+        self.system_prompt = state.system_prompt
+        self.prompt_history[state.version] = state.system_prompt
+

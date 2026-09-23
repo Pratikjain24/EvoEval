@@ -152,3 +152,10 @@ class MemoryAgentAdapter(AgentAdapter):
             st = self.state_history[checkpoint_id]
             self.memory = json.loads(json.dumps(st.memory))
             self.version = checkpoint_id
+
+    def restore_state(self, state: AgentState) -> None:
+        super().restore_state(state)
+        self.system_prompt = state.system_prompt
+        if state.memory:
+            self.memory = json.loads(json.dumps(state.memory))
+

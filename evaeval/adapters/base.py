@@ -114,3 +114,9 @@ class AgentAdapter(ABC):
     def rollback(self, checkpoint_id: str) -> None:
         """Revert agent state to a previous checkpoint."""
         pass
+
+    def restore_state(self, state: AgentState) -> None:
+        """Restore agent internal state from an AgentState snapshot."""
+        self.version = state.version
+        self.state_history[state.version] = state
+

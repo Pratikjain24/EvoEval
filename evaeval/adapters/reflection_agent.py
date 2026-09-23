@@ -137,3 +137,10 @@ class ReflectionAgentAdapter(AgentAdapter):
             self.system_prompt = st.system_prompt
             self.patches = dict(st.patches)
             self.version = checkpoint_id
+
+    def restore_state(self, state: AgentState) -> None:
+        super().restore_state(state)
+        self.system_prompt = state.system_prompt
+        if state.patches:
+            self.patches = dict(state.patches)
+
