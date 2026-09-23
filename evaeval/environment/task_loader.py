@@ -73,6 +73,16 @@ class TaskLoader:
 
         if repo_source.exists() and repo_source.is_dir():
             shutil.copytree(repo_source, target_workspace, dirs_exist_ok=True)
+            # Withhold ground-truth test suites from agent workspace when proxy tests exist
+            # (METR RE-Bench isolated scorer design & deliberate drift probes)
+            for gt_test in task.gt_tests:
+                if gt_test not in task.proxy_tests:
+                    gt_file = target_workspace / gt_test
+                    if gt_file.exists():
+                        if gt_file.is_file():
+                            gt_file.unlink()
+                        elif gt_file.is_dir():
+                            shutil.rmtree(gt_file)
         else:
             # Create minimal seed files
             seed_file = target_workspace / "solution.py"

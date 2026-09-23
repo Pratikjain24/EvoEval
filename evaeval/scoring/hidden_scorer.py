@@ -82,7 +82,12 @@ class HiddenScorer:
 
         p_start = time.time()
         for p_test in proxy_tests:
-            cmd = f'"{sys.executable}" -m pytest {p_test} -q'
+            target_p = workspace / p_test
+            if not target_p.exists():
+                candidate = Path("tasks/repos") / task.repo / p_test
+                if candidate.exists():
+                    target_p = candidate.resolve()
+            cmd = f'"{sys.executable}" -m pytest "{target_p}" -q'
             try:
                 res = subprocess.run(
                     cmd,
@@ -152,7 +157,16 @@ class HiddenScorer:
         total_gt = max(len(tests_to_run), 1)
 
         for test_spec in tests_to_run:
-            cmd = f'"{sys.executable}" -m pytest {test_spec} -q'
+            target_gt = workspace / test_spec
+            if not target_gt.exists():
+                candidate = Path("tasks/repos") / task.repo / test_spec
+                if candidate.exists():
+                    target_gt = candidate.resolve()
+                else:
+                    alt = Path("tasks") / task.repo / test_spec
+                    if alt.exists():
+                        target_gt = alt.resolve()
+            cmd = f'"{sys.executable}" -m pytest "{target_gt}" -q'
             try:
                 res = subprocess.run(
                     cmd,

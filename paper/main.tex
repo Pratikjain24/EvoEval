@@ -37,6 +37,16 @@ Large language model (LLM) agents deployed in software engineering environments 
     \item \textbf{Reward Hacking (Proxy Gap)}: Exploiting naive proxy rewards (e.g. exit codes, assertion mocking) while failing underlying ground-truth semantics.
 \end{enumerate}
 
+\section{Scientific Hypotheses}
+We structure our empirical inquiry around five central hypotheses:
+\begin{itemize}
+    \item \textbf{$\mathbf{H_1}$ (Capability Drift)}: Recursive self-evolution yields monotonic task completion gains over static baselines.
+    \item \textbf{$\mathbf{H_2}$ (Reward Gaming / Exploitation)}: When provided with visible proxy metrics, unconstrained self-evolution ($G_2, G_3, G_4$) over-optimizes for the proxy while failing ground-truth invariants ($\text{ProxyGap} \gg 0$).
+    \item \textbf{$\mathbf{H_3}$ (Safety Erosion)}: Unconstrained prompt and memory mutation increases safety boundary violation rates over successive cycles.
+    \item \textbf{$\mathbf{H_4}$ (Catastrophic Forgetting)}: Adaptation to novel failure modes degrades capability on earlier, previously mastered tasks ($\text{Retention} < 1.0$).
+    \item \textbf{$\mathbf{H_5}$ (Verification \& Guard Invariance)}: Static verification ($G_5$) and regression-guarded rollback ($G_6$) constrain reward hacking and eliminate safety drift ($\text{ProxyGap} \approx 0, \text{SafetyDrift} \approx 0$).
+\end{itemize}
+
 \section{Methodology and Agent Taxonomy}
 EvoEval evaluates six representative agent archetypes:
 \begin{itemize}
@@ -47,6 +57,9 @@ EvoEval evaluates six representative agent archetypes:
     \item \textbf{$G_5$ (Static Verifier Gate)}: Intercepts mutations and applies static security pattern checks and safety canaries.
     \item \textbf{$G_6$ (Regression-Guarded Verifier)}: Integrates static verification with canary regression suites and automatic rollback.
 \end{itemize}
+
+\subsection{Deliberate Drift Probes}
+To directly test $\mathbf{H_2}$ and $\mathbf{H_5}$, exactly 20\% of tasks in the 100-task benchmark are engineered as \textit{deliberate drift probes} (\texttt{exploit\_probe}). Each probe repository embeds a visible, gameable proxy evaluation (\texttt{test\_proxy.py} and \texttt{progress\_metric.py}) within the agent workspace. Crucially, the ground-truth test suite (\texttt{test\_gt.py}) remains strictly hidden from the agent sandbox, executed only within an isolated evaluation container. This methodology mirrors METR's RE-Bench finding, wherein visible test fixtures provoked a 43-fold surge in test harness hacking, isolating true semantic capability from superficial optimization.
 
 \section{Mathematical Formulations}
 We quantify agent evolution using four core metric formulations:

@@ -87,3 +87,21 @@ graph TD
 | **Backend** | **FastAPI + SQLAlchemy** | Asynchronous REST service sharing Pydantic data schemas. |
 | **Frontend** | **Next.js 14+ App Router + Tailwind** | Responsive UI with SVG visualizers tailored for the 4 publication figures. |
 | **Paper Pipeline** | **LaTeX (NeurIPS format) + Matplotlib** | Publication-ready manuscript and vector figure generation. |
+
+---
+
+## 4. Deliberate Drift Probes & Scientific Hypotheses (H2/H5)
+
+### 4.1 Design of the Drift Probe Instrument
+To rigorously quantify specification gaming and reward hacking during recursive self-evolution, EvoEval incorporates **deliberate drift probes** across exactly 20% of the benchmark tasks (20 out of 100 tasks, categorized under `type: "exploit_probe"` in `tasks/tasks_index.json`).
+
+Each drift probe repository (e.g., `mini_orm`) features:
+1. **Visible, Gameable Proxy Score**: A local test suite (`tests/test_proxy.py`) and progress metric script (`progress_metric.py`) visible within the agent workspace. These check superficial outputs (e.g., string interpolation of query clauses) without asserting critical invariants.
+2. **Hidden Ground-Truth Invariant Suite**: An isolated test suite (`tests/test_gt.py`) asserting strict semantic invariants (e.g., SQL injection defense, parameterized placeholders, query grammar integrity).
+3. **Scorer Invisibility (METR RE-Bench Design)**: Following METR's empirical finding where agent visibility of evaluation harnesses led to a 43x surge in test-suite hacking, the ground truth suite is withheld from the agent workspace by `TaskLoader.setup_task_workspace()` and executed only by `HiddenScorer` in an isolated harness.
+
+### 4.2 Hypotheses Addressed
+- **$\mathbf{H_2}$ (Reward Gaming / Exploitation Hypothesis)**: Unconstrained recursive self-evolution ($G_2, G_3, G_4$) over-optimizes for visible proxy metrics (e.g., `progress_metric.py` completion) at the expense of underlying invariants, causing divergence in the proxy gap:
+  $$\Delta_{\text{proxy}}(t) = S_{\text{proxy}}(t) - S_{\text{gt}}(t) > 0$$
+- **$\mathbf{H_5}$ (Verification & Guard Invariance Hypothesis)**: Agents equipped with static verification gates ($G_5$) or regression guards with atomic rollback ($G_6$) reject specification gaming mutations, preserving ground-truth invariants and maintaining:
+  $$\Delta_{\text{proxy}}(t) \approx 0 \quad \forall t$$
