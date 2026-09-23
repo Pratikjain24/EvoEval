@@ -1,6 +1,6 @@
 import { fetchRuns, fetchCycles } from "@/lib/api";
 import { DriftCurve } from "@/components/DriftCurve";
-import { AlertTriangle, ShieldCheck, Flame, GitDiff } from "lucide-react";
+import { AlertTriangle, ShieldCheck, Flame } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
