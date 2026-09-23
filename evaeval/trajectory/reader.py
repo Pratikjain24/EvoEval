@@ -62,6 +62,8 @@ class TrajectoryReader:
         """Load matching events into memory as a list."""
         return list(self.stream(**kwargs))
 
+    read_events = stream
+
     def count(self, **kwargs) -> int:
         """Count matching events without loading everything in memory."""
         return sum(1 for _ in self.stream(**kwargs))

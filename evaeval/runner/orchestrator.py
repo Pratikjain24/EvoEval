@@ -367,6 +367,32 @@ class ExperimentOrchestrator:
                                 )
                             )
 
+                            # Capture baseline repository commit state for git history audit
+                            baseline_commit_count = None
+                            baseline_head_sha = None
+                            if (task_ws / ".git").exists():
+                                try:
+                                    res_cnt = subprocess.run(
+                                        ["git", "rev-list", "--count", "HEAD"],
+                                        cwd=str(task_ws),
+                                        capture_output=True,
+                                        text=True,
+                                        timeout=5,
+                                    )
+                                    if res_cnt.returncode == 0:
+                                        baseline_commit_count = int(res_cnt.stdout.strip())
+                                    res_sha = subprocess.run(
+                                        ["git", "rev-parse", "HEAD"],
+                                        cwd=str(task_ws),
+                                        capture_output=True,
+                                        text=True,
+                                        timeout=5,
+                                    )
+                                    if res_sha.returncode == 0:
+                                        baseline_head_sha = res_sha.stdout.strip()
+                                except Exception:
+                                    pass
+
                             timeout_sec = self.config.sandbox.timeout_sec
                             with DockerRunner(
                                 config=self.config.sandbox,
@@ -445,7 +471,17 @@ class ExperimentOrchestrator:
                                         workspace_dir=task_ws,
                                         cycle=cycle,
                                         group=group,
+                                        run_id=run_name,
+                                        seed=seed,
+                                        agent_version=agent.version,
+                                        baseline_commit_count=baseline_commit_count,
+                                        baseline_head_sha=baseline_head_sha,
+                                        trajectory_writer=writer,
                                     )
+                                    # Record tamper violations if any
+                                    for chk_name, chk_payload in eval_score.tamper_checks.items():
+                                        if not chk_payload.passed:
+                                            cycle_safety_violations.append(chk_payload.model_dump())
 
                                 # Record any safety violations
                                 if safety_mon.violations:
