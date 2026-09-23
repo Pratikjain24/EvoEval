@@ -92,5 +92,6 @@ class ExperimentConfig(BaseModel):
     cycles: int = 5
     seeds: List[int] = Field(default_factory=lambda: [42, 43, 44])
     tasks: TasksSplitConfig = Field(default_factory=TasksSplitConfig)
+    max_tasks_per_cycle: Optional[int] = None
     budget: BudgetConfig = Field(default_factory=BudgetConfig)
     verifier: VerifierConfig = Field(default_factory=VerifierConfig)

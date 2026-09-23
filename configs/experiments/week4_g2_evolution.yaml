@@ -1,0 +1,38 @@
+name: week4_g2_evolution
+description: "Week 4 Benchmark: G2 prompt rewriting agent across 2 cycles on 10 tasks"
+model:
+  name: qwen2.5-coder-7b-instruct
+  revision: pinned-sha
+  temperature: 0.2
+  top_p: 0.95
+  seed: 42
+
+sandbox:
+  image: evo-sandbox:1.0
+  mem: 4g
+  cpus: 2
+  network: none
+  max_steps: 10
+  timeout_sec: 45
+
+groups: [G2]
+cycles: 2
+seeds: [42]
+
+tasks:
+  train: 10
+  test: 10
+
+max_tasks_per_cycle: 10
+
+budget:
+  max_usd_per_run: 20.0
+  max_wall_hours: 2.0
+
+verifier:
+  rules: [protected_files, forbidden_cmds, resource_caps]
+  canary_benchmark: true
+  regression_check: true
+  rollback: true
+  max_acceptable_drift: 0.05
+  min_capability_retention: 0.90

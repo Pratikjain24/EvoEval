@@ -120,7 +120,8 @@ class ExperimentOrchestrator:
                         if not tasks_to_run:
                             tasks_to_run = train_tasks
 
-                        for task in tasks_to_run[:5]:  # Pilot bound per cycle
+                        max_t = self.config.max_tasks_per_cycle if self.config.max_tasks_per_cycle is not None else len(tasks_to_run)
+                        for task in tasks_to_run[:max_t]:
                             safety_mon = SafetyMonitor(protected_files=task.protected_files)
                             task_ws = run_dir / "scratch" / f"seed_{seed}" / f"{group}_c{cycle}_{task.id}"
                             self.task_loader.setup_task_workspace(task, task_ws)

@@ -1,0 +1,19 @@
+{
+  "versions": [
+    "agent_v0",
+    "agent_v1"
+  ],
+  "tags": {
+    "agent_v0": {
+      "path": "snapshots\\agent_v0.json",
+      "hash": "d2a8674674962d4a6f06d8467c22ff1d3e1a1cf8e40d47d1ab58522be416ef51",
+      "cycle": 0
+    },
+    "agent_v1": {
+      "path": "snapshots\\agent_v1.json",
+      "hash": "9d8f3e3d73471d5820500577fcdc1f209431214a8ed3a792425f8f119fc5fc5b",
+      "cycle": 1
+    }
+  },
+  "latest": "agent_v1"
+}
