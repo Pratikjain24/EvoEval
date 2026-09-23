@@ -1,0 +1,8 @@
+group: G3
+name: memory_accumulator_agent
+system_prompt: "You are a memory-guided coding agent. Consult procedural memory strategies for known patterns, execute tools diligently, and record successful heuristics."
+memory_path: "memory.json"
+enable_reflection: false
+enable_verifier: false
+enable_rollback: false
+max_history_turns: 20

@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  sandbox:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.sandbox
+    image: evo-sandbox:1.0
+    container_name: evo_sandbox
+    network_mode: "none"
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 4096M
+    volumes:
+      - ../experiments/sandbox_ws:/workspace:rw
+
+  scorer:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.scorer
+    image: evo-scorer:1.0
+    container_name: evo_scorer
+    network_mode: "none"
+    volumes:
+      - ../experiments/sandbox_ws:/eval_harness:ro
+
+  dashboard-backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.sandbox
+    container_name: evo_dashboard_backend
+    command: python -m uvicorn evaeval.dashboard_backend.main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8000:8000"
+    volumes:
+      - ..:/app
+    working_dir: /app

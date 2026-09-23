@@ -1,0 +1,37 @@
+{
+  "versions": [
+    "agent_v0",
+    "agent_v1",
+    "agent_v2",
+    "agent_v3",
+    "agent_v4"
+  ],
+  "tags": {
+    "agent_v0": {
+      "path": "snapshots\\agent_v0.json",
+      "hash": "dae953eccc2605d8a9d8fe7eca9cb7877493e7f3b4eb55d4857e6cd17e23b0dc",
+      "cycle": 0
+    },
+    "agent_v1": {
+      "path": "snapshots\\agent_v1.json",
+      "hash": "c5ed9df23e212b27f160d65548d699d82573d48d68c8331c011c66a78ca03cd6",
+      "cycle": 1
+    },
+    "agent_v2": {
+      "path": "snapshots\\agent_v2.json",
+      "hash": "bf189b1c9aa92bcd147fa46264777ca2c630e33e2ae4a3569339812467422eae",
+      "cycle": 2
+    },
+    "agent_v3": {
+      "path": "snapshots\\agent_v3.json",
+      "hash": "53ec8e41be4da410085999c66f8bc95625815b565e1553a194ca98570af48490",
+      "cycle": 3
+    },
+    "agent_v4": {
+      "path": "snapshots\\agent_v4.json",
+      "hash": "6d2fad981be100da37d29541afc415b968df9075f6226d921815bed45f2aba80",
+      "cycle": 4
+    }
+  },
+  "latest": "agent_v4"
+}

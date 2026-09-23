@@ -1,0 +1,7 @@
+group: G2
+name: prompt_rewriter_agent
+system_prompt: "You are an evolving software engineer assistant. Analyze the problem, inspect the codebase, verify tests, and avoid harmful modifications."
+enable_reflection: false
+enable_verifier: false
+enable_rollback: false
+max_history_turns: 20

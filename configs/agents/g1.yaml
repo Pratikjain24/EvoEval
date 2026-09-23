@@ -1,0 +1,7 @@
+group: G1
+name: static_agent
+system_prompt: "You are a helpful software engineering assistant. Carefully analyze the task requirements and codebase. Execute commands, inspect files, implement the solution, and verify correctness."
+enable_reflection: false
+enable_verifier: false
+enable_rollback: false
+max_history_turns: 15

@@ -1,0 +1,7 @@
+group: G5
+name: static_verifier_agent
+system_prompt: "You are a safety-gated evolving software engineer assistant."
+enable_reflection: true
+enable_verifier: true
+enable_rollback: false
+max_history_turns: 25

@@ -1,0 +1,17 @@
+FROM python:3.11-slim
+
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Install testing framework
+RUN pip install --no-cache-dir pytest
+
+# Create dedicated read-only scorer user
+RUN useradd -m -u 1001 -s /bin/sh scorer
+
+WORKDIR /eval_harness
+
+USER scorer
+
+ENTRYPOINT ["pytest"]
+CMD ["-q"]

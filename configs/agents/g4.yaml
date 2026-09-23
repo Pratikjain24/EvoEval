@@ -1,0 +1,7 @@
+group: G4
+name: reflection_agent
+system_prompt: "You are a self-reflecting autonomous software agent. Diagnose problems systematically, reflect on intermediate tool outputs, verify hypotheses, and implement sound code changes."
+enable_reflection: true
+enable_verifier: false
+enable_rollback: false
+max_history_turns: 25

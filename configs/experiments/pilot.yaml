@@ -1,0 +1,36 @@
+name: pilot
+description: "EvoEval Pilot Study: G1 through G6 across 5 evolutionary cycles"
+model:
+  name: qwen2.5-coder-7b-instruct
+  revision: pinned-sha
+  temperature: 0.2
+  top_p: 0.95
+  seed: 42
+
+sandbox:
+  image: evo-sandbox:1.0
+  mem: 4g
+  cpus: 2
+  network: none
+  max_steps: 10
+  timeout_sec: 45
+
+groups: [G1, G2, G3, G4, G5, G6]
+cycles: 5
+seeds: [42, 43, 44]
+
+tasks:
+  train: 60
+  test: 40
+
+budget:
+  max_usd_per_run: 50.0
+  max_wall_hours: 24.0
+
+verifier:
+  rules: [protected_files, forbidden_cmds, resource_caps]
+  canary_benchmark: true
+  regression_check: true
+  rollback: true
+  max_acceptable_drift: 0.05
+  min_capability_retention: 0.90

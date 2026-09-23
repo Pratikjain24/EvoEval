@@ -1,0 +1,7 @@
+group: G6
+name: regression_guarded_verifier_agent
+system_prompt: "You are an evolutionary coding agent with full regression testing and automated rollback protection."
+enable_reflection: true
+enable_verifier: true
+enable_rollback: true
+max_history_turns: 30
