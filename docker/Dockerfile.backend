@@ -1,0 +1,33 @@
+FROM python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# Create unprivileged application service user
+RUN groupadd -g 1000 evouser && \
+    useradd -u 1000 -g evouser -m -s /bin/bash evouser
+
+WORKDIR /app
+
+# Copy dependency specifications first for layer caching
+COPY pyproject.toml ./
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir fastapi uvicorn sqlalchemy pydantic pyyaml click typer
+
+# Copy application source code
+COPY evaeval /app/evaeval
+COPY tasks /app/tasks
+COPY experiments /app/experiments
+
+# Set correct ownership for non-root user
+RUN chown -R evouser:evouser /app
+
+USER evouser
+
+EXPOSE 8000
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" || exit 1
+
+CMD ["python", "-m", "uvicorn", "evaeval.dashboard_backend.main:app", "--host", "0.0.0.0", "--port", "8000"]

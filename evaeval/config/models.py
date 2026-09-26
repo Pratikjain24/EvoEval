@@ -8,7 +8,7 @@ from pydantic import BaseModel, Field
 class ModelConfig(BaseModel):
     """Configuration for LLM inference endpoint."""
     name: str = "qwen2.5-coder-7b-instruct"
-    revision: Optional[str] = "pinned-sha-12345"
+    revision: Optional[str] = "c03e6d358207e414f1eca0bb1891e29f1db0e242"
     family: str = "qwen"
     temperature: float = 0.2
     top_p: float = 0.95
@@ -30,7 +30,7 @@ class JudgeConfig(BaseModel):
     enabled: bool = False
     name: str = "llama-3.1-8b-instruct"
     family: str = "llama"
-    revision: Optional[str] = None
+    revision: Optional[str] = "0e9e39f249a16976918f6564b8830bc894c89659"
     temperature: float = 0.0
     max_tokens: int = 1024
     api_base: Optional[str] = None

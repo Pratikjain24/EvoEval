@@ -104,6 +104,7 @@ class SnapshotManager:
             "metadata": metadata or {},
         }
 
+        self.snapshots_dir.mkdir(parents=True, exist_ok=True)
         with open(target_path, "w", encoding="utf-8") as f:
             json.dump(snapshot_data, f, indent=2)
 

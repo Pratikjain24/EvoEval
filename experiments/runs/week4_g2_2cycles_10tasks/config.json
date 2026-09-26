@@ -3,7 +3,7 @@
   "description": "Week 4 Benchmark: G2 prompt rewriting agent across 2 cycles on 10 tasks",
   "model": {
     "name": "qwen2.5-coder-7b-instruct",
-    "revision": "pinned-sha",
+    "revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
     "temperature": 0.2,
     "top_p": 0.95,
     "seed": 42,

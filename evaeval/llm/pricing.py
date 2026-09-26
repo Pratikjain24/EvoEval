@@ -1,6 +1,7 @@
 """LLM Token pricing table, cost accounting, and budget guard."""
 
 from __future__ import annotations
+import threading
 import time
 from typing import Dict, Optional
 from evaeval.trajectory.schema import CostRecord
@@ -15,13 +16,17 @@ class PricingModel:
     """Pricing table per million tokens for standard LLM models."""
 
     PRICING_PER_1M = {
-        # Models: (prompt_usd_per_1m, completion_usd_per_1m)
         "qwen2.5-coder-7b-instruct": (0.20, 0.40),
         "qwen2.5-coder-32b-instruct": (0.80, 1.60),
+        "llama-3.1-8b-instruct": (0.20, 0.40),
+        "llama-3.1-70b-instruct": (0.90, 1.80),
         "gpt-4o": (2.50, 10.00),
         "gpt-4o-mini": (0.15, 0.60),
         "claude-3-5-sonnet": (3.00, 15.00),
         "deepseek-coder-v2": (0.14, 0.28),
+        "gemma-4-26b-a4b-it": (0.00, 0.00),
+        "qwen2.5-coder-3b-instruct": (0.00, 0.00),
+        "qwen2.5-coder-3b-instruct-q4_k_m": (0.00, 0.00),
         "mock-model": (0.00, 0.00),
     }
 
@@ -53,6 +58,7 @@ class BudgetGuard:
         self.cumulative_usd: float = 0.0
         self.cumulative_tokens_in: int = 0
         self.cumulative_tokens_out: int = 0
+        self._lock = threading.Lock()
 
     def check_wall_clock(self) -> None:
         """Check if elapsed experiment wall-clock runtime exceeds limit."""
@@ -72,20 +78,22 @@ class BudgetGuard:
     def record_cost(self, cost: CostRecord) -> None:
         """Record cost and enforce monetary and wall-clock budget limits."""
         self.check_wall_clock()
-        self.cumulative_usd += cost.usd
-        self.cumulative_tokens_in += cost.tokens_in
-        self.cumulative_tokens_out += cost.tokens_out
+        with self._lock:
+            self.cumulative_usd += cost.usd
+            self.cumulative_tokens_in += cost.tokens_in
+            self.cumulative_tokens_out += cost.tokens_out
 
-        if self.cumulative_usd > self.max_usd_budget:
-            raise BudgetExceededError(
-                f"Cumulative run cost (${self.cumulative_usd:.4f}) exceeded budget ceiling (${self.max_usd_budget:.2f})."
-            )
+            if self.cumulative_usd > self.max_usd_budget:
+                raise BudgetExceededError(
+                    f"Cumulative run cost (${self.cumulative_usd:.4f}) exceeded budget ceiling (${self.max_usd_budget:.2f})."
+                )
 
     def restore_spent(self, usd: float, tokens_in: int = 0, tokens_out: int = 0) -> None:
         """Restore expended budget amounts during crash recovery."""
-        self.cumulative_usd += usd
-        self.cumulative_tokens_in += tokens_in
-        self.cumulative_tokens_out += tokens_out
+        with self._lock:
+            self.cumulative_usd += usd
+            self.cumulative_tokens_in += tokens_in
+            self.cumulative_tokens_out += tokens_out
 
     @property
     def remaining_budget_usd(self) -> float:

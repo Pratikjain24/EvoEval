@@ -67,6 +67,8 @@ class TaskLoader:
 
         repo_source = self.repos_dir / task.repo
         if not (repo_source.exists() and repo_source.is_dir()):
+            repo_source = self.repos_dir / task.id
+        if not (repo_source.exists() and repo_source.is_dir()):
             candidate = self.tasks_file.parent / task.repo
             if candidate.exists() and candidate.is_dir():
                 repo_source = candidate

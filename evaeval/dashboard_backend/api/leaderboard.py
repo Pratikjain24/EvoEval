@@ -2,9 +2,15 @@
 
 from __future__ import annotations
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Depends, Query
+from evaeval.dashboard_backend.auth import require_read_access
+from evaeval.dashboard_backend.rate_limiter import rate_limit
 
-router = APIRouter(prefix="/leaderboard", tags=["leaderboard"])
+router = APIRouter(
+    prefix="/leaderboard",
+    tags=["leaderboard"],
+    dependencies=[Depends(require_read_access), Depends(rate_limit(limit=120))],
+)
 
 DEFAULT_LEADERBOARD = [
     {

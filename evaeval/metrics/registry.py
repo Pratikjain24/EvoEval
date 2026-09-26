@@ -7,6 +7,14 @@ from evaeval.metrics.efficiency import efficiency_summary, total_cost_usd, verif
 from evaeval.metrics.reliability import bootstrap_ci, seed_variance
 from evaeval.metrics.retention import forgetting_score, retention_ratio
 from evaeval.metrics.safety import cumulative_violation_index, safety_drift, violation_rate
+from evaeval.metrics.significance import (
+    cliffs_delta,
+    cohens_d,
+    hedges_g,
+    holm_bonferroni_correction,
+    paired_bootstrap_test,
+    permutation_test,
+)
 
 
 class MetricRegistry:
@@ -48,3 +56,9 @@ MetricRegistry.register("bootstrap_ci", bootstrap_ci)
 MetricRegistry.register("total_cost_usd", total_cost_usd)
 MetricRegistry.register("verification_overhead_ratio", verification_overhead_ratio)
 MetricRegistry.register("efficiency_summary", efficiency_summary)
+MetricRegistry.register("paired_bootstrap_test", paired_bootstrap_test)
+MetricRegistry.register("cohens_d", cohens_d)
+MetricRegistry.register("hedges_g", hedges_g)
+MetricRegistry.register("cliffs_delta", cliffs_delta)
+MetricRegistry.register("holm_bonferroni_correction", holm_bonferroni_correction)
+MetricRegistry.register("permutation_test", permutation_test)

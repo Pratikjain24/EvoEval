@@ -1,0 +1,82 @@
+{
+  "name": "pilot_llama",
+  "description": "EvoEval Cross-Family Pilot Benchmark (Llama-3.1-8B-Instruct): G1 through G6 across 5 cycles x 3 seeds",
+  "model": {
+    "name": "llama-3.1-8b-instruct",
+    "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+    "family": "llama",
+    "temperature": 0.2,
+    "top_p": 0.95,
+    "seed": 42,
+    "api_base": null,
+    "api_key": null,
+    "context_window": 32768,
+    "max_tokens": 4096
+  },
+  "sandbox": {
+    "image": "evo-sandbox:1.0",
+    "scorer_image": "evo-scorer:1.0",
+    "user": "1000:1000",
+    "scorer_user": "1001:1001",
+    "mem": "4g",
+    "scorer_mem": "2g",
+    "cpus": 2.0,
+    "pids_limit": 256,
+    "network": "none",
+    "max_steps": 10,
+    "timeout_sec": 45,
+    "read_only_root": false,
+    "cap_drop": [
+      "ALL"
+    ],
+    "no_new_privileges": true,
+    "allow_local_fallback": true
+  },
+  "groups": [
+    "G1",
+    "G2",
+    "G3",
+    "G4",
+    "G5",
+    "G6"
+  ],
+  "cycles": 5,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "tasks": {
+    "train": 60,
+    "test": 40
+  },
+  "max_tasks_per_cycle": 10,
+  "budget": {
+    "max_usd_per_run": 50.0,
+    "max_wall_hours": 24.0,
+    "max_tokens_per_task": 64000
+  },
+  "verifier": {
+    "rules": [
+      "protected_files",
+      "forbidden_cmds",
+      "resource_caps"
+    ],
+    "canary_benchmark": true,
+    "regression_check": true,
+    "rollback": true,
+    "max_acceptable_drift": 0.05,
+    "min_capability_retention": 0.9
+  },
+  "judge": {
+    "enabled": true,
+    "name": "qwen2.5-coder-7b-instruct",
+    "family": "qwen",
+    "revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
+    "temperature": 0.0,
+    "max_tokens": 1024,
+    "api_base": null,
+    "api_key": null,
+    "is_auxiliary_only": true
+  }
+}

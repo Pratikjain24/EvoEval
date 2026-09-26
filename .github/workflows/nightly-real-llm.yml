@@ -1,0 +1,105 @@
+name: Nightly Real-LLM (vLLM) Smoke Test
+
+on:
+  schedule:
+    # Run nightly at 02:00 UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+    inputs:
+      model_name:
+        description: 'Hugging Face / vLLM model name'
+        required: true
+        default: 'qwen2.5-coder-7b-instruct'
+      tasks:
+        description: 'Benchmark tasks to evaluate (1-2 tasks)'
+        required: true
+        default: 'task_001,task_006'
+      strict_mode:
+        description: 'Fail if live GPU vLLM is unreachable'
+        type: boolean
+        default: false
+
+jobs:
+  # Job 1: GPU Runner execution when self-hosted or cloud GPU runner is active
+  real-vllm-gpu-smoke:
+    name: Real vLLM GPU Smoke (Qwen2.5-Coder)
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-latest]
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pip'
+
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[dev]"
+
+    - name: Pre-Flight Environment & Remote Pinned Model Verification
+      run: |
+        python -m evaeval.runner.cli verify-env --config configs/experiments/smoke_real_llm.yaml
+
+    - name: Run vLLM Protocol & Drift Probes (Integration Test Suite)
+      run: |
+        pytest tests/test_vllm_integration.py -v --durations=10
+
+    - name: Start Local/Containerized vLLM Server (if GPU Available)
+      id: vllm-setup
+      run: |
+        if command -v nvidia-smi &> /dev/null; then
+          echo "GPU detected. Initializing vLLM container..."
+          docker run -d --name vllm-server \
+            --gpus all \
+            -p 8000:8000 \
+            --ipc=host \
+            vllm/vllm-openai:latest \
+            --model Qwen/Qwen2.5-Coder-7B-Instruct \
+            --revision c03e6d358207e414f1eca0bb1891e29f1db0e242 \
+            --dtype half \
+            --max-model-len 4096 \
+            --port 8000
+          
+          echo "Waiting for vLLM server to become healthy..."
+          for i in {1..60}; do
+            if curl -s http://localhost:8000/v1/models | grep -q "qwen"; then
+              echo "vLLM server is healthy!"
+              echo "VLLM_ACTIVE=true" >> $GITHUB_ENV
+              break
+            fi
+            sleep 5
+          done
+        else
+          echo "No physical GPU found on this runner. Operating in simulated vLLM / smoke mode."
+          echo "VLLM_ACTIVE=false" >> $GITHUB_ENV
+        fi
+
+    - name: Run Real-LLM End-to-End Smoke Test & Drift Measurement
+      run: |
+        if [ "$VLLM_ACTIVE" = "true" ]; then
+          python scripts/run_vllm_smoke_test.py --strict --api-base http://localhost:8000/v1 --tasks "${{ github.event.inputs.tasks || 'task_001,task_006' }}"
+          pytest tests/test_vllm_integration.py -v -m real_llm
+        else
+          python scripts/run_vllm_smoke_test.py --api-base http://localhost:8000/v1 --tasks "${{ github.event.inputs.tasks || 'task_001,task_006' }}"
+        fi
+
+    - name: Run Benchmark CLI Smoke Run
+      run: |
+        evoeval run --config configs/experiments/smoke_real_llm.yaml --run-id nightly_vllm_smoke
+
+    - name: Upload Smoke Test Artifacts & Drift Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: vllm-smoke-test-artifacts
+        path: |
+          experiments/runs/vllm_smoke_canonical/vllm_smoke_test_report.json
+          experiments/runs/nightly_vllm_smoke/trajectory.jsonl
+          experiments/runs/nightly_vllm_smoke/results/cycle_metrics.json
+        retention-days: 30

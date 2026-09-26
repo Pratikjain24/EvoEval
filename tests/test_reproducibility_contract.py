@@ -14,6 +14,7 @@ import json
 import random
 import shutil
 import stat
+import sys
 from pathlib import Path
 import pytest
 import yaml
@@ -48,7 +49,7 @@ def temp_run_dir(tmp_path: Path):
 # ==============================================================================
 
 def test_pinned_model_weights_in_full_study():
-    """Verify configs/experiments/full_study.yaml pins exact revision commit SHAs."""
+    """Verify configs/experiments/full_study.yaml pins exact 40-hex revision commit SHAs."""
     cfg_path = Path("configs/experiments/full_study.yaml")
     assert cfg_path.exists(), "full_study.yaml config must exist"
 
@@ -58,18 +59,23 @@ def test_pinned_model_weights_in_full_study():
     exp_cfg = ExperimentConfig.model_validate(data)
     assert exp_cfg.model.revision is not None
     assert exp_cfg.model.revision != "pinned-sha", "Model revision must be an explicit commit SHA"
-    assert len(exp_cfg.model.revision) >= 10, "Model revision must be a full or substantial git SHA"
+    assert len(exp_cfg.model.revision) == 40, "Model revision must be an exact 40-hex HuggingFace commit SHA"
+    assert all(c in "0123456789abcdef" for c in exp_cfg.model.revision.lower())
     assert exp_cfg.model.family == "qwen"
 
     # Judge configuration is also pinned
     assert exp_cfg.judge.enabled is True
     assert exp_cfg.judge.revision is not None
+    assert len(exp_cfg.judge.revision) == 40, "Judge revision must be an exact 40-hex HuggingFace commit SHA"
+    assert all(c in "0123456789abcdef" for c in exp_cfg.judge.revision.lower())
     assert exp_cfg.judge.family == "llama"
     assert exp_cfg.judge.family != exp_cfg.model.family, "Cross-family isolation must be maintained"
 
 
 def test_pinned_docker_image_digests():
     """Verify docker/image_digests.json contains SHA-256 digests for all 4 containers."""
+    from evaeval.runner.reproducibility import verify_docker_specifications
+
     digests = load_pinned_docker_digests()
 
     required_images = [
@@ -83,6 +89,30 @@ def test_pinned_docker_image_digests():
         digest = digests[img]
         assert digest.startswith("sha256:"), f"Digest must be a SHA-256 digest: {digest}"
         assert len(digest) == 71, f"Standard SHA-256 digest length is 7 + 64 characters: {digest}"
+
+    # Verify Dockerfile specifications and base images
+    spec = verify_docker_specifications()
+    assert spec["status"] in ("pass", "warning")
+    assert len(spec["base_images"]) == 4
+    for img, binfo in spec["base_images"].items():
+        assert binfo["digest"].startswith("sha256:")
+        assert len(binfo["digest"]) == 71
+
+    # Verify build_and_inspect_images.py verification pipeline
+    import subprocess
+    script_path = Path(__file__).resolve().parent.parent / "scripts" / "build_and_inspect_images.py"
+    proc = subprocess.run([sys.executable, str(script_path), "--verify"], capture_output=True, text=True)
+    assert proc.returncode == 0, f"build_and_inspect_images.py --verify failed:\n{proc.stdout}\n{proc.stderr}"
+
+    # Verify build provenance record
+    prov_file = Path(__file__).resolve().parent.parent / "docker" / "build_provenance.json"
+    assert prov_file.exists(), "docker/build_provenance.json missing"
+    with open(prov_file, "r", encoding="utf-8") as f:
+        prov = json.load(f)
+    assert "images" in prov
+    for img in required_images:
+        assert img in prov["images"], f"{img} missing from build_provenance.json"
+        assert prov["images"][img]["digest"] == digests[img]
 
 
 # ==============================================================================
@@ -196,6 +226,22 @@ def test_export_huggingface_dataset(temp_run_dir: Path, tmp_path: Path):
     )
     writer.close()
 
+    # Write a second event with a probe command requiring responsible-disclosure redaction
+    writer = TrajectoryWriter(traj_path)
+    writer.write(
+        TrajectoryEvent(
+            run_id="hf_test_run",
+            cycle=0,
+            seed=42,
+            group="G1",
+            task_id="task_probe",
+            agent_version="agent_v0",
+            event_type="tool_call",
+            payload={"tool": "bash", "arguments": {"cmd": "chmod 777 exploit.sh && rm -rf /"}},
+        )
+    )
+    writer.close()
+
     # Create dummy audit queue
     with open(temp_run_dir / "audit_queue.json", "w", encoding="utf-8") as f:
         json.dump([{"task_id": "task_001", "is_violation": False, "is_reward_hacked": False}], f)
@@ -208,8 +254,37 @@ def test_export_huggingface_dataset(temp_run_dir: Path, tmp_path: Path):
     assert (hf_out / "labels" / "labels.jsonl").exists(), "labels/labels.jsonl must exist"
     assert (hf_out / "README.md").exists(), "Dataset card README.md must exist"
     assert (hf_out / "dataset_info.json").exists(), "dataset_info.json must exist"
+    assert (hf_out / "croissant.json").exists(), "Croissant metadata must exist"
+    assert (hf_out / "neurips_checklist.md").exists(), "NeurIPS checklist must exist"
 
     with open(hf_out / "dataset_info.json", "r", encoding="utf-8") as f:
         info = json.load(f)
     assert info["dataset_name"] == "evoeval-benchmark"
     assert info["splits"] == ["tasks", "trajectories", "labels"]
+
+    # Verify Croissant MLCommons 1.0 metadata & Responsible Data Practices
+    with open(hf_out / "croissant.json", "r", encoding="utf-8") as f:
+        croissant = json.load(f)
+    assert croissant["@type"] == "sc:Dataset"
+    assert croissant["conformsTo"] == "http://mlcommons.org/croissant/1.0"
+    assert croissant["version"] == "1.0.0"
+    assert any(dist["name"] == "trajectories.jsonl" for dist in croissant["distribution"])
+    assert any(r["name"] == "tasks" for r in croissant["recordSet"])
+    assert any(r["name"] == "trajectories" for r in croissant["recordSet"])
+    assert any(r["name"] == "labels" for r in croissant["recordSet"])
+    assert croissant["license"] == "https://spdx.org/licenses/Apache-2.0"
+    assert "dataBiases" in croissant
+    assert "personalDataConsent" in croissant
+    assert "dataCollection" in croissant
+
+    # Verify NeurIPS checklist content
+    checklist_text = (hf_out / "neurips_checklist.md").read_text(encoding="utf-8")
+    assert "NeurIPS 2027 Paper Checklist" in checklist_text
+    assert "Evaluation Tools, Frameworks, and Infrastructure" in checklist_text
+
+    # Verify responsible disclosure redaction of exploit command in trajectories
+    traj_lines = (hf_out / "trajectories" / "trajectories.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    assert len(traj_lines) >= 2
+    redacted_event = json.loads(traj_lines[-1])
+    assert redacted_event["payload"]["arguments"]["cmd"] == "[REDACTED_SECURITY_PROBE_COMMAND]"
+

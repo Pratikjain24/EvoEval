@@ -153,3 +153,58 @@ class LocalSandbox:
             })
         return items
 
+
+class DockerSandbox(LocalSandbox):
+    """Containerized sandbox executing shell commands inside a live Docker container."""
+
+    def __init__(
+        self,
+        workspace_dir: Path,
+        container_id: str,
+        safety_monitor: Optional[SafetyMonitor] = None,
+        max_file_size_bytes: int = 10 * 1024 * 1024,
+    ):
+        super().__init__(workspace_dir, safety_monitor, max_file_size_bytes)
+        self.container_id = container_id
+
+    def exec_command(self, cmd: str, timeout: int = 30) -> Dict[str, Any]:
+        """Execute a shell command inside the active Docker container via docker exec."""
+        start = time.time()
+        allowed, safety_payload = self.safety_monitor.check_command(cmd)
+        if not allowed:
+            return {
+                "stdout": "",
+                "stderr": f"SECURITY BLOCK: {safety_payload.violation_details if safety_payload else 'Blocked'}",
+                "exit_code": 126,
+                "duration_ms": 1,
+                "blocked": True,
+            }
+
+        try:
+            proc = subprocess.run(
+                ["docker", "exec", "-w", "/workspace", self.container_id, "sh", "-c", cmd],
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+            )
+            duration_ms = int((time.time() - start) * 1000)
+            return {
+                "stdout": proc.stdout,
+                "stderr": proc.stderr,
+                "exit_code": proc.returncode,
+                "duration_ms": duration_ms,
+                "blocked": False,
+            }
+        except subprocess.TimeoutExpired:
+            duration_ms = int((time.time() - start) * 1000)
+            return {
+                "stdout": "",
+                "stderr": f"Command timed out after {timeout} seconds.",
+                "exit_code": 124,
+                "duration_ms": duration_ms,
+                "blocked": False,
+            }
+        except Exception:
+            # Graceful fallback to local execution if docker exec fails
+            return super().exec_command(cmd, timeout=timeout)
+

@@ -81,7 +81,7 @@ graph TD
 | **LLM Runtime** | **OpenAI-compatible / MockLLM** | Standard `/chat/completions` API; offline mock client for deterministic testing. |
 | **Sandbox** | **Docker + LocalSandbox fallback** | Unprivileged container; strict path confinement fallback jail on Windows. |
 | **Hidden Scorer** | **Read-only pytest harness** | Ground truth tests isolated from agent visibility (mitigating 43x reward hacking spike). |
-| **Event Logging** | **Pydantic v2 + JSONL with `fsync`** | Immutable append-only event stream; mathematically verifiable metrics. |
+| **Event Logging** | **Pydantic v2 + JSONL with `fsync`** | Immutable append-only event stream; property-tested metrics. |
 | **Versioning** | **Git tags (`agent_v0..agent_vN`)** | Content-addressable, reviewer-verifiable checkpoints on agent state repository. |
 | **Analysis** | **DuckDB + NumPy + SciPy** | Fast columnar queries; 95% bootstrap confidence intervals for scientific rigor. |
 | **Backend** | **FastAPI + SQLAlchemy** | Asynchronous REST service sharing Pydantic data schemas. |

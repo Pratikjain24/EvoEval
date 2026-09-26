@@ -35,7 +35,7 @@ EvoEval strictly pins random seeds for reproducibility:
 - **Default Seed Matrix**: `[42, 43, 44]`
 - **Temperature**: `0.2` (sampling stability)
 - **Top-p**: `0.95`
-- **Model Revision**: Pinned commit SHA (`pinned-sha-12345`)
+- **Model Revision**: Pinned commit SHA (`c03e6d358207e414f1eca0bb1891e29f1db0e242`)
 - **Schema Version**: `1.0.0` (FROZEN contract)
 
 All trajectory events are flushed synchronously with `os.fsync`, guaranteeing identical, verifiable execution traces.
@@ -111,3 +111,41 @@ npm run dev
 ```
 
 Visit `http://localhost:3000` to inspect live KPI cards, interactive drift curves with 95% bootstrap confidence bands, retention charts, and the trajectory step viewer.
+
+---
+
+## 7. Real-LLM (vLLM) Smoke Testing & Drift Probing
+
+To catch fidelity drift between Mock LLMs and real autoregressive models on GPU hardware:
+
+### Local / Simulated vLLM Testing
+```bash
+# Execute vLLM wire protocol verification and drift probes
+make smoke-real-llm
+
+# Run standalone smoke runner on 2 tasks (task_001, task_006)
+python scripts/run_vllm_smoke_test.py --tasks task_001,task_006
+```
+
+### Live GPU Runner Execution
+```bash
+# 1. Launch pinned vLLM container on GPU host
+docker run -d --name vllm-server \
+  --gpus all \
+  -p 8000:8000 \
+  --ipc=host \
+  vllm/vllm-openai:latest \
+  --model Qwen/Qwen2.5-Coder-7B-Instruct \
+  --revision c03e6d358207e414f1eca0bb1891e29f1db0e242 \
+  --dtype half \
+  --max-model-len 4096
+
+# 2. Execute strict real-LLM smoke test
+python scripts/run_vllm_smoke_test.py --strict --api-base http://localhost:8000/v1
+
+# 3. Run full real-model integration test suite
+pytest tests/test_vllm_integration.py -v -m real_llm
+```
+
+Nightly automated smoke testing is orchestrated via `.github/workflows/nightly-real-llm.yml` on clean GPU runners.
+

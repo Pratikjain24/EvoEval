@@ -2,7 +2,8 @@ name: pilot
 description: "EvoEval Pilot Study: G1 through G6 across 5 evolutionary cycles"
 model:
   name: qwen2.5-coder-7b-instruct
-  revision: pinned-sha
+  revision: "c03e6d358207e414f1eca0bb1891e29f1db0e242"
+  family: qwen
   temperature: 0.2
   top_p: 0.95
   seed: 42
@@ -22,6 +23,8 @@ seeds: [42, 43, 44]
 tasks:
   train: 60
   test: 40
+
+max_tasks_per_cycle: 10
 
 budget:
   max_usd_per_run: 50.0

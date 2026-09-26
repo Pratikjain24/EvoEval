@@ -6,9 +6,15 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from evaeval.dashboard_backend.auth import require_read_access
 from evaeval.dashboard_backend.db.models import Run, get_db
+from evaeval.dashboard_backend.rate_limiter import rate_limit
 
-router = APIRouter(prefix="/runs", tags=["runs"])
+router = APIRouter(
+    prefix="/runs",
+    tags=["runs"],
+    dependencies=[Depends(require_read_access), Depends(rate_limit(limit=60))],
+)
 
 
 @router.get("", response_model=List[Dict[str, Any]])

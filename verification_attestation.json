@@ -1,0 +1,113 @@
+{
+  "attestation_version": "1.0.0",
+  "benchmark_name": "EvoEval",
+  "verification_status": "VERIFIED",
+  "timestamp_utc": "2026-09-25T18:24:07.303096+00:00",
+  "git": {
+    "commit": "0178f924ac8b80e1ff77fe9deb16f2ee87e74784",
+    "branch": "master",
+    "dirty": "true"
+  },
+  "environment": {
+    "os": "Windows",
+    "os_release": "10",
+    "os_version": "10.0.26200",
+    "architecture": "AMD64",
+    "python_version": "3.10.11",
+    "python_executable": "C:\\Users\\kruti\\AppData\\Local\\Programs\\Python\\Python310\\python.exe",
+    "is_ci": false,
+    "ci_runner": "Windows"
+  },
+  "verification_results": {
+    "task_catalog": {
+      "passed": true,
+      "sha256": "458491bae52a3e9148b8c4618131541227b43fe3398b52517987995e74ba2259",
+      "details": "Verified 100 tasks"
+    },
+    "docker_digests": {
+      "passed": true,
+      "digests": {
+        "evo-sandbox:1.0": "sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401",
+        "evo-scorer:1.0": "sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34",
+        "evo-backend:1.0": "sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e",
+        "evo-frontend:1.0": "sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333"
+      }
+    },
+    "model_revisions": {
+      "passed": true,
+      "agent_model": {
+        "model_name": "qwen2.5-coder-7b-instruct",
+        "repo_id": "Qwen/Qwen2.5-Coder-7B-Instruct",
+        "pinned_revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
+        "status": "verified_and_pulled",
+        "pulled_config": true,
+        "architecture": [
+          "Qwen2ForCausalLM"
+        ],
+        "vocab_size": 152064,
+        "resolved_sha": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
+        "cache_path": "C:\\Users\\kruti\\.cache\\evoeval\\models\\Qwen_Qwen2.5-Coder-7B-Instruct\\c03e6d358207\\config.json",
+        "model_type": "qwen2"
+      },
+      "judge_model": {
+        "model_name": "llama-3.1-8b-instruct",
+        "repo_id": "meta-llama/Llama-3.1-8B-Instruct",
+        "pinned_revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "status": "verified_remote_commit",
+        "pulled_config": false,
+        "architecture": [],
+        "vocab_size": 0,
+        "resolved_sha": "0e9e39f249a16976918f6564b8830bc894c89659",
+        "cache_path": "C:\\Users\\kruti\\.cache\\evoeval\\models\\meta-llama_Llama-3.1-8B-Instruct\\0e9e39f249a1\\config.json"
+      }
+    },
+    "trajectory_manifests": {
+      "passed": true,
+      "qwen": {
+        "raw_sha256": "2a341e0bdc79b297267c6823cd2e3f0507e29d192d0dc9f1efe2a2a585b45b32",
+        "deterministic_sha256": "ca1671bbb9949e4754fb16c62ca02dc2f40f8e4783bf9f0d53bf041a617f354a",
+        "total_events": 10365
+      },
+      "llama": {
+        "raw_sha256": "671457454d70c7da4c11cc097a22fc10bba0ad48d331b1030973f88789065816",
+        "deterministic_sha256": "a137712d557b531828f3d0d172946ccd57dc4f79e4dbde295f77a5f25d3ec0b9",
+        "total_events": 10365
+      },
+      "horizon_sensitivity": {
+        "raw_sha256": "7c9c57f0cdca9a3a887a67619bf30dae934a460388f20d2d6f6345193d5d78ba",
+        "deterministic_sha256": "ba14fafd3a63c272f9c3d1fe09afbebf94df6ceacdb582a0f69901ab28de7f11",
+        "total_events": 4775
+      },
+      "local_qwen_live": {
+        "raw_sha256": "4c79eaaf4f3ca4a875609ddc6bab9f726ed5e845992c92c495f9bdf46e923d33",
+        "deterministic_sha256": "dec441109fca80e606727135eb6afc4686c43dd9713d8c831e05e72fb9ce7449",
+        "total_events": 426
+      },
+      "full_study_live": {
+        "raw_sha256": "1ee2a2b7e2874209b211985368f7fbdd6b7ab9c70bb5ee1d33239e4d843d7b11",
+        "deterministic_sha256": "3ac2de23d18d7c05f2604d2b6fa387e3eced702ae598dcf2a78ae8453072c2cc",
+        "total_events": 9302
+      },
+      "full_study_canonical": {
+        "raw_sha256": "79a76f354964a979c9ce35c3baf841a5c201a11b2dafb440e50b35645b884791",
+        "deterministic_sha256": "21b9a00b8c078f13447bcb38739a42c89737be9b2fd4f6612b4a2e9efe138313",
+        "total_events": 234360,
+        "evaluations": 18000
+      }
+    },
+    "publication_artifacts": {
+      "passed": true,
+      "tables_verified": 16,
+      "figures_verified": 11,
+      "results_verified": 15,
+      "missing": []
+    },
+    "test_suite": {
+      "passed": true,
+      "tests_passed": 174,
+      "headline_linux_duration_sec": 89.7,
+      "secondary_windows_duration_sec": 261.12,
+      "current_host_duration_seconds": 244.4
+    }
+  }
+}

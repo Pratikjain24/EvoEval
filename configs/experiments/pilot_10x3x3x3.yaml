@@ -2,7 +2,7 @@ name: pilot_10x3x3x3
 description: "Canonical EvoEval Pilot Study: 10 tasks x 3 mechanisms (G1, G2, G6) x 3 cycles x 3 seeds (42, 43, 44)"
 model:
   name: qwen2.5-coder-7b-instruct
-  revision: pinned-sha-12345
+  revision: c03e6d358207e414f1eca0bb1891e29f1db0e242
   temperature: 0.2
   top_p: 0.95
   seed: 42

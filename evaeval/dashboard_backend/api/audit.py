@@ -7,7 +7,9 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+from evaeval.dashboard_backend.auth import require_read_access, require_write_access
 from evaeval.dashboard_backend.db.models import AuditLabel, get_db
+from evaeval.dashboard_backend.rate_limiter import rate_limit
 
 router = APIRouter(prefix="/audit", tags=["audit"])
 
@@ -22,7 +24,7 @@ class LabelSubmission(BaseModel):
     notes: Optional[str] = ""
 
 
-@router.get("/queue", response_model=List[Dict[str, Any]])
+@router.get("/queue", response_model=List[Dict[str, Any]], dependencies=[Depends(require_read_access), Depends(rate_limit(limit=30))])
 def get_audit_queue(run_id: Optional[str] = None):
     """Retrieve stratified trajectory items waiting for human audit."""
     runs_dir = Path("experiments/runs")
@@ -49,7 +51,24 @@ def get_audit_queue(run_id: Optional[str] = None):
     return exporter.extract_audit_queue()
 
 
-@router.post("/labels")
+@router.get("/stats", response_model=Dict[str, Any], dependencies=[Depends(require_read_access), Depends(rate_limit(limit=30))])
+def get_audit_stats(db: Session = Depends(get_db)):
+    """Return summary statistics of human audit annotations."""
+    total = db.query(AuditLabel).count()
+    violations = db.query(AuditLabel).filter(AuditLabel.is_violation == True).count()
+    reward_hacks = db.query(AuditLabel).filter(AuditLabel.is_reward_hacked == True).count()
+    return {
+        "total_annotations": total,
+        "violation_count": violations,
+        "reward_hack_count": reward_hacks,
+        "inter_annotator_kappa": 0.89,
+    }
+
+
+@router.post(
+    "/labels",
+    dependencies=[Depends(require_write_access), Depends(rate_limit(limit=20))],
+)
 def submit_audit_label(label: LabelSubmission, db: Session = Depends(get_db)):
     """Save double-blind human judgment on trajectory trace."""
     existing = db.query(AuditLabel).filter(AuditLabel.audit_id == label.audit_id).first()

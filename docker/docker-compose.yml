@@ -1,5 +1,9 @@
 version: "3.8"
 
+networks:
+  evo-net:
+    driver: bridge
+
 services:
   sandbox:
     build:
@@ -19,6 +23,9 @@ services:
           cpus: "2.0"
           memory: 4096M
           pids: 256
+        reservations:
+          cpus: "0.5"
+          memory: 1024M
     volumes:
       - ../experiments/sandbox_ws:/workspace:rw
 
@@ -40,6 +47,9 @@ services:
           cpus: "2.0"
           memory: 2048M
           pids: 128
+        reservations:
+          cpus: "0.5"
+          memory: 512M
     volumes:
       - ../experiments/sandbox_ws:/eval_harness/workspace:ro
       - ../tests/hidden_gt:/eval_harness/tests:ro
@@ -47,15 +57,42 @@ services:
   backend:
     build:
       context: ..
-      dockerfile: docker/Dockerfile.sandbox
+      dockerfile: docker/Dockerfile.backend
     image: evo-backend:1.0
     container_name: evo_backend
-    command: python -m uvicorn evaeval.dashboard_backend.main:app --host 0.0.0.0 --port 8000
+    restart: unless-stopped
+    user: "1000:1000"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2048M
+          pids: 128
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\" || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    environment:
+      - EVOEVAL_API_KEY=${EVOEVAL_API_KEY:-evoeval-dev-key-change-in-production}
+      - DASHBOARD_REQUIRE_AUTH=${DASHBOARD_REQUIRE_AUTH:-false}
+      - RATE_LIMIT_READ_PER_MINUTE=${RATE_LIMIT_READ_PER_MINUTE:-120}
+      - ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
     ports:
       - "8000:8000"
     volumes:
-      - ..:/app
+      - ../experiments/runs:/app/experiments/runs:ro
     working_dir: /app
+    networks:
+      - evo-net
 
   frontend:
     build:
@@ -63,12 +100,36 @@ services:
       dockerfile: docker/Dockerfile.frontend
     image: evo-frontend:1.0
     container_name: evo_frontend
+    restart: unless-stopped
+    user: "1000:1000"
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+          pids: 64
+        reservations:
+          cpus: "0.2"
+          memory: 128M
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:3000/ || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
     ports:
       - "3000:3000"
     depends_on:
       - backend
     environment:
       - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NODE_ENV=production
+    networks:
+      - evo-net
 
   # Alias for backward compatibility
   dashboard-backend:

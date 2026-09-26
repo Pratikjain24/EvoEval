@@ -3,10 +3,16 @@
 from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
+from evaeval.dashboard_backend.auth import require_read_access
+from evaeval.dashboard_backend.rate_limiter import rate_limit
 from evaeval.trajectory.reader import TrajectoryReader
 
-router = APIRouter(prefix="/runs/{run_id}/trajectories", tags=["trajectories"])
+router = APIRouter(
+    prefix="/runs/{run_id}/trajectories",
+    tags=["trajectories"],
+    dependencies=[Depends(require_read_access), Depends(rate_limit(limit=60))],
+)
 
 
 @router.get("", response_model=List[Dict[str, Any]])

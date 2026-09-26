@@ -218,7 +218,14 @@ class DockerRunner:
             self.container_id = None
 
     def get_sandbox(self) -> LocalSandbox:
-        """Return the active SandboxAPI interface."""
+        """Return the active SandboxAPI interface (DockerSandbox if active, else LocalSandbox)."""
+        if self.is_docker_active and self.container_id:
+            from evaeval.environment.sandbox import DockerSandbox
+            return DockerSandbox(
+                workspace_dir=self.workspace_dir,
+                container_id=self.container_id,
+                safety_monitor=self.safety_monitor,
+            )
         return self._local_sandbox
 
     def exec_command(self, cmd: str, timeout: int = 30) -> Dict[str, Any]:

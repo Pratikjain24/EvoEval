@@ -1,0 +1,40 @@
+{
+  "benchmark_name": "EvoEval",
+  "total_tasks": 100,
+  "total_pairs_evaluated": 4950,
+  "mean_pairwise_similarity": 0.0524,
+  "std_pairwise_similarity": 0.0732,
+  "min_pairwise_similarity": 0.0069,
+  "max_pairwise_similarity": 0.4166,
+  "p95_pairwise_similarity": 0.2137,
+  "duplicate_pairs_count": 0,
+  "near_duplicate_pairs_count": 0,
+  "diversity_verdict": "CONFIRMED_DIVERSE_ZERO_DUPLICATES",
+  "top_5_most_similar_pairs": [
+    {
+      "task_a": "task_004",
+      "task_b": "task_009",
+      "similarity": 0.4166
+    },
+    {
+      "task_a": "task_021",
+      "task_b": "task_096",
+      "similarity": 0.4014
+    },
+    {
+      "task_a": "task_029",
+      "task_b": "task_094",
+      "similarity": 0.4011
+    },
+    {
+      "task_a": "task_049",
+      "task_b": "task_054",
+      "similarity": 0.3912
+    },
+    {
+      "task_a": "task_009",
+      "task_b": "task_059",
+      "similarity": 0.3876
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "report_version": "1.0.0",
+  "timestamp_utc": "2026-09-25T08:49:21.376334+00:00",
+  "runner_config": {
+    "api_base": "http://127.0.0.1:8000/v1",
+    "model": "qwen2.5-coder-3b-instruct-q4_k_m",
+    "tasks": [
+      "task_001"
+    ],
+    "strict": false,
+    "is_reachable": true
+  },
+  "drift_analysis": {
+    "mock": {
+      "tokens_in": 22,
+      "tokens_out": 16,
+      "latency_ms": 0,
+      "code_extracted": true,
+      "code_length": 32,
+      "is_fallback": false
+    },
+    "real": {
+      "tokens_in": 44,
+      "tokens_out": 651,
+      "latency_ms": 48200,
+      "code_extracted": true,
+      "code_length": 1663,
+      "is_fallback": false
+    },
+    "drift": {
+      "token_ratio_real_to_mock": 40.69,
+      "latency_ratio_real_to_mock": 48200.54,
+      "code_fence_parity": true,
+      "fallback_detected": false
+    }
+  },
+  "execution_summary": {
+    "duration_seconds": 2.57,
+    "events_logged": 53,
+    "metrics_count": 2,
+    "groups_evaluated": [
+      "G1",
+      "G2"
+    ],
+    "mean_success_rate": 0.0
+  },
+  "verdict": "PASS"
+}

@@ -1,0 +1,18 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{\textbf{Main Evolutionary Benchmark Results across Agent Archetypes ($G_1$--$G_6$)}. Means and 95\% bootstrap confidence intervals across three random seeds (42, 43, 44). $\Delta P(T)$: net capability change; $\text{SafetyDrift}(T)$: safety boundary violation rate change; $\text{Retention}(T)$: capability retention ratio on historical test suites.}
+\label{tab:main_results}
+\begin{tabular}{llccccccc}
+\toprule
+\textbf{Group} & \textbf{Mechanism} & \textbf{$P(0)$} & \textbf{$P(T)$} & \textbf{$\Delta P(T)$} & \textbf{SafetyDrift$(T)$} & \textbf{ProxyGap} & \textbf{Retention$(T)$} & \textbf{Cost (\$)} \\
+\midrule
+G1 & Frozen Control & 0.40 & 0.40 & +0.00 & 0.00 & 0.00 & 100\% & \$0.045 \\
+G2 & Prompt Rewriter & 0.40 & 0.40 & +0.00 & 0.00 & 0.00 & 82\% & \$0.067 \\
+G3 & Memory Accumulator & 0.40 & 0.40 & +0.00 & 0.00 & 0.00 & 91\% & \$0.083 \\
+G4 & Reflection Agent & 0.40 & 0.40 & +0.00 & 0.00 & 0.00 & 82\% & \$0.105 \\
+G5 & Static Verifier & 0.40 & 0.40 & +0.00 & 0.00 & 0.00 & 91\% & \$0.105 \\
+G6 & Regression Guard & 0.40 & 0.40 & +0.00 & 0.00 & 0.00 & 98\% & \$0.105 \\
+\bottomrule
+\end{tabular}
+\end{table*}

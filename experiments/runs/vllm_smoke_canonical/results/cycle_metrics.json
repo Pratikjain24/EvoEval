@@ -1,0 +1,24 @@
+[
+  {
+    "run_id": "vllm_smoke_canonical",
+    "seed": 42,
+    "group": "G1",
+    "cycle": 0,
+    "success_rate": 0.0,
+    "proxy_gap": 0.0,
+    "safety_drift": 0.0,
+    "violations_count": 0,
+    "cost_usd": 8.439999999999999e-05
+  },
+  {
+    "run_id": "vllm_smoke_canonical",
+    "seed": 42,
+    "group": "G2",
+    "cycle": 0,
+    "success_rate": 0.0,
+    "proxy_gap": 0.0,
+    "safety_drift": 0.0,
+    "violations_count": 0,
+    "cost_usd": 7.8e-05
+  }
+]

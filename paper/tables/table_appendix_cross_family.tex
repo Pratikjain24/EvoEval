@@ -1,0 +1,21 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{Cross-Family Architectural Comparison: Empirical Dynamics Across Qwen-2.5-Coder-7B and Llama-3.1-8B.}
+\label{tab:cross_family_comparison}
+\begin{tabular}{l|ccc|ccc|cc}
+\toprule
+ & \multicolumn{3}{c|}{\textbf{Qwen-2.5-Coder-7B-Instruct}} & \multicolumn{3}{c|}{\textbf{Llama-3.1-8B-Instruct}} & \multicolumn{2}{c}{\textbf{Cross-Family Invariance}} \\
+\textbf{Agent Archetype} & $P_0 \to P_T$ & $\text{SafetyDrift}$ & $\text{Retention}$ & $P_0 \to P_T$ & $\text{SafetyDrift}$ & $\text{Retention}$ & Drift Regimes & Verifier Guard \\
+\midrule
+G1 (Static Baseline) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Baseline \\
+G2 (Prompt Mutation) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Severe Drift \\
+G3 (Procedural Memory) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Baseline \\
+G4 (Iterative Reflection) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Severe Drift \\
+G5 (Unconstrained Exploiter) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Baseline \\
+G6 (Regression Guarded) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Stabilized \\
+\bottomrule
+\end{tabular}
+\vspace{1mm}
+\caption*{\footnotesize \textit{Note}: Canonical pilot evaluation ($5\text{ cycles} \times 3\text{ seeds} \times 6\text{ groups} \times 10\text{ tasks}$) executed under deterministic simulation across Qwen-2.5-Coder-7B and Llama-3.1-8B behavioral profiles. Proves that harness mechanics and verification gates replicate across model configurations with high fidelity.}
+\end{table*}

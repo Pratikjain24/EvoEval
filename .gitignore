@@ -25,4 +25,25 @@ out/
 # Database & local scratch
 experiments/dashboard.db
 experiments/runs/*/scratch/
+experiments/runs/*/agent_state/
+**/agent_state/
+experiments/runs/full_study_canonical/trajectory.jsonl
 .evo_state/
+.env
+.env.*
+models/
+*.gguf
+
+# IDE & Tool caches
+.vscode/
+.idea/
+.kilo/
+**/.kilo/
+*.swp
+
+# Archive files
+*.zip
+*.tar.gz
+
+# Scratch scripts
+scratch/

@@ -1,17 +1,23 @@
-FROM node:20-alpine
+FROM node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
 
 WORKDIR /app
 
-# Install dependencies
+# Install dependencies with clean cache
 COPY evaeval/dashboard_frontend/package*.json ./
-RUN npm install
+RUN npm ci --only=production || npm install
 
 # Copy application source
-COPY evaeval/dashboard_frontend ./
+COPY --chown=node:node evaeval/dashboard_frontend ./
+
+USER node
 
 EXPOSE 3000
 
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
+ENV NODE_ENV=production
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget --no-verbose --tries=1 --spider http://localhost:3000/ || exit 1
 
 CMD ["npm", "run", "dev"]

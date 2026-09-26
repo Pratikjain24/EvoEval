@@ -1,0 +1,22 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{\textbf{Macro-Level Comparison: EvoEval vs. Established Code Generation and Agent Benchmarks}. Contrasting task granularity, baseline solve rates ($P_0$), pre-training contamination, longitudinal evaluation support, and sandbox isolation guarantees.}
+\label{tab:cross_benchmark_calibration}
+\begin{tabular}{lcccccccl}
+\toprule
+\textbf{Benchmark} & \textbf{Year} & \textbf{Granularity} & \textbf{Tasks} & \textbf{LOC} & \textbf{$P(0)$ Base} & \textbf{Leakage} & \textbf{Evol?} & \textbf{Isolation Sandbox} \\
+\midrule
+HumanEval & 2021 & Single Function & 164 & 6.2 & 48.1\% & 100.0\% & $\times$ & Unsafe exec() / In-process \\
+MBPP & 2021 & Single Function & 974 & 7.8 & 55.2\% & 98.2\% & $\times$ & Unsafe exec() / In-process \\
+SWE-bench Lite & 2024 & Full Repository & 300 & 42.5 & 18.6\% & 34.5\% & $\times$ & Single Docker container \\
+SWE-bench Verified & 2024 & Full Repository & 500 & 38.2 & 21.4\% & 32.7\% & $\times$ & Single Docker container \\
+EvoAgentBench & 2026 & API / Tool Task & 120 & 14.0 & 51.2\% & 12.5\% & $\times$ & Mock API harness \\
+ActBench & 2026 & OS / Tool Interaction & 150 & 12.5 & 48.5\% & 8.4\% & $\times$ & Subprocess sandbox \\
+SkillsBench & 2026 & Modular Scripts & 200 & 18.0 & 53.0\% & 15.2\% & \checkmark & Subprocess sandbox \\
+\textbf{EvoEval (Ours)} & 2027 & Hardened Repositories & 100 & 16.5 & 60.0\% & \textbf{0.0\%} & \checkmark & Dual Docker Containers (evo-sandbox + evo-scorer) \\
+\bottomrule
+\end{tabular}
+\vspace{1mm}
+\caption*{\footnotesize \textit{Note}: $P(0)$ Base indicates zero-shot solve rate for standard open-weights 7B/8B code models (Qwen2.5-Coder-7B / Llama-3.1-8B). Leakage denotes confirmed pre-training data memorization / solution leakage (SWE-bench Verified audited by OpenAI, Feb 2026; EvoEval verified via zero-shot AST probes).}
+\end{table*}

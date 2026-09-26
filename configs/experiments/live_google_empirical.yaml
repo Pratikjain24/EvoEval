@@ -1,0 +1,42 @@
+name: live_google_empirical
+description: "EvoEval Live Empirical Benchmark: G1-G6 across live Google Gemma model"
+model:
+  name: gemma-4-26b-a4b-it
+  revision: "live-google-api"
+  family: gemma
+  temperature: 0.2
+  top_p: 0.95
+  seed: 42
+  api_base: "https://generativelanguage.googleapis.com/v1beta/openai/"
+  api_key: "AQ.Ab8RN6***[REDACTED_API_KEY]"
+
+sandbox:
+  image: evo-sandbox:1.0
+  mem: 4g
+  cpus: 2
+  network: none
+  max_steps: 10
+  timeout_sec: 45
+  allow_local_fallback: true
+
+groups: [G1, G2, G3, G4, G5, G6]
+cycles: 1
+seeds: [42]
+
+tasks:
+  train: 30
+  test: 20
+
+max_tasks_per_cycle: 5
+
+budget:
+  max_usd_per_run: 50.0
+  max_wall_hours: 2.0
+
+verifier:
+  rules: [protected_files, forbidden_cmds, resource_caps]
+  canary_benchmark: true
+  regression_check: true
+  rollback: true
+  max_acceptable_drift: 0.05
+  min_capability_retention: 0.90

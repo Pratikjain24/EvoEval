@@ -1,0 +1,29 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{\textbf{Authoritative Timing Reconciliation and Multi-Tier Latency Benchmark}. Comprehensive consolidation of all execution latency benchmarks across platforms, environments, and granularities. Specification budgets define architectural SLA limits, while empirical values report measured wall-clock latencies. Task lifecycle durations distinguish between the frozen $G_1$ control baseline (1.68s Windows / 1.84s Linux) and the cohort grand mean across all archetypes $G_1$--$G_6$ (1.75s Windows / 1.94s Linux). Agent tool interaction turns (1.62 steps) measure algorithmic decision depth rather than wall-clock time.}
+\label{tab:timing_reconciliation}
+\begin{tabular}{llccp{7.2cm}}
+\toprule
+\textbf{Benchmark Dimension} & \textbf{Platform / Environment} & \textbf{Budget SLA} & \textbf{Empirical Value} & \textbf{Measurement Scope \& Latency Context} \\
+\midrule
+\textbf{Fast CI Integration} & Linux CI (\texttt{ubuntu-latest}) & $< 15.00$s & \textbf{8.45s} & Fast pre-commit gate (1 task $\times$ 1 cycle $\times$ $G_1$ + $G_2$, MockLLM) \\
+\textbf{Fast CI Integration} & Windows Development Host & $< 15.00$s & \textbf{13.22s} & Local developer pre-commit verification without GPU hardware \\
+\midrule
+\textbf{Full Regression Suite} & Linux CI (\texttt{ubuntu-latest}) & $< 120.00$s & \textbf{91.20s} & 187 tests across 29 files (100\% pass rate, 0 failures) \\
+\textbf{Full Regression Suite} & Windows Development Host & $< 300.00$s & \textbf{258.12s} & 186 passed, 1 skipped (Docker daemon skipped on Windows host) \\
+\midrule
+\textbf{Task Lifecycle ($G_1$)} & Linux Docker (\texttt{evo-sandbox}) & $< 3.00$s & \textbf{1.84s} & Frozen baseline $G_1$ single-task lifecycle (setup, execution, pytest) \\
+\textbf{Task Lifecycle ($G_1$)} & Windows LocalSandbox & $< 3.00$s & \textbf{1.68s} & Frozen baseline $G_1$ single-task lifecycle in local path-jail \\
+\textbf{Task Lifecycle (Cohort Mean)} & Linux Docker (\texttt{evo-sandbox}) & $< 3.00$s & \textbf{1.94s} & Grand mean across all 6 archetypes ($G_1$ 1.84s, $G_4$ 2.05s, $G_6$ 2.14s) \\
+\textbf{Task Lifecycle (Cohort Mean)} & Windows LocalSandbox & $< 3.00$s & \textbf{1.75s} & Grand mean across all 6 archetypes in local path-jail \\
+\midrule
+\textbf{Agent Tool Turns ($G_1$)} & Monorepo Invariant & N/A & \textbf{1.62 steps} & Algorithmic tool steps per task (turns, not seconds) \\
+\midrule
+\textbf{Single LLM Step (Mock)} & In-Process Memory & $< 50$ms & \textbf{15ms} & Deterministic mock responses for rapid CI testing \\
+\textbf{Single LLM Step (Local)} & Local CPU/GPU (\texttt{llama-cpp}) & $< 5.00$s & \textbf{1,842ms} & \texttt{Qwen2.5-Coder-3B-Instruct} 4-bit in-process neural inference \\
+\textbf{Single LLM Step (Cloud)} & Remote OpenAI-Compatible & $< 5.00$s & \textbf{2,145ms} & \texttt{gemma-4-26b-a4b-it} live foundation model completion \\
+\textbf{Task Turn (Live Neural)} & Remote OpenAI-Compatible & $< 60.00$s & \textbf{21.80s} & Multi-turn neural reasoning, container execution, and scoring \\
+\bottomrule
+\end{tabular}
+\end{table*}

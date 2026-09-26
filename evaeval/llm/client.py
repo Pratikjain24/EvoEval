@@ -18,6 +18,9 @@ class LLMResponse(BaseModel):
     tokens_out: int = 0
     cost_usd: float = 0.0
     latency_ms: int = 0
+    is_fallback: bool = False
+    model_name: Optional[str] = None
+    raw_response: Optional[Dict[str, Any]] = None
 
 
 class BaseLLMClient(ABC):
@@ -93,17 +96,35 @@ class MockLLMClient(BaseLLMClient):
             tokens_out=tokens_out,
             cost_usd=cost,
             latency_ms=latency_ms,
+            is_fallback=False,
+            model_name=self.model_name,
         )
-
 
 
 class OpenAICompatibleClient(BaseLLMClient):
     """Client for OpenAI-compatible APIs (vLLM, Ollama, llama.cpp, OpenAI, Groq)."""
 
-    def __init__(self, config: ModelConfig):
+    def __init__(self, config: ModelConfig, allow_fallback: bool = True):
         self.config = config
         self.api_base = config.api_base or "http://localhost:8000/v1"
         self.api_key = config.api_key or "EMPTY"
+        self.allow_fallback = allow_fallback
+
+    def check_health(self) -> Dict[str, Any]:
+        """Check if the remote vLLM/OpenAI server is reachable and query available models."""
+        import httpx
+
+        url = f"{self.api_base.rstrip('/')}/models"
+        headers = {"Authorization": f"Bearer {self.api_key}"}
+        try:
+            with httpx.Client(timeout=5.0) as client:
+                res = client.get(url, headers=headers)
+                res.raise_for_status()
+                data = res.json()
+            models = [m.get("id") for m in data.get("data", [])]
+            return {"status": "ok", "reachable": True, "models": models}
+        except Exception as e:
+            return {"status": "unreachable", "reachable": False, "error": str(e), "models": []}
 
     def generate(
         self,
@@ -150,10 +171,95 @@ class OpenAICompatibleClient(BaseLLMClient):
                 tokens_out=tokens_out,
                 cost_usd=cost,
                 latency_ms=latency_ms,
+                is_fallback=False,
+                model_name=self.config.name,
+                raw_response=data,
             )
         except Exception as e:
+            if not self.allow_fallback:
+                raise RuntimeError(
+                    f"Real vLLM generation failed for endpoint '{url}' with model '{self.config.name}': {e}"
+                ) from e
             # Fallback to mock on connection error to ensure robust execution
             mock = MockLLMClient(self.config.name)
             resp = mock.generate(messages, tools, temperature)
+            resp.is_fallback = True
             resp.content = f"[Offline Fallback due to: {str(e)}]\n" + resp.content
             return resp
+
+
+class LocalLlamaClient(BaseLLMClient):
+    """Direct in-process GGUF LLM client powered by llama-cpp-python."""
+
+    _cached_llm: Optional[Any] = None
+    _cached_path: Optional[str] = None
+
+    def __init__(
+        self,
+        model_path: str = "models/qwen2.5-coder-3b-instruct-q4_k_m.gguf",
+        context_window: int = 4096,
+        n_threads: int = 8,
+    ):
+        from pathlib import Path
+
+        p = Path(model_path)
+        if not p.is_absolute():
+            # Check relative to cwd or repo root
+            repo_root = Path(__file__).resolve().parent.parent.parent
+            if (repo_root / model_path).exists():
+                p = repo_root / model_path
+            elif Path(model_path).exists():
+                p = Path(model_path).resolve()
+
+        self.model_path = str(p.resolve())
+        self.model_name = p.stem
+        self.context_window = context_window
+        self.n_threads = n_threads
+
+        if LocalLlamaClient._cached_llm is None or LocalLlamaClient._cached_path != self.model_path:
+            from llama_cpp import Llama
+            LocalLlamaClient._cached_llm = Llama(
+                model_path=self.model_path,
+                n_ctx=self.context_window,
+                n_threads=self.n_threads,
+                verbose=False,
+            )
+            LocalLlamaClient._cached_path = self.model_path
+
+        self.llm = LocalLlamaClient._cached_llm
+
+    def check_health(self) -> Dict[str, Any]:
+        return {"status": "ok", "reachable": True, "models": [self.model_name]}
+
+    def generate(
+        self,
+        messages: List[Dict[str, str]],
+        tools: Optional[List[Dict[str, Any]]] = None,
+        temperature: Optional[float] = None,
+    ) -> LLMResponse:
+        start = time.time()
+        temp = temperature if temperature is not None else 0.2
+        resp = self.llm.create_chat_completion(
+            messages=messages,
+            temperature=temp,
+            max_tokens=2048,
+        )
+        latency_ms = int((time.time() - start) * 1000)
+        choice = resp["choices"][0]
+        content = choice["message"].get("content", "") or ""
+        usage = resp.get("usage", {})
+        tokens_in = usage.get("prompt_tokens", max(20, len(str(messages)) // 4))
+        tokens_out = usage.get("completion_tokens", max(10, len(content) // 4))
+        cost = PricingModel.calculate_cost(self.model_name, tokens_in, tokens_out)
+
+        return LLMResponse(
+            content=content,
+            tool_calls=[],
+            tokens_in=tokens_in,
+            tokens_out=tokens_out,
+            cost_usd=cost,
+            latency_ms=latency_ms,
+            is_fallback=False,
+            model_name=self.model_name,
+            raw_response=resp,
+        )

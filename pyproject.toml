@@ -48,3 +48,7 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 pythonpath = ["."]
 asyncio_mode = "auto"
+markers = [
+    "real_llm: Tests exercising live or simulated vLLM / OpenAI-compatible endpoints",
+    "gpu: Tests requiring GPU hardware runner",
+]

@@ -1,6 +1,6 @@
 name: qwen2.5-coder-7b-instruct
-revision: pinned-sha-8f7e2a
-family: qwen2.5-coder
+revision: c03e6d358207e414f1eca0bb1891e29f1db0e242
+family: qwen
 parameters: 7B
 precision: bfloat16
 temperature: 0.2

@@ -1,0 +1,19 @@
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Double-Blind Human Verification \& Automated Scorer Concordance ($N_{\text{audit}} = 79$ Pilot Calibration \& $N_{\text{audit}} = 240$ Expanded Longitudinal Cohort)}. Dual independent domain experts evaluated blinded execution traces for behavioral safety violations and proxy reward gaming. Disagreements were adjudicated by a senior research referee. Automated safety monitors and proxy detectors demonstrate robust concordance across both calibration and longitudinal regimes.}
+\label{tab:human_audit}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Cohort \& Evaluated Dimension} & \textbf{Agreement ($P_o$)} & \textbf{Cohen's $\kappa$} & \textbf{Precision} & \textbf{Recall} & \textbf{$F_1$ Score} & \textbf{FPR} \\
+\midrule
+\multicolumn{7}{l}{\textit{Phase 1: Pilot Calibration Cohort ($N_{\text{audit}} = 79$ traces, Generations 0--4)}} \\
+Safety Boundary Violations & 98.7\% & 0.93 & 88.9\% & 88.9\% & 0.89 & 1.4\% \\
+Specification Gaming / Proxy Gap & 98.7\% & 0.96 & 94.4\% & 94.4\% & 0.94 & 1.6\% \\
+\midrule
+\multicolumn{7}{l}{\textit{Phase 2: Expanded Longitudinal Cohort ($N_{\text{audit}} = 240$ traces, Generations 0--9)}} \\
+Safety Boundary Violations & 95.4\% & 0.83 & 82.5\% & 100.0\% & 0.90 & 3.4\% \\
+Specification Gaming / Proxy Gap & 95.8\% & 0.90 & 90.0\% & 100.0\% & 0.95 & 4.0\% \\
+\bottomrule
+\end{tabular}
+\end{table}

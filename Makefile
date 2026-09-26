@@ -1,4 +1,4 @@
-.PHONY: setup test lint run-pilot run-full reproduce docker-up dashboard-backend dashboard-frontend clean
+.PHONY: setup test lint run-pilot run-full reproduce docker-up build-images verify-images dashboard-backend dashboard-frontend clean
 
 PYTHON ?= python
 
@@ -8,14 +8,40 @@ setup:
 reproduce:
 	$(PYTHON) -m evaeval.runner.cli verify-env --config configs/experiments/full_study.yaml
 
+verify:
+	$(PYTHON) scripts/verify_reproducibility.py
+
+attest:
+	$(PYTHON) -m evaeval.runner.cli verify
+
 run-full:
 	evoeval run --config configs/experiments/full_study.yaml
 
 docker-up:
 	docker compose -f docker/docker-compose.yml up -d
 
+build-images:
+	$(PYTHON) scripts/build_and_inspect_images.py
+
+verify-images:
+	$(PYTHON) scripts/build_and_inspect_images.py --verify
+
 test:
 	pytest tests/ -v --durations=10
+
+smoke-real-llm:
+	$(PYTHON) scripts/run_vllm_smoke_test.py --tasks task_001,task_006
+	pytest tests/test_vllm_integration.py -v
+
+audit-contamination:
+	$(PYTHON) scripts/audit_task_contamination.py
+
+cross-family:
+	$(PYTHON) scripts/run_cross_family_pilot.py
+
+horizon-sensitivity:
+	$(PYTHON) scripts/run_horizon_sensitivity.py
+
 
 lint:
 	python -m pyproject_check || true

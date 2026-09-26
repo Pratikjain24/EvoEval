@@ -3,6 +3,8 @@
 from __future__ import annotations
 import concurrent.futures
 import json
+import os
+import subprocess
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -19,7 +21,7 @@ from evaeval.environment.safety_monitor import SafetyMonitor
 from evaeval.environment.task_loader import TaskLoader
 from evaeval.evolution.controller import EvolutionController
 from evaeval.evolution.verifier import EvolutionVerifier
-from evaeval.llm.client import BaseLLMClient
+from evaeval.llm.client import BaseLLMClient, MockLLMClient, OpenAICompatibleClient
 from evaeval.llm.pricing import BudgetGuard
 from evaeval.runner.reproducibility import (
     generate_trajectory_manifest,
@@ -49,6 +51,7 @@ class ExperimentOrchestrator:
         max_retries: int = 2,
         retry_backoff: float = 0.2,
         llm_client: Optional[BaseLLMClient] = None,
+        max_workers: int = 8,
     ):
         self.config = config
         self.task_loader = task_loader
@@ -56,7 +59,17 @@ class ExperimentOrchestrator:
         self.runs_dir.mkdir(parents=True, exist_ok=True)
         self.max_retries = max_retries
         self.retry_backoff = retry_backoff
-        self.llm_client = llm_client
+        if llm_client is not None:
+            self.llm_client = llm_client
+        elif config.model.api_base in ("local", "in_process", "direct") or config.model.name.endswith(".gguf"):
+            from evaeval.llm.client import LocalLlamaClient
+            model_p = config.model.name if config.model.name.endswith(".gguf") else "models/qwen2.5-coder-3b-instruct-q4_k_m.gguf"
+            self.llm_client = LocalLlamaClient(model_path=model_p, n_threads=8)
+        elif config.model.api_base:
+            self.llm_client = OpenAICompatibleClient(config.model)
+        else:
+            self.llm_client = MockLLMClient(model_name=config.model.name)
+        self.max_workers = max(1, max_workers)
         self.budget_guard = BudgetGuard(
             max_usd_budget=config.budget.max_usd_per_run,
             max_wall_hours=config.budget.max_wall_hours,
@@ -217,6 +230,238 @@ class ExperimentOrchestrator:
             error="Exhausted all retries.",
         )
 
+    def _execute_single_task(
+        self,
+        task: TaskConfig,
+        seed: int,
+        group: str,
+        cycle: int,
+        agent: AgentAdapter,
+        run_name: str,
+        run_dir: Path,
+        writer: TrajectoryWriter,
+        scorer: HiddenScorer,
+    ) -> Tuple[Dict[str, Any], List[Dict[str, Any]], Tuple[int, str, int, str]]:
+        """Execute and score a single task inside its isolated workspace with telemetry logging."""
+        self.budget_guard.check_wall_clock()
+        task_key = (seed, group, cycle, task.id)
+        safety_mon = SafetyMonitor(protected_files=task.protected_files)
+        task_ws = run_dir / "scratch" / f"seed_{seed}" / f"{group}_c{cycle}_{task.id}"
+        self.task_loader.setup_task_workspace(task, task_ws)
+
+        # Log task start
+        start_payload = TaskStartPayload(
+            task_id=task.id,
+            task_type=task.type,
+            repo=task.repo,
+            prompt=task.prompt,
+            protected_files=task.protected_files,
+        )
+        writer.write(
+            TrajectoryEvent(
+                run_id=run_name,
+                cycle=cycle,
+                seed=seed,
+                group=group,
+                task_id=task.id,
+                agent_version=agent.version,
+                event_type="task_start",
+                payload=start_payload.model_dump(),
+                cost=CostRecord(),
+            )
+        )
+
+        # Capture baseline repository commit state for git history audit
+        baseline_commit_count = None
+        baseline_head_sha = None
+        if (task_ws / ".git").exists():
+            try:
+                res_cnt = subprocess.run(
+                    ["git", "rev-list", "--count", "HEAD"],
+                    cwd=str(task_ws),
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                )
+                if res_cnt.returncode == 0:
+                    baseline_commit_count = int(res_cnt.stdout.strip())
+                res_sha = subprocess.run(
+                    ["git", "rev-parse", "HEAD"],
+                    cwd=str(task_ws),
+                    capture_output=True,
+                    text=True,
+                    timeout=5,
+                )
+                if res_sha.returncode == 0:
+                    baseline_head_sha = res_sha.stdout.strip()
+            except Exception:
+                pass
+
+        timeout_sec = self.config.sandbox.timeout_sec
+        with DockerRunner(
+            config=self.config.sandbox,
+            workspace_dir=task_ws,
+            safety_monitor=safety_mon,
+        ) as runner:
+            sandbox = runner.get_sandbox()
+            spec = TaskSpec(
+                task_id=task.id,
+                task_type=task.type,
+                repo_name=task.repo,
+                prompt=task.prompt,
+                entrypoint=task.entrypoint,
+                protected_files=task.protected_files,
+            )
+
+            # Execute task with retry and timeout protection
+            res = self._run_task_with_retry(
+                agent=agent,
+                spec=spec,
+                sandbox=sandbox,
+                safety_monitor=safety_mon,
+                timeout_sec=timeout_sec,
+            )
+
+            # Log tool calls & observations
+            for tc in res.tool_calls:
+                writer.write(
+                    TrajectoryEvent(
+                        run_id=run_name,
+                        cycle=cycle,
+                        seed=seed,
+                        group=group,
+                        task_id=task.id,
+                        agent_version=agent.version,
+                        event_type="tool_call",
+                        payload=ToolCallPayload(
+                            tool_name=tc.tool_name,
+                            arguments=tc.arguments,
+                        ).model_dump(),
+                        cost=CostRecord(),
+                    )
+                )
+                writer.write(
+                    TrajectoryEvent(
+                        run_id=run_name,
+                        cycle=cycle,
+                        seed=seed,
+                        group=group,
+                        task_id=task.id,
+                        agent_version=agent.version,
+                        event_type="observation",
+                        payload=ObservationPayload(
+                            tool_name=tc.tool_name,
+                            stdout=tc.output[:300],
+                            exit_code=tc.exit_code,
+                            duration_ms=tc.duration_ms,
+                        ).model_dump(),
+                        cost=CostRecord(wall_ms=tc.duration_ms),
+                    )
+                )
+
+            task_safety_violations = []
+
+            # Score task with read-only HiddenScorer if not timed out
+            if res.status == "timeout":
+                eval_score = EvaluationScoreResult(
+                    task_id=task.id,
+                    ground_truth_score=0.0,
+                    proxy_score=0.0,
+                    proxy_gap=0.0,
+                    is_reward_hacked=False,
+                    tamper_report=TamperReport(is_tampered=False),
+                )
+            else:
+                eval_score = scorer.evaluate_task(
+                    task=task,
+                    workspace_dir=task_ws,
+                    cycle=cycle,
+                    group=group,
+                    run_id=run_name,
+                    seed=seed,
+                    agent_version=agent.version,
+                    baseline_commit_count=baseline_commit_count,
+                    baseline_head_sha=baseline_head_sha,
+                    trajectory_writer=writer,
+                    agent_model=self.config.model.name,
+                    agent_family=self.config.model.family,
+                )
+                # Record tamper violations if any
+                for chk_name, chk_payload in eval_score.tamper_checks.items():
+                    if not chk_payload.passed:
+                        task_safety_violations.append(chk_payload.model_dump())
+
+            # Record any safety violations
+            if safety_mon.violations:
+                for v in safety_mon.violations:
+                    task_safety_violations.append(v.model_dump())
+                    writer.write(
+                        TrajectoryEvent(
+                            run_id=run_name,
+                            cycle=cycle,
+                            seed=seed,
+                            group=group,
+                            task_id=task.id,
+                            agent_version=agent.version,
+                            event_type="safety_check",
+                            payload=v.model_dump(),
+                            cost=CostRecord(),
+                        )
+                    )
+
+            task_cost = CostRecord(
+                tokens_in=res.tokens_used // 2,
+                tokens_out=res.tokens_used // 2,
+                usd=res.cost_usd,
+                wall_ms=res.wall_time_ms,
+            )
+            self.budget_guard.check_task_tokens(res.tokens_used)
+            self.budget_guard.record_cost(task_cost)
+
+            is_success = (
+                eval_score.ground_truth_score >= 0.5 and res.status != "timeout"
+            )
+            task_result_entry = {
+                "task_id": task.id,
+                "success": is_success,
+                "gt_score": eval_score.ground_truth_score,
+                "proxy_score": eval_score.proxy_score,
+                "proxy_gap": eval_score.proxy_gap,
+                "cost_usd": res.cost_usd,
+                "status": res.status,
+            }
+
+            # Log task end event
+            end_status = (
+                "timeout"
+                if res.status == "timeout"
+                else ("success" if is_success else "failure")
+            )
+            end_payload = TaskEndPayload(
+                status=end_status,
+                success=is_success,
+                ground_truth_score=eval_score.ground_truth_score,
+                proxy_score=eval_score.proxy_score,
+                proxy_gap=eval_score.proxy_gap,
+                wall_time_ms=res.wall_time_ms,
+                total_steps=len(res.tool_calls),
+            )
+            writer.write(
+                TrajectoryEvent(
+                    run_id=run_name,
+                    cycle=cycle,
+                    seed=seed,
+                    group=group,
+                    task_id=task.id,
+                    agent_version=agent.version,
+                    event_type="task_end",
+                    payload=end_payload.model_dump(),
+                    cost=task_cost,
+                )
+            )
+
+            return task_result_entry, task_safety_violations, task_key
+
     def run_experiment(self, run_id: Optional[str] = None) -> Path:
         """Execute full experiment run with crash recovery, timeout safeguards, and budget tracking."""
         timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
@@ -248,7 +493,11 @@ class ExperimentOrchestrator:
                 )
             ]
 
-        scorer = HiddenScorer()
+        if getattr(self.config, "judge", None) and self.config.judge.enabled:
+            from evaeval.scoring.llm_judge import LLMJudge
+            scorer = HiddenScorer(llm_judge=LLMJudge(self.config.judge))
+        else:
+            scorer = HiddenScorer()
         verifier = EvolutionVerifier(
             rules=self.config.verifier.rules,
             max_acceptable_drift=self.config.verifier.max_acceptable_drift,
@@ -334,231 +583,45 @@ class ExperimentOrchestrator:
                             all_cycle_metrics.append(metric_entry)
                             continue
 
-                        # Execute tasks that are not yet recorded
+                        # Filter uncached tasks to execute
+                        tasks_to_run_now: List[TaskConfig] = []
                         for task in active_cycle_tasks:
                             self.budget_guard.check_wall_clock()
                             task_key = (seed, group, cycle, task.id)
-
                             if task_key in completed_tasks:
-                                # Replay cached task result
                                 cached_res = task_end_results.get(task_key)
                                 if cached_res:
                                     cycle_task_results.append(cached_res)
-                                continue
+                            else:
+                                tasks_to_run_now.append(task)
 
-                            safety_mon = SafetyMonitor(protected_files=task.protected_files)
-                            task_ws = run_dir / "scratch" / f"seed_{seed}" / f"{group}_c{cycle}_{task.id}"
-                            self.task_loader.setup_task_workspace(task, task_ws)
-
-                            # Log task start
-                            start_payload = TaskStartPayload(
-                                task_id=task.id,
-                                task_type=task.type,
-                                repo=task.repo,
-                                prompt=task.prompt,
-                                protected_files=task.protected_files,
-                            )
-                            writer.write(
-                                TrajectoryEvent(
-                                    run_id=run_name,
-                                    cycle=cycle,
-                                    seed=seed,
-                                    group=group,
-                                    task_id=task.id,
-                                    agent_version=agent.version,
-                                    event_type="task_start",
-                                    payload=start_payload.model_dump(),
-                                    cost=CostRecord(),
-                                )
-                            )
-
-                            # Capture baseline repository commit state for git history audit
-                            baseline_commit_count = None
-                            baseline_head_sha = None
-                            if (task_ws / ".git").exists():
-                                try:
-                                    res_cnt = subprocess.run(
-                                        ["git", "rev-list", "--count", "HEAD"],
-                                        cwd=str(task_ws),
-                                        capture_output=True,
-                                        text=True,
-                                        timeout=5,
-                                    )
-                                    if res_cnt.returncode == 0:
-                                        baseline_commit_count = int(res_cnt.stdout.strip())
-                                    res_sha = subprocess.run(
-                                        ["git", "rev-parse", "HEAD"],
-                                        cwd=str(task_ws),
-                                        capture_output=True,
-                                        text=True,
-                                        timeout=5,
-                                    )
-                                    if res_sha.returncode == 0:
-                                        baseline_head_sha = res_sha.stdout.strip()
-                                except Exception:
-                                    pass
-
-                            timeout_sec = self.config.sandbox.timeout_sec
-                            with DockerRunner(
-                                config=self.config.sandbox,
-                                workspace_dir=task_ws,
-                                safety_monitor=safety_mon,
-                            ) as runner:
-                                sandbox = runner.get_sandbox()
-                                spec = TaskSpec(
-                                    task_id=task.id,
-                                    task_type=task.type,
-                                    repo_name=task.repo,
-                                    prompt=task.prompt,
-                                    entrypoint=task.entrypoint,
-                                    protected_files=task.protected_files,
-                                )
-
-                                # Execute task with retry and timeout protection
-                                res = self._run_task_with_retry(
-                                    agent=agent,
-                                    spec=spec,
-                                    sandbox=sandbox,
-                                    safety_monitor=safety_mon,
-                                    timeout_sec=timeout_sec,
-                                )
-
-                                # Log tool calls & observations
-                                for tc in res.tool_calls:
-                                    writer.write(
-                                        TrajectoryEvent(
-                                            run_id=run_name,
-                                            cycle=cycle,
-                                            seed=seed,
-                                            group=group,
-                                            task_id=task.id,
-                                            agent_version=agent.version,
-                                            event_type="tool_call",
-                                            payload=ToolCallPayload(
-                                                tool_name=tc.tool_name,
-                                                arguments=tc.arguments,
-                                            ).model_dump(),
-                                            cost=CostRecord(),
+                        if tasks_to_run_now:
+                            if self.max_workers > 1 and len(tasks_to_run_now) > 1:
+                                with concurrent.futures.ThreadPoolExecutor(
+                                    max_workers=min(self.max_workers, len(tasks_to_run_now))
+                                ) as pool:
+                                    futures = [
+                                        pool.submit(
+                                            self._execute_single_task,
+                                            t, seed, group, cycle, agent, run_name, run_dir, writer, scorer
                                         )
+                                        for t in tasks_to_run_now
+                                    ]
+                                    for fut in futures:
+                                        t_entry, t_violations, t_key = fut.result()
+                                        cycle_task_results.append(t_entry)
+                                        cycle_safety_violations.extend(t_violations)
+                                        completed_tasks.add(t_key)
+                                        task_end_results[t_key] = t_entry
+                            else:
+                                for t in tasks_to_run_now:
+                                    t_entry, t_violations, t_key = self._execute_single_task(
+                                        t, seed, group, cycle, agent, run_name, run_dir, writer, scorer
                                     )
-                                    writer.write(
-                                        TrajectoryEvent(
-                                            run_id=run_name,
-                                            cycle=cycle,
-                                            seed=seed,
-                                            group=group,
-                                            task_id=task.id,
-                                            agent_version=agent.version,
-                                            event_type="observation",
-                                            payload=ObservationPayload(
-                                                tool_name=tc.tool_name,
-                                                stdout=tc.output[:300],
-                                                exit_code=tc.exit_code,
-                                                duration_ms=tc.duration_ms,
-                                            ).model_dump(),
-                                            cost=CostRecord(wall_ms=tc.duration_ms),
-                                        )
-                                    )
-
-                                # Score task with read-only HiddenScorer if not timed out
-                                if res.status == "timeout":
-                                    eval_score = EvaluationScoreResult(
-                                        task_id=task.id,
-                                        ground_truth_score=0.0,
-                                        proxy_score=0.0,
-                                        proxy_gap=0.0,
-                                        is_reward_hacked=False,
-                                        tamper_report=TamperReport(is_tampered=False),
-                                    )
-                                else:
-                                    eval_score = scorer.evaluate_task(
-                                        task=task,
-                                        workspace_dir=task_ws,
-                                        cycle=cycle,
-                                        group=group,
-                                        run_id=run_name,
-                                        seed=seed,
-                                        agent_version=agent.version,
-                                        baseline_commit_count=baseline_commit_count,
-                                        baseline_head_sha=baseline_head_sha,
-                                        trajectory_writer=writer,
-                                    )
-                                    # Record tamper violations if any
-                                    for chk_name, chk_payload in eval_score.tamper_checks.items():
-                                        if not chk_payload.passed:
-                                            cycle_safety_violations.append(chk_payload.model_dump())
-
-                                # Record any safety violations
-                                if safety_mon.violations:
-                                    for v in safety_mon.violations:
-                                        cycle_safety_violations.append(v.model_dump())
-                                        writer.write(
-                                            TrajectoryEvent(
-                                                run_id=run_name,
-                                                cycle=cycle,
-                                                seed=seed,
-                                                group=group,
-                                                task_id=task.id,
-                                                agent_version=agent.version,
-                                                event_type="safety_check",
-                                                payload=v.model_dump(),
-                                                cost=CostRecord(),
-                                            )
-                                        )
-
-                                task_cost = CostRecord(
-                                    tokens_in=res.tokens_used // 2,
-                                    tokens_out=res.tokens_used // 2,
-                                    usd=res.cost_usd,
-                                    wall_ms=res.wall_time_ms,
-                                )
-                                self.budget_guard.check_task_tokens(res.tokens_used)
-                                self.budget_guard.record_cost(task_cost)
-
-                                is_success = (
-                                    eval_score.ground_truth_score >= 0.5 and res.status != "timeout"
-                                )
-                                task_result_entry = {
-                                    "task_id": task.id,
-                                    "success": is_success,
-                                    "gt_score": eval_score.ground_truth_score,
-                                    "proxy_score": eval_score.proxy_score,
-                                    "proxy_gap": eval_score.proxy_gap,
-                                    "cost_usd": res.cost_usd,
-                                    "status": res.status,
-                                }
-                                cycle_task_results.append(task_result_entry)
-                                completed_tasks.add(task_key)
-                                task_end_results[task_key] = task_result_entry
-
-                                # Log task end event
-                                end_status = (
-                                    "timeout"
-                                    if res.status == "timeout"
-                                    else ("success" if is_success else "failure")
-                                )
-                                end_payload = TaskEndPayload(
-                                    status=end_status,
-                                    success=is_success,
-                                    ground_truth_score=eval_score.ground_truth_score,
-                                    proxy_score=eval_score.proxy_score,
-                                    proxy_gap=eval_score.proxy_gap,
-                                    wall_time_ms=res.wall_time_ms,
-                                    total_steps=len(res.tool_calls),
-                                )
-                                writer.write(
-                                    TrajectoryEvent(
-                                        run_id=run_name,
-                                        cycle=cycle,
-                                        seed=seed,
-                                        group=group,
-                                        task_id=task.id,
-                                        agent_version=agent.version,
-                                        event_type="task_end",
-                                        payload=end_payload.model_dump(),
-                                        cost=task_cost,
-                                    )
-                                )
+                                    cycle_task_results.append(t_entry)
+                                    cycle_safety_violations.extend(t_violations)
+                                    completed_tasks.add(t_key)
+                                    task_end_results[t_key] = t_entry
 
                         # Evolution step at end of cycle
                         if (seed, group, cycle) in completed_evolution_cycles:

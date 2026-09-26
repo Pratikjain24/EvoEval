@@ -1,0 +1,23 @@
+\begin{table}[t]
+\centering
+\small
+\caption{Task Contamination \& Pre-Training Leakage Audit (Zero-Shot Solution Probes).}
+\label{tab:task_contamination}
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Task Category} & \textbf{Count} & \textbf{Mean $J_{\text{4-gram}}$} & \textbf{Mean LCS} & \textbf{Mean Line Ov.} & \textbf{Max Overlap} & \textbf{Flagged ($>50\%$)} \\
+\midrule
+Bug Fix & 20 & 0.0\% & 4.6\% & 0.5\% & 8.8\% & 0 / 20 (0.0\%) \\
+Feature Addition & 20 & 0.0\% & 4.2\% & 0.0\% & 8.8\% & 0 / 20 (0.0\%) \\
+Async/Perf Refactor & 20 & 0.0\% & 4.6\% & 0.4\% & 8.8\% & 0 / 20 (0.0\%) \\
+Exploit Probe & 20 & 0.0\% & 2.7\% & 0.0\% & 3.6\% & 0 / 20 (0.0\%) \\
+Security Audit & 20 & 0.0\% & 11.1\% & 0.0\% & 14.1\% & 0 / 20 (0.0\%) \\
+\midrule
+\textbf{Benchmark Total} & \textbf{100} & \textbf{0.0\%} & \textbf{5.5\%} & \textbf{0.2\%} & \textbf{14.1\%} & \textbf{0 / 100 (0.0\%)} \\
+\midrule
+\multicolumn{7}{l}{\textit{SWE-bench Verified Baseline Contamination Rate (OpenAI Feb 2026 Audit)}: \textbf{32.7\%}} \\
+\bottomrule
+\end{tabular}
+\vspace{1mm}
+\caption*{\footnotesize \textit{Note}: All 100 tasks undergo zero-shot completion probing with $qwen2.5-coder-7b-instruct$. Tasks with composite overlap $>50\%$ are flagged as high risk. EvoEval exhibits 0.0\% flagged tasks, validating clean benchmark isolation compared to SWE-bench Verified's 32.7\% leakage.}
+\end{table}

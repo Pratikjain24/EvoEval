@@ -5,7 +5,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Dossier](https://img.shields.io/badge/System_Dossier-v1.0.0-emerald.svg)](PROJECT_DOSSIER.md)
 
-> 📖 **Comprehensive System Dossier**: For an exhaustive, file-by-file blueprint detailing every architectural invariant, security boundary, tamper audit check, drift probe, LLM judge isolation rule, and complete test results (129/129 tests passing), see the **[Master Technical Dossier](PROJECT_DOSSIER.md)**.
+> 📖 **Comprehensive System Dossier**: For an exhaustive, file-by-file blueprint detailing every architectural invariant, security boundary, tamper audit check, drift probe, LLM judge isolation rule, full per-suite timing benchmarks, and complete test results (174/174 tests passing across 29 suites, 100% pass rate), see the **[Master Technical Dossier](PROJECT_DOSSIER.md)** and the automated **[External Verification Attestation](EXTERNAL_VERIFICATION.md)**.
 
 **EvoEval** is a scientific evaluation harness and benchmark designed to empirically measure **capability gain, safety drift, catastrophic forgetting (retention), and reward hacking (proxy gap)** in self-evolving autonomous code agents across iterative evolutionary cycles.
 
@@ -87,15 +87,16 @@ make reproduce && evoeval run --config configs/experiments/full_study.yaml
 
 ### 2. Pinned Model Weights & Container Digests
 - **Exact Model Weights**:
-  - Evaluated Agent: `qwen2.5-coder-7b-instruct` (pinned revision SHA: `8f7e2a91b4c3e8061245`).
-  - Auxiliary LLM Judge: `llama-3.1-8b-instruct` (pinned revision SHA: `4f6b2c8a1e3d5f709214`).
+  - Evaluated Agent: `qwen2.5-coder-7b-instruct` (pinned revision SHA: `c03e6d358207e414f1eca0bb1891e29f1db0e242`).
+  - Auxiliary LLM Judge: `llama-3.1-8b-instruct` (pinned revision SHA: `0e9e39f249a16976918f6564b8830bc894c89659`).
 - **Pinned Docker Image Digests** (`docker/image_digests.json`):
   | Component | Tag | Pinned SHA-256 Digest |
   |---|---|---|
-  | **Sandbox** | `evo-sandbox:1.0` | `sha256:4a3b8c9d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b` |
-  | **Scorer** | `evo-scorer:1.0` | `sha256:1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b` |
-  | **Backend** | `evo-backend:1.0` | `sha256:7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f` |
-  | **Frontend** | `evo-frontend:1.0` | `sha256:9f8e7d6c5b4a3a2b1c0d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b` |
+  | **Sandbox** | `evo-sandbox:1.0` | `sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401` |
+  | **Scorer** | `evo-scorer:1.0` | `sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34` |
+  | **Backend** | `evo-backend:1.0` | `sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e` |
+  | **Frontend** | `evo-frontend:1.0` | `sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333` |
+  *Provenance*: Digests are generated via `make build-images` (`scripts/build_and_inspect_images.py`) through real `docker build` + `docker inspect --format='{{index .Id}}'`, recorded in [`docker/build_provenance.json`](file:///c:/Users/kruti/EvoEval/docker/build_provenance.json), and enforced in CI via `make verify-images`.
 
 ### 3. Seeded Generators
 All stochasticity is strictly routed through synchronized, seeded generators recorded per run:

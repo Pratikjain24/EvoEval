@@ -4,10 +4,16 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any, Dict, List
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from evaeval.dashboard_backend.auth import require_read_access
+from evaeval.dashboard_backend.rate_limiter import rate_limit
 from evaeval.metrics.reliability import bootstrap_ci
 
-router = APIRouter(prefix="/runs/{run_id}/cycles", tags=["cycles"])
+router = APIRouter(
+    prefix="/runs/{run_id}/cycles",
+    tags=["cycles"],
+    dependencies=[Depends(require_read_access), Depends(rate_limit(limit=60))],
+)
 
 
 @router.get("", response_model=List[Dict[str, Any]])

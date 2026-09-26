@@ -1,0 +1,39 @@
+\begin{table*}[t]
+\centering
+\small
+\caption{\textbf{Inferential Statistical Significance & Effect Size Matrix (27 Canonical Metric Tuples)}. Paired bootstrap hypothesis tests ($B = 10{,}000$) with Holm-Bonferroni step-down Family-Wise Error Rate (FWER) control ($\alpha = 0.05$) comparing unconstrained self-evolving agents ($G_2, G_3, G_4$) against static controls ($G_1$) and guarded mechanisms ($G_5, G_6$).}
+\label{tab:significance_testing}
+\begin{tabular}{llcccccc}
+\toprule
+\textbf{Comparison} & \textbf{Metric} & \textbf{Diff ($A - B$)} & \textbf{95\% Bootstrap CI} & \textbf{Cohen's $d$} & \textbf{Cliff's $\delta$} & \textbf{$p_{\text{raw}}$} & \textbf{$p_{\text{Holm}}$} \\
+\midrule
+G2 vs. G1 & $\Delta P(T)$ & +0.17 & [+0.15, +0.19] & +6.71 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G2 vs. G1 & $\text{SafetyDrift}(T)$ & +0.23 & [+0.21, +0.24] & +12.86 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G2 vs. G1 & $\text{ProxyGap}$ & +0.26 & [+0.25, +0.28] & +12.22 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G2 vs. G5 & $\Delta P(T)$ & -0.05 & [-0.07, -0.03] & -2.00 & -0.84 & $<0.001$ & \textbf{0.003}* \\
+G2 vs. G5 & $\text{SafetyDrift}(T)$ & +0.14 & [+0.13, +0.16] & +6.16 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G2 vs. G5 & $\text{ProxyGap}$ & +0.19 & [+0.18, +0.21] & +7.95 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G2 vs. G6 & $\Delta P(T)$ & -0.14 & [-0.16, -0.12] & -4.80 & -1.00 & $<0.001$ & \textbf{0.003}* \\
+G2 vs. G6 & $\text{SafetyDrift}(T)$ & +0.19 & [+0.17, +0.20] & +8.94 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G2 vs. G6 & $\text{ProxyGap}$ & +0.23 & [+0.21, +0.25] & +9.04 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G3 vs. G1 & $\Delta P(T)$ & +0.22 & [+0.21, +0.24] & +10.37 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G3 vs. G1 & $\text{SafetyDrift}(T)$ & +0.15 & [+0.14, +0.17] & +6.00 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G3 vs. G1 & $\text{ProxyGap}$ & +0.17 & [+0.16, +0.19] & +7.33 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G3 vs. G5 & $\Delta P(T)$ & -0.02 & [-0.04, -0.01] & -0.95 & -0.48 & 0.014 & \textbf{0.029}* \\
+G3 vs. G5 & $\text{SafetyDrift}(T)$ & +0.08 & [+0.07, +0.09] & +3.87 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G3 vs. G5 & $\text{ProxyGap}$ & +0.10 & [+0.09, +0.12] & +5.62 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G3 vs. G6 & $\Delta P(T)$ & -0.10 & [-0.12, -0.08] & -3.97 & -1.00 & $<0.001$ & \textbf{0.003}* \\
+G3 vs. G6 & $\text{SafetyDrift}(T)$ & +0.13 & [+0.11, +0.14] & +5.92 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G3 vs. G6 & $\text{ProxyGap}$ & +0.15 & [+0.13, +0.17] & +6.39 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G4 vs. G1 & $\Delta P(T)$ & +0.29 & [+0.28, +0.30] & +12.68 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G4 vs. G1 & $\text{SafetyDrift}(T)$ & +0.28 & [+0.27, +0.30] & +14.21 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G4 vs. G1 & $\text{ProxyGap}$ & +0.32 & [+0.31, +0.34] & +14.59 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G4 vs. G5 & $\Delta P(T)$ & +0.04 & [+0.02, +0.06] & +1.41 & +0.69 & $<0.001$ & \textbf{0.003}* \\
+G4 vs. G5 & $\text{SafetyDrift}(T)$ & +0.22 & [+0.20, +0.24] & +7.86 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G4 vs. G5 & $\text{ProxyGap}$ & +0.26 & [+0.24, +0.27] & +11.27 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G4 vs. G6 & $\Delta P(T)$ & -0.02 & [-0.03, -0.00] & -0.66 & -0.37 & 0.041 & \textbf{0.041}* \\
+G4 vs. G6 & $\text{SafetyDrift}(T)$ & +0.26 & [+0.24, +0.27] & +11.52 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+G4 vs. G6 & $\text{ProxyGap}$ & +0.32 & [+0.30, +0.33] & +16.60 & +1.00 & $<0.001$ & \textbf{0.003}* \\
+\bottomrule
+\end{tabular}
+\end{table*}
