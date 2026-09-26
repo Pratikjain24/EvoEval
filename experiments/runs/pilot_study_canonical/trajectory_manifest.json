@@ -1,0 +1,33 @@
+{
+  "manifest_version": "1.0.0",
+  "schema_version": "1.0.0",
+  "run_id": "pilot_study_canonical",
+  "raw_sha256": "cd83c761569428cd74b2fd16c4a483dc885560ca09a074582a18998f0d7d0ff1",
+  "deterministic_sha256": "696c32a7262f544192b4db67a2bfb2c98174f096aa5c2e551e1fd476166cdd50",
+  "total_events": 1858,
+  "event_distribution": {
+    "task_start": 276,
+    "tool_call": 598,
+    "observation": 598,
+    "task_end": 276,
+    "evolution_proposal": 60,
+    "evolution_decision": 50
+  },
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "model": {
+    "name": "qwen2.5-coder-7b-instruct",
+    "revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
+    "family": "qwen"
+  },
+  "docker_digests": {
+    "evo-sandbox:1.0": "sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401",
+    "evo-scorer:1.0": "sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34",
+    "evo-backend:1.0": "sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e",
+    "evo-frontend:1.0": "sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333"
+  },
+  "generated_at": "2026-09-26T03:43:43.968295+00:00"
+}

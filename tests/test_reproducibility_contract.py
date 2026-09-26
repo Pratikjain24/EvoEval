@@ -181,6 +181,19 @@ def test_trajectory_manifest_generation(temp_run_dir: Path):
     assert "docker_digests" in manifest
 
 
+def test_cli_manifest_command():
+    """Verify that `evoeval manifest --run-id <id>` CLI command executes without error."""
+    from typer.testing import CliRunner
+    from evaeval.runner.cli import app
+
+    runner = CliRunner()
+    result = runner.invoke(app, ["manifest", "--run-id", "pilot_study_canonical"])
+    assert result.exit_code == 0, f"CLI manifest command failed:\n{result.stdout}"
+    assert "Trajectory SHA-256 Manifest" in result.stdout
+    assert "Deterministic SHA-256" in result.stdout
+    assert "Total Trajectory Events" in result.stdout
+
+
 # ==============================================================================
 # 4. Docker Compose 4-Service Unified Environment
 # ==============================================================================

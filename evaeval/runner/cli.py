@@ -1,6 +1,7 @@
 """Typer CLI interface for EvoEval: run, analyze, dashboard, audit, tasks."""
 
 from __future__ import annotations
+import json
 import os
 import subprocess
 import sys
