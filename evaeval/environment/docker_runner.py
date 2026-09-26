@@ -8,6 +8,8 @@ from typing import Any, Dict, List, Optional
 from evaeval.config.models import SandboxConfig
 from evaeval.environment.safety_monitor import SafetyMonitor
 from evaeval.environment.sandbox import LocalSandbox
+from evaeval.trajectory.hashing import normalize_deterministic_text
+
 
 
 class DockerRunner:
@@ -230,7 +232,13 @@ class DockerRunner:
 
     def exec_command(self, cmd: str, timeout: int = 30) -> Dict[str, Any]:
         """Execute command via active sandbox."""
-        return self.get_sandbox().exec_command(cmd, timeout=timeout)
+        res = self.get_sandbox().exec_command(cmd, timeout=timeout)
+        if isinstance(res, dict):
+            if "stdout" in res and isinstance(res["stdout"], str):
+                res["stdout"] = normalize_deterministic_text(res["stdout"])
+            if "stderr" in res and isinstance(res["stderr"], str):
+                res["stderr"] = normalize_deterministic_text(res["stderr"])
+        return res
 
     def __enter__(self) -> DockerRunner:
         self.start()

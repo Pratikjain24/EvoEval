@@ -7,6 +7,8 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from evaeval.environment.safety_monitor import SafetyMonitor
+from evaeval.trajectory.hashing import normalize_deterministic_text
+
 
 
 class SandboxConfinementError(Exception):
@@ -80,8 +82,8 @@ class LocalSandbox:
             )
             duration_ms = int((time.time() - start) * 1000)
             return {
-                "stdout": proc.stdout,
-                "stderr": proc.stderr,
+                "stdout": normalize_deterministic_text(proc.stdout),
+                "stderr": normalize_deterministic_text(proc.stderr),
                 "exit_code": proc.returncode,
                 "duration_ms": duration_ms,
                 "blocked": False,
@@ -189,8 +191,8 @@ class DockerSandbox(LocalSandbox):
             )
             duration_ms = int((time.time() - start) * 1000)
             return {
-                "stdout": proc.stdout,
-                "stderr": proc.stderr,
+                "stdout": normalize_deterministic_text(proc.stdout),
+                "stderr": normalize_deterministic_text(proc.stderr),
                 "exit_code": proc.returncode,
                 "duration_ms": duration_ms,
                 "blocked": False,

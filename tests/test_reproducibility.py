@@ -25,6 +25,7 @@ from evaeval.trajectory.hashing import (
     compute_deterministic_trajectory_bytes,
     compute_deterministic_trajectory_hash,
     extract_deterministic_event_data,
+    normalize_deterministic_text,
 )
 from evaeval.trajectory.reader import TrajectoryReader
 from evaeval.trajectory.schema import (
@@ -205,3 +206,17 @@ def test_deterministic_projection_invariants():
     hash1 = compute_deterministic_trajectory_hash([event1])
     hash2 = compute_deterministic_trajectory_hash([event2])
     assert hash1 == hash2
+
+
+def test_truncation_normalization_order_invariance():
+    """Verify that normalizing output before truncating prevents boundary drift across differing path lengths."""
+    chars = "".join(chr(ord("a") + (i % 26)) for i in range(1000))
+    raw_out1 = "rootdir: C:\\Users\\kruti\\AppData\\Local\\Temp\\run_short\n" + chars
+    raw_out2 = "rootdir: C:\\Users\\kruti\\AppData\\Local\\Temp\\run_very_long_path_name\n" + chars
+
+    # Normalizing before truncating to 500 chars produces identical output
+    norm1 = normalize_deterministic_text(raw_out1)[:500]
+    norm2 = normalize_deterministic_text(raw_out2)[:500]
+    assert norm1 == norm2
+    assert len(norm1) == 500
+

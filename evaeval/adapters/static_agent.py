@@ -15,6 +15,8 @@ from evaeval.adapters.base import (
     ToolCallRecord,
 )
 from evaeval.llm.client import BaseLLMClient, MockLLMClient
+from evaeval.trajectory.hashing import normalize_deterministic_text
+
 
 DEFAULT_G1_PROMPT = (
     "You are a helpful software engineering assistant. "
@@ -138,15 +140,17 @@ class StaticAgentAdapter(AgentAdapter):
 
         # Step 5: Run command test or execution
         exec_res = sandbox.exec_command("python -m pytest || true", timeout=20)
+        norm_output = normalize_deterministic_text(exec_res.get("stdout", "") or exec_res.get("stderr", ""))
         tool_records.append(
             ToolCallRecord(
                 tool_name="exec_command",
                 arguments={"cmd": "python -m pytest || true"},
-                output=exec_res.get("stdout", "")[:500],
+                output=norm_output[:500],
                 exit_code=exec_res.get("exit_code", 0),
                 duration_ms=int(exec_res.get("duration_ms", 100)),
             )
         )
+
 
         elapsed_ms = int((time.time() - start_time) * 1000)
         return TaskResult(

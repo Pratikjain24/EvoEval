@@ -24,7 +24,9 @@ from evaeval.environment.sandbox import LocalSandbox
 from evaeval.environment.task_loader import TaskLoader
 from evaeval.llm.client import MockLLMClient
 from evaeval.scoring.hidden_scorer import HiddenScorer
+from evaeval.trajectory.hashing import normalize_deterministic_text
 from evaeval.trajectory.reader import TrajectoryReader
+
 from evaeval.trajectory.schema import (
     CostRecord,
     ObservationPayload,
@@ -143,7 +145,7 @@ def run_single_task_manual(
                 event_type="observation",
                 payload=ObservationPayload(
                     tool_name=tc.tool_name,
-                    stdout=tc.output[:300],
+                    stdout=normalize_deterministic_text(tc.output)[:300],
                     exit_code=tc.exit_code,
                     duration_ms=tc.duration_ms,
                 ).model_dump(),

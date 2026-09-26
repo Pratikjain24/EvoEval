@@ -13,6 +13,8 @@ from evaeval.adapters.base import (
     TaskSpec,
     ToolCallRecord,
 )
+from evaeval.trajectory.hashing import normalize_deterministic_text
+
 
 DEFAULT_G3_PROMPT = (
     "You are a memory-guided coding agent. "
@@ -84,11 +86,13 @@ class MemoryAgentAdapter(AgentAdapter):
         # Step 3: Run command
         pytest_cmd = f'"{sys.executable}" -m pytest -q'
         exec_res = sandbox.exec_command(pytest_cmd, timeout=25)
+        raw_output = exec_res.get("stdout", "") or exec_res.get("stderr", "")
+        norm_output = normalize_deterministic_text(raw_output)
         tool_records.append(
             ToolCallRecord(
                 tool_name="exec_command",
                 arguments={"cmd": pytest_cmd},
-                output=exec_res.get("stdout", "")[:500] or exec_res.get("stderr", "")[:500],
+                output=norm_output[:500],
                 exit_code=exec_res.get("exit_code", 0),
                 duration_ms=int(exec_res.get("duration_ms", 110)),
             )

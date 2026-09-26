@@ -20,11 +20,12 @@ def normalize_deterministic_text(text: str) -> str:
     if not isinstance(text, str) or not text:
         return text
 
-    # 1. Normalize pytest session header paths (e.g. rootdir, configfile, inifile, testpaths)
+    # 1. Normalize pytest session header paths (e.g. rootdir, configfile, inifile, testpaths, cachedir)
     text = re.sub(r"rootdir:\s*[^\r\n,]+", "rootdir: [ROOTDIR]", text, flags=re.IGNORECASE)
     text = re.sub(r"configfile:\s*[^\r\n,]+", "configfile: [CONFIGFILE]", text, flags=re.IGNORECASE)
     text = re.sub(r"inifile:\s*[^\r\n,]+", "inifile: [INIFILE]", text, flags=re.IGNORECASE)
     text = re.sub(r"testpaths:\s*[^\r\n,]+", "testpaths: [TESTPATHS]", text, flags=re.IGNORECASE)
+    text = re.sub(r"cachedir:\s*[^\r\n,]+", "cachedir: [CACHEDIR]", text, flags=re.IGNORECASE)
 
     # 2. Normalize absolute scratch/temp paths embedded in output, tracebacks, or file paths
     # Windows paths: e.g. C:\Users\...\AppData\Local\Temp\... or C:/Users/.../run_...

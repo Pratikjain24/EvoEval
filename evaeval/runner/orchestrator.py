@@ -36,7 +36,9 @@ from evaeval.trajectory.schema import (
     ToolCallPayload,
     TrajectoryEvent,
 )
+from evaeval.trajectory.hashing import normalize_deterministic_text
 from evaeval.trajectory.writer import TrajectoryWriter
+
 
 
 class ExperimentOrchestrator:
@@ -350,7 +352,7 @@ class ExperimentOrchestrator:
                         event_type="observation",
                         payload=ObservationPayload(
                             tool_name=tc.tool_name,
-                            stdout=tc.output[:300],
+                            stdout=normalize_deterministic_text(tc.output)[:300],
                             exit_code=tc.exit_code,
                             duration_ms=tc.duration_ms,
                         ).model_dump(),
