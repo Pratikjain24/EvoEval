@@ -819,7 +819,7 @@ EvoEval/
 ├── tasks/
 │   ├── tasks_index.json               # 100 standardized benchmark task specifications
 │   └── repos/                         # Task repository templates (including mini_orm drift probe)
-├── tests/                             # 27 quality gate test suites (165 total tests)
+├── tests/                             # 30 quality gate test suites (187 total tests)
 └── paper/
     └── main.tex                       # NeurIPS LaTeX manuscript with formal hypotheses
 ```
