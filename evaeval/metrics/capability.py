@@ -1,7 +1,7 @@
 """Capability Metrics: Success rate, improvement gain, and generalization gap."""
 
 from __future__ import annotations
-from typing import Dict, List, Sequence, Union
+from typing import Dict, List, Optional, Sequence, Union
 import numpy as np
 
 

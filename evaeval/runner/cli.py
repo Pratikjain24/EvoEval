@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 import json
-import os
-import subprocess
-import sys
 from pathlib import Path
 from typing import Optional
 import typer
@@ -142,7 +139,7 @@ def analyze(
     for k, p in tables.items():
         shutil.copy2(p, paper_tbl_dir / p.name)
 
-    console.print(f"[bold cyan]Copied publication assets to paper/figures/ and paper/tables/[/bold cyan]")
+    console.print("[bold cyan]Copied publication assets to paper/figures/ and paper/tables/[/bold cyan]")
 
 
 @app.command()
@@ -268,7 +265,7 @@ def stats(
 
     console.print(p_tbl)
 
-    console.print(f"\n[bold green]Statistical analysis complete![/bold green]")
+    console.print("\n[bold green]Statistical analysis complete![/bold green]")
     console.print(f"  - Hypotheses Tested: [bold]{report.total_hypotheses}[/bold]")
     console.print(f"  - Raw Significant ($p < {alpha}$): [bold cyan]{report.significant_raw} / {report.total_hypotheses}[/bold cyan]")
     console.print(f"  - Holm-Bonferroni Significant: [bold green]{report.significant_holm} / {report.total_hypotheses}[/bold green]")
@@ -452,7 +449,7 @@ def audit(
         )
     console.print(grp_tbl)
 
-    console.print(f"\n[bold green]Human audit execution complete![/bold green]")
+    console.print("\n[bold green]Human audit execution complete![/bold green]")
     console.print(f"  - Traces Audited: [bold]{report.sample_size}[/bold]")
     console.print(f"  - JSON Results: [cyan]{artifacts['json']}[/cyan]")
     console.print(f"  - Markdown Summary: [cyan]{artifacts['markdown']}[/cyan]")
@@ -564,7 +561,7 @@ def audit_contamination(
     console.print(f"  - Flagged (>50%):  [bold cyan]{report.flagged_tasks_count} / {report.total_tasks_audited} ({report.flag_rate_pct:.1f}%)[/bold cyan]")
     console.print(f"  - Mean Overlap:    {report.mean_composite_leakage:.2%}")
     console.print(f"  - Max Overlap:     {report.max_composite_leakage:.2%}")
-    console.print(f"  - Baseline Ref:    SWE-bench Verified had [bold red]32.7%[/bold red] leakage (retired Feb 2026).")
+    console.print("  - Baseline Ref:    SWE-bench Verified had [bold red]32.7%[/bold red] leakage (retired Feb 2026).")
 
 
 
@@ -580,7 +577,6 @@ def verify_env(
     from evaeval.config.models import ExperimentConfig
     from evaeval.environment.task_loader import TaskLoader
     from evaeval.runner.reproducibility import (
-        load_pinned_docker_digests,
         set_global_seed,
         verify_and_pull_model_revision,
         verify_docker_specifications,

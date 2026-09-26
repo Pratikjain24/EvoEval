@@ -1,8 +1,7 @@
 """Retention Metrics: Catastrophic forgetting and backward capability retention."""
 
 from __future__ import annotations
-from typing import Dict, List, Sequence, Union
-import numpy as np
+from typing import List, Sequence
 
 
 def retention_ratio(perf_old_t: float, perf_old_0: float, eps: float = 1e-6) -> float:

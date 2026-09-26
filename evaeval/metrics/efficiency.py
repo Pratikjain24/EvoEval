@@ -1,7 +1,7 @@
 """Efficiency Metrics: Token expenditure, monetary cost, execution latency, and verification overhead."""
 
 from __future__ import annotations
-from typing import Dict, List, Sequence
+from typing import Dict, Sequence
 from evaeval.trajectory.schema import CostRecord
 
 

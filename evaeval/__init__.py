@@ -8,6 +8,7 @@ from evaeval.adapters.base import AgentAdapter, TaskSpec, TaskResult, EvolutionF
 
 __all__ = [
     "__version__",
+    "SCHEMA_VERSION",
     "TrajectoryEvent",
     "CostRecord",
     "AgentAdapter",

@@ -9,7 +9,6 @@ Formal inferential framework to test scientific hypotheses H1 through H5:
 
 from __future__ import annotations
 from dataclasses import dataclass
-import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 import numpy as np
@@ -620,19 +619,19 @@ class StatisticalSignificanceAnalyzer:
 
     def _generate_markdown_report(self, report: StatisticalAuditReport) -> str:
         lines = [
-            f"# Statistical Significance & Effect Size Audit Report",
-            f"",
+            "# Statistical Significance & Effect Size Audit Report",
+            "",
             f"- **Run ID**: `{report.run_id}`",
             f"- **Significance Level (Alpha)**: `{report.alpha}`",
             f"- **Bootstrap Resamples**: `{report.n_bootstraps:,}`",
             f"- **Total Hypotheses Tested**: `{report.total_hypotheses}`",
             f"- **Significant (Raw $p < 0.05$)**: `{report.significant_raw} / {report.total_hypotheses}`",
             f"- **Significant (Holm-Corrected)**: `{report.significant_holm} / {report.total_hypotheses}`",
-            f"",
-            f"## Canonical 27 Metric Tuples",
-            f"",
-            f"| Comparison | Metric | Mean Diff [95% CI] | Cohen's d | Cliff's $\\delta$ | Raw $p$ | Holm $p$ | Decision |",
-            f"|---|---|---|---|---|---|---|---|",
+            "",
+            "## Canonical 27 Metric Tuples",
+            "",
+            "| Comparison | Metric | Mean Diff [95% CI] | Cohen's d | Cliff's $\\delta$ | Raw $p$ | Holm $p$ | Decision |",
+            "|---|---|---|---|---|---|---|---|",
         ]
         for r in report.results:
             ci_str = f"[{r.ci_95_diff[0]:.2f}, {r.ci_95_diff[1]:.2f}]"
@@ -644,11 +643,11 @@ class StatisticalSignificanceAnalyzer:
             )
 
         lines.extend([
-            f"",
-            f"## Pooled Comparisons: All Unconstrained ($G_2$--$G_4$) vs All Guarded ($G_5$--$G_6$)",
-            f"",
-            f"| Metric | Unconstrained Mean | Guarded Mean | Difference | Cohen's d | Cliff's $\\delta$ | $p$-value | Significance |",
-            f"|---|---|---|---|---|---|---|---|",
+            "",
+            "## Pooled Comparisons: All Unconstrained ($G_2$--$G_4$) vs All Guarded ($G_5$--$G_6$)",
+            "",
+            "| Metric | Unconstrained Mean | Guarded Mean | Difference | Cohen's d | Cliff's $\\delta$ | $p$-value | Significance |",
+            "|---|---|---|---|---|---|---|---|",
         ])
         for p in report.pooled_comparisons:
             p_str = f"{p.p_value_holm:.4f}" if p.p_value_holm >= 0.0001 else "<0.0001"

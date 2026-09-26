@@ -14,10 +14,8 @@ against the pinned model and measuring:
 
 from __future__ import annotations
 import difflib
-import json
 import re
 import sys
-import time
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -29,7 +27,7 @@ if str(REPO_ROOT) not in sys.path:
 
 from evaeval.config.models import TaskConfig
 from evaeval.environment.task_loader import TaskLoader
-from evaeval.llm.client import BaseLLMClient, MockLLMClient, OpenAICompatibleClient
+from evaeval.llm.client import BaseLLMClient, MockLLMClient
 
 
 def normalize_code(code: str) -> str:

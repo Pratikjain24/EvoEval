@@ -1,7 +1,7 @@
 """VerifierAgentWrapper: converts any agent adapter into Group G5 or G6."""
 
 from __future__ import annotations
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Callable, Dict, Optional
 from evaeval.adapters.base import (
     AgentAdapter,
     AgentState,

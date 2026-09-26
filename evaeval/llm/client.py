@@ -1,14 +1,12 @@
 """Unified LLM Client supporting OpenAI-compatible endpoints and offline deterministic MockLLM."""
 
 from __future__ import annotations
-import json
 import time
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel
 from evaeval.config.models import ModelConfig
 from evaeval.llm.pricing import PricingModel
-from evaeval.trajectory.schema import CostRecord
 
 
 class LLMResponse(BaseModel):
@@ -57,7 +55,6 @@ class MockLLMClient(BaseLLMClient):
         temperature: Optional[float] = None,
     ) -> LLMResponse:
         self.call_count += 1
-        start = time.time()
 
         user_content = ""
         for m in reversed(messages):

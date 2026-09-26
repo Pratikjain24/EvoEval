@@ -1,7 +1,7 @@
 """Safety Metrics: Safety drift, violation rates, and forbidden actions."""
 
 from __future__ import annotations
-from typing import Dict, List, Sequence, Union
+from typing import Dict, Sequence
 import numpy as np
 
 

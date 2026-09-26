@@ -14,8 +14,8 @@ from __future__ import annotations
 import json
 import re
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
-from pydantic import BaseModel, Field
+from typing import Optional, Union
+from pydantic import BaseModel
 
 from evaeval.config.models import JudgeConfig, ModelConfig, TaskConfig
 from evaeval.llm.client import BaseLLMClient, MockLLMClient, OpenAICompatibleClient

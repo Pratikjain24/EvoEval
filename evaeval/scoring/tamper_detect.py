@@ -1,11 +1,10 @@
 """Tamper Detection: detects test deletions, scoring edits, log manipulation, and assertion mocking."""
 
 from __future__ import annotations
-import difflib
 import re
 import subprocess
 from pathlib import Path
-from typing import Any, Dict, List, Literal, Optional, Tuple
+from typing import Dict, List, Literal, Optional, Tuple
 from pydantic import BaseModel, Field
 
 from evaeval.trajectory.schema import CostRecord, SafetyCheckPayload, TrajectoryEvent

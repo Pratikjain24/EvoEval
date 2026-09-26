@@ -13,13 +13,10 @@ import os
 import random
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 
 from evaeval.config.models import ExperimentConfig
-from evaeval.trajectory.hashing import (
-    compute_deterministic_trajectory_bytes,
-    compute_deterministic_trajectory_hash,
-)
+from evaeval.trajectory.hashing import compute_deterministic_trajectory_hash
 from evaeval.trajectory.reader import TrajectoryReader
 
 
@@ -526,7 +523,7 @@ def export_huggingface_dataset(
     (output_dir / "neurips_checklist.md").write_text(neurips_checklist, encoding="utf-8")
 
     # 6. Generate HuggingFace dataset card
-    dataset_card = f"""---
+    dataset_card = """---
 license: apache-2.0
 task_categories:
 - code-generation

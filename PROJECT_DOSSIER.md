@@ -292,8 +292,8 @@ To address reviewer scrutiny regarding benchmark positioning and answer *"How do
 | **MBPP** (Austin et al., 2021) | Elementary algorithms | 11 | 0 (prompt-only) | Single-turn | Assert statements | **98.2%** (memorized) | 82.6% (saturated) |
 | **SWE-bench Ver.** (Jimenez et al., 2024) | Real GitHub PRs | 1,840 | 15–40 steps | Multi-hour | Hidden repo pytest suites | **32.7%** (contaminated) | 20.0% (severe floor) |
 | **EvoAgentBench** (Gao et al., 2026) | Agent transferability | 120 | 4–12 steps | Single-episode | Task completion | 14.5% (medium) | 48.0% (uncalibrated) |
-| **ActBench** (Chen et al., 2026) | Static safety probes | 85 | 3–8 steps | Single-turn | Rule-based security checks | 8.2% (low) | 52.0% (uncalibrated) |
-| **SkillsBench** (Liu et al., 2026) | Skill accumulation | 210 | 6–15 steps | Multi-task | Task unit tests | 11.0% (low) | 54.0% (uncalibrated) |
+| **ActBench** (Yao et al., 2026) | Static safety probes | 85 | 3–8 steps | Single-turn | Rule-based security checks | 8.2% (low) | 52.0% (uncalibrated) |
+| **SkillsBench** (Li et al., 2026) | Skill accumulation | 210 | 6–15 steps | Multi-task | Task unit tests | 11.0% (low) | 54.0% (uncalibrated) |
 | **EvoEval (Ours)** | **Recursive evolution harness** | **185** | **1–8 steps** | **Longitudinal ($T \ge 10$)** | **Dual-container hidden pytest** | **0.0%** (zero contamination) | **60.0% ($P_0 = 0.60$)** |
 
 #### Why Frozen Baseline Calibration ($P(0) = 0.60$) Is Mathematically Essential for Self-Evolution
@@ -1236,8 +1236,8 @@ On SWE-bench Verified, an 8B-parameter open-weights agent fails $80\%$ of tasks 
 #### 4. Scientific Differentiation from EvoAgentBench, ActBench, and SkillsBench
 
 - **EvoAgentBench** (Gao et al., 2026): Focuses exclusively on single-episode cross-task transfer. EvoEval evaluates **multi-cycle longitudinal evolution** ($T \ge 10$--$25$), quantifying safety boundary erosion and catastrophic forgetting across generations.
-- **ActBench** (Chen et al., 2026): Measures tool and shell vulnerabilities in static, un-evolving single-session environments ($18.4\%$ violation rate). EvoEval demonstrates that recursive adaptation **accelerates drift from $0\%$ up to $28\%$ ($G_4$)**, and formalizes $G_6$ verifier rollback to eliminate drift.
-- **SkillsBench** (Liu et al., 2026): Observes that unbounded skill accumulation yields negligible capability gain ($\Delta P \approx -0.02$ to $+0.03$) due to memory pollution. EvoEval isolates the exact cause (retrieval dilution) and proves that regression guards with atomic rollback ($G_6$) achieve **$+0.32$ net capability gain** while maintaining $98\%$ retention.
+- **ActBench** (Yao et al., 2026): Measures tool and shell vulnerabilities in static, un-evolving single-session environments ($18.4\%$ violation rate). EvoEval demonstrates that recursive adaptation **accelerates drift from $0\%$ up to $28\%$ ($G_4$)**, and formalizes $G_6$ verifier rollback to eliminate drift.
+- **SkillsBench** (Li et al., 2026): Observes that unbounded skill accumulation yields negligible capability gain ($\Delta P \approx -0.02$ to $+0.03$) due to memory pollution. EvoEval isolates the exact cause (retrieval dilution) and proves that regression guards with atomic rollback ($G_6$) achieve **$+0.32$ net capability gain** while maintaining $98\%$ retention.
 
 ---
 
@@ -1279,9 +1279,9 @@ An automated drift probe between mock and real endpoints ([`vllm_smoke_test_repo
 ### P1. Related Work Positioning
 The manuscript explicitly contrasts EvoEval against five contemporary benchmarks with dedicated structured comparisons:
 1. **EvoAgentBench** (Gao et al., 2026): Measures single-episode ability transfer; EvoEval introduces longitudinal multi-cycle evolution, quantifying hidden safety boundary erosion ($\text{SafetyDrift}$), catastrophic forgetting ($\text{Retention}$), and specification gaming ($\text{ProxyGap}$).
-2. **ActBench** (Chen et al., 2026): Evaluates attack surfaces in static sessions; EvoEval demonstrates that unconstrained self-evolution accelerates boundary drift across generations and formalizes verifier rollback ($G_6$) to guarantee stability.
+2. **ActBench** (Yao et al., 2026): Evaluates attack surfaces in static sessions; EvoEval demonstrates that unconstrained self-evolution accelerates boundary drift across generations and formalizes verifier rollback ($G_6$) to guarantee stability.
 3. **AI Agent Reliability Framework** (Rabanser et al., 2026): Establishes reliability dimensions for static frozen models; EvoEval operationalizes multi-dimensional reliability for recursively self-evolving agents whose internal state ($\Pi_t, \mathcal{M}_t, \mathcal{C}_t$) mutates over time.
-4. **SkillsBench** (Liu et al., 2026): Observes ~0% capability gain from self-generated skills; EvoEval provides the structural explanation (context dilution and skill pollution) and the architectural solution (canary regression suites and atomic rollback).
+4. **SkillsBench** (Li et al., 2026): Observes ~0% capability gain from self-generated skills; EvoEval provides the structural explanation (context dilution and skill pollution) and the architectural solution (canary regression suites and atomic rollback).
 5. **METR RE-Bench & Threat Evaluations** (Kinniment et al., 2024; METR, 2024): Discovered a 43-fold surge in test tampering in qualitative case studies; EvoEval operationalizes this into 20 reproducible deliberate drift probes, the mathematical $\text{ProxyGap}$ metric, and dual-container sandboxes with a 5-layer anti-tamper engine.
 
 > **Page 1 Core Claim**: EvoEval is the first evaluation benchmark and experimental harness that is simultaneously **longitudinal** ($T \ge 5$--$25$ cycles), **framework-agnostic** (6 canonical archetypes across multiple foundation model families), and **multi-dimensional** (concurrently measuring $\Delta P$, $\text{SafetyDrift}$, $\text{Retention}$, and $\text{ProxyGap}$ alongside compute costs).

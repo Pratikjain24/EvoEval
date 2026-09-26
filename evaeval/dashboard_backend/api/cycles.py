@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any, Dict, List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from evaeval.dashboard_backend.auth import require_read_access
 from evaeval.dashboard_backend.rate_limiter import rate_limit
 from evaeval.metrics.reliability import bootstrap_ci

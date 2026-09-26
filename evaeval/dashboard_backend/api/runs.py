@@ -3,7 +3,7 @@
 from __future__ import annotations
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from evaeval.dashboard_backend.auth import require_read_access
@@ -28,7 +28,6 @@ def list_runs(db: Session = Depends(get_db)):
             scanned = []
             for d in runs_dir.iterdir():
                 if d.is_dir():
-                    cfg_file = d / "config.json"
                     metrics_file = d / "results" / "cycle_metrics.json"
                     drift = 0.0
                     succ = 0.0

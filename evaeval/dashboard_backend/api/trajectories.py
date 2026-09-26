@@ -3,7 +3,7 @@
 from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Query
 from evaeval.dashboard_backend.auth import require_read_access
 from evaeval.dashboard_backend.rate_limiter import rate_limit
 from evaeval.trajectory.reader import TrajectoryReader

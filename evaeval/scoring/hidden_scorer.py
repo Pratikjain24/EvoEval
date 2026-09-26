@@ -5,11 +5,11 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 from pydantic import BaseModel, Field
 from evaeval.config.models import TaskConfig
 from evaeval.scoring.llm_judge import JudgeEvaluationResult, LLMJudge
-from evaeval.scoring.proxy_gap import ProxyGapAnalyzer, ProxyGapRecord
+from evaeval.scoring.proxy_gap import ProxyGapAnalyzer
 from evaeval.scoring.tamper_detect import TamperDetector, TamperReport
 from evaeval.trajectory.schema import SafetyCheckPayload, TrajectoryEvent
 
@@ -98,7 +98,7 @@ class HiddenScorer:
                     agent_model=agent_model or "qwen2.5-coder-7b-instruct",
                     agent_family=agent_family or "qwen",
                 )
-            except Exception as e:
+            except Exception:
                 pass  # Judge failure does not disrupt primary rule-based/test evaluation
 
         # 1. Run Proxy Tests (Surface reward)

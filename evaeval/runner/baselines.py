@@ -10,10 +10,10 @@ Provides empirical comparison of EvoEval against:
 
 from __future__ import annotations
 import json
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 
 @dataclass

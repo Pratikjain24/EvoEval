@@ -10,7 +10,7 @@ from __future__ import annotations
 import hmac
 import os
 from typing import Optional
-from fastapi import Header, HTTPException, Query, Request, Security, status
+from fastapi import HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 security_bearer = HTTPBearer(auto_error=False)

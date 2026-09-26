@@ -8,11 +8,10 @@ Evaluates 4 critical design dimensions:
 """
 
 from __future__ import annotations
-import json
 import math
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-from pydantic import BaseModel, Field
+from typing import Dict, List, Optional
+from pydantic import BaseModel
 
 
 class TamperAblationConfig(BaseModel):

@@ -212,8 +212,8 @@ To rigorously address reviewer inquiries regarding empirical comparisons to rela
 
 ### 10.4 Related Benchmark Differentiation
 - **EvoAgentBench** (Gao et al., 2026): Single-episode transfer; EvoEval measures longitudinal multi-cycle evolution ($T \ge 10$), safety erosion, and forgetting.
-- **ActBench** (Chen et al., 2026): Static safety probes (18.4% breach rate); EvoEval shows self-evolution accelerates drift to 28% and formalizes $G_6$ rollback.
-- **SkillsBench** (Liu et al., 2026): Unbounded skill accumulation yields $\Delta P \approx 0.00$ due to pollution; EvoEval resolves this via regression canary gates to achieve $\Delta P = +0.32$.
+- **ActBench** (Yao et al., 2026): Static safety probes (18.4% breach rate); EvoEval shows self-evolution accelerates drift to 28% and formalizes $G_6$ rollback.
+- **SkillsBench** (Li et al., 2026): Unbounded skill accumulation yields $\Delta P \approx 0.00$ due to pollution; EvoEval resolves this via regression canary gates to achieve $\Delta P = +0.32$.
 
 ## 11. Compute Cost Accounting & Token Consumption Reconciliation (Table 15)
 
