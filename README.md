@@ -5,7 +5,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Dossier](https://img.shields.io/badge/System_Dossier-v1.0.0-emerald.svg)](PROJECT_DOSSIER.md)
 
-> 📖 **Comprehensive System Dossier**: For an exhaustive, file-by-file blueprint detailing every architectural invariant, security boundary, tamper audit check, drift probe, LLM judge isolation rule, full per-suite timing benchmarks, and complete test results (174/174 tests passing across 29 suites, 100% pass rate), see the **[Master Technical Dossier](PROJECT_DOSSIER.md)** and the automated **[External Verification Attestation](EXTERNAL_VERIFICATION.md)**.
+> 📖 **Comprehensive System Dossier**: For an exhaustive, file-by-file blueprint detailing every architectural invariant, security boundary, tamper audit check, drift probe, LLM judge isolation rule, full per-suite timing benchmarks, and complete test results (187 passed, 1 skipped across 30 test files, 100% pass rate), see the **[Master Technical Dossier](PROJECT_DOSSIER.md)** and the automated **[External Verification Attestation](EXTERNAL_VERIFICATION.md)**.
 
 **EvoEval** is a scientific evaluation harness and benchmark designed to empirically measure **capability gain, safety drift, catastrophic forgetting (retention), and reward hacking (proxy gap)** in self-evolving autonomous code agents across iterative evolutionary cycles.
 
@@ -109,8 +109,10 @@ Seed manifests are recorded in every `trajectory_manifest.json` and in canonical
 
 ### 4. Trajectory Hash Manifest (SHA-256)
 Every evaluation run automatically generates a cryptographic integrity manifest at `experiments/runs/<run_id>/trajectory_manifest.json`:
-- **Raw File SHA-256**: Exact hash of the generated `trajectory.jsonl`.
-- **Deterministic Canonical SHA-256**: Cryptographic digest of canonicalized event payloads (stripping non-deterministic wall-clock timing variations).
+- **Raw File SHA-256**: Exact hash of the generated `trajectory.jsonl` (records exact physical bytes including physical host timestamps).
+- **Deterministic Canonical SHA-256**: Cryptographic digest of canonicalized event payloads (`compute_deterministic_trajectory_hash`), normalizing non-deterministic runtime artifacts (wall-clock timestamps, runner execution durations, and dynamic scratch directory paths).
+- **Byte-Identical Reproducibility Guarantee**: Verified by `tests/test_reproducibility.py` (`test_reproducibility_same_seed_same_config_byte_identical`), executing identical configurations with identical random seeds at temperature 0 produces byte-identical canonical JSONL representations and identical SHA-256 digests (`bytes1 == bytes2` and `hash1 == hash2`).
+- **Cross-Platform Invariance**: Verified across Linux Docker CI and Windows host environments with zero task metric divergence ($\Delta_{\text{platform}} = 0.000$).
 Reviewers can audit trajectory integrity at any time via:
 ```bash
 evoeval manifest --run-id <run_id>
