@@ -20,22 +20,23 @@ def normalize_deterministic_text(text: str) -> str:
     if not isinstance(text, str) or not text:
         return text
 
-    # 1. Normalize pytest session header paths
-    text = re.sub(r"rootdir:\s+[^\r\n]+", "rootdir: [ROOTDIR]", text)
-    text = re.sub(r"configfile:\s+[^\r\n]+", "configfile: [CONFIGFILE]", text)
-    text = re.sub(r"testpaths:\s+[^\r\n]+", "testpaths: [TESTPATHS]", text)
+    # 1. Normalize pytest session header paths (e.g. rootdir, configfile, inifile, testpaths)
+    text = re.sub(r"rootdir:\s*[^\r\n,]+", "rootdir: [ROOTDIR]", text, flags=re.IGNORECASE)
+    text = re.sub(r"configfile:\s*[^\r\n,]+", "configfile: [CONFIGFILE]", text, flags=re.IGNORECASE)
+    text = re.sub(r"inifile:\s*[^\r\n,]+", "inifile: [INIFILE]", text, flags=re.IGNORECASE)
+    text = re.sub(r"testpaths:\s*[^\r\n,]+", "testpaths: [TESTPATHS]", text, flags=re.IGNORECASE)
 
     # 2. Normalize absolute scratch/temp paths embedded in output, tracebacks, or file paths
-    # Windows paths: e.g. C:\Users\...\AppData\Local\Temp\... or C:\...\scratch\run_...
+    # Windows paths: e.g. C:\Users\...\AppData\Local\Temp\... or C:/Users/.../run_...
     text = re.sub(
-        r"[A-Za-z]:\\[^\s\r\n\(\)\'\":]+?\\(?:Temp|temp|tmp|scratch|run_[^\\]+)\\[^\s\r\n\(\)\'\":]*",
+        r"[A-Za-z]:[\\/][^\s\r\n\(\)\'\":]+?[\\/](?:Temp|temp|tmp|scratch|run_[^\s\\/]+|pytest-[^\s\\/]+)[\\/][^\s\r\n\(\)\'\":]*",
         "[SCRATCH_PATH]",
         text,
     )
-    # POSIX temp paths: e.g. /tmp/..., /var/tmp/..., /private/tmp/...
-    text = re.sub(r"(?:/tmp|/var/tmp|/private/tmp)[^\s\r\n\(\)\'\":]*", "[TEMP_PATH]", text)
+    # POSIX temp paths: e.g. /tmp/..., /var/tmp/..., /private/tmp/..., /var/folders/...
+    text = re.sub(r"(?:/tmp|/var/tmp|/private/tmp|/var/folders|/private/var/folders)[^\s\r\n\(\)\'\":]*", "[TEMP_PATH]", text)
     # POSIX scratch paths: e.g. /.../scratch/run_.../...
-    text = re.sub(r"/[^\s\r\n\(\)\'\":]+/(?:scratch|run_[^/]+)/[^\s\r\n\(\)\'\":]*", "[SCRATCH_PATH]", text)
+    text = re.sub(r"/[^\s\r\n\(\)\'\":]+/(?:scratch|run_[^/\s]+|pytest-[^/\s]+)/[^\s\r\n\(\)\'\":]*", "[SCRATCH_PATH]", text)
 
     # 3. Normalize test runner execution timings / durations
     text = re.sub(r"\bin \d+(?:\.\d+)?s\b", "in [DURATION]", text)
