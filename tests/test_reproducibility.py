@@ -154,7 +154,7 @@ def test_deterministic_projection_invariants():
         event_type="observation",
         payload=ObservationPayload(
             tool_name="exec_command",
-            stdout="1 passed in 0.04s\n",
+            stdout="rootdir: /tmp/pytest-of-runner/pytest-0/run_alpha/scratch/task_001\nconfigfile: pyproject.toml\n1 passed in 0.04s\n",
             stderr="",
             exit_code=0,
             duration_ms=45,
@@ -174,7 +174,7 @@ def test_deterministic_projection_invariants():
         event_type="observation",
         payload=ObservationPayload(
             tool_name="exec_command",
-            stdout="1 passed in 0.08s\n",
+            stdout="rootdir: /tmp/pytest-of-runner/pytest-1/run_beta/scratch/task_001\nconfigfile: pyproject.toml\n1 passed in 0.08s\n",
             stderr="",
             exit_code=0,
             duration_ms=80,
