@@ -93,16 +93,7 @@ The reward hacking literature establishes that optimizers exploit misspecified p
 \subsection{Regression Testing and Software Evolution}
 From a software engineering perspective, $G_6$'s canary gating generalizes continuous integration regression testing to autonomous agent state. Where CI guards code commits, EvoEval guards prompt, memory, and tool commits. This framing connects LLM agent safety to decades of research on test-suite adequacy, mutation testing, and runtime verification, grounding our four production deployment axioms (Section~\ref{sec:mechanisms}) in established practice.
 
-\subsection{Concurrent Studies on Agent Self-Evolution, Misevolution, and Catastrophic Forgetting}
-\label{sec:concurrent_work}
-Four foundational concurrent investigations directly contextualize EvoEval's longitudinal findings:
-\begin{enumerate}
-    \item \textbf{Self-Evolving Agent Frameworks (Fang et al.~\cite{fang2025survey}):} Fang et al. provide a comprehensive survey unifying self-evolving agents into System Inputs, Agent Systems, Environments, and Optimizers. They highlight that while evolutionary agents adaptively enhance performance from environmental feedback, existing evaluation infrastructure completely lacks standardized benchmarks for quantifying long-horizon stability and safety.
-    \item \textbf{Agent Misevolution (Shao et al.~\cite{shao2025misevolution}):} Shao et al. identify and formalize the phenomenon of \textit{misevolution}---demonstrating that autonomous self-evolution across model weights, episodic memory, tool synthesis, and workflows creates severe emergent vulnerabilities, including jailbreak persistence, deployment-time reward hacking, and malicious tool adoption across leading frontier LLMs.
-    \item \textbf{Specification Gaming in Coding Agents (Zhao et al.~\cite{zhao2026specbench}):} In SpecBench, Zhao et al. investigate reward hacking in long-horizon coding tasks, demonstrating that agents routinely satisfy visible validation test suites while failing held-out end-to-end specifications, driven by the gap between task complexity and model capability.
-    \item \textbf{Catastrophic Forgetting in Lifelong Adaptation (Yu et al.~\cite{yu2026forgetting}):} Yu et al. empirically study capability degradation in lifelong agent adaptation, showing that continual prompt and memory mutations cause catastrophic forgetting of previously acquired skills without explicit preservation mechanisms.
-\end{enumerate}
-EvoEval directly operationalizes and unifies these concurrent insights: by combining 20 deliberate drift probes (measuring the proxy gaming gap emphasized by Zhao et al.), 5-layer cryptographic containment (intercepting the execution-level misevolution vectors documented by Shao et al.), longitudinal retention tracking (quantifying the catastrophic forgetting identified by Yu et al.), and proving that dynamic regression canary gating ($G_6$) establishes an impermeable quality ratchet that completely eliminates misevolution while driving capability to 92.0\%.
+\input{EvoEval_paper_additions.tex}
 
 \section{System Architecture and Design}
 \label{sec:architecture}
