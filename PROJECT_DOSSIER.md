@@ -820,8 +820,12 @@ EvoEval/
 │   ├── tasks_index.json               # 100 standardized benchmark task specifications
 │   └── repos/                         # Task repository templates (including mini_orm drift probe)
 ├── tests/                             # 30 quality gate test suites (187 total tests)
-└── paper/
-    └── main.tex                       # NeurIPS LaTeX manuscript with formal hypotheses
+├── paper/
+│   ├── main.tex                       # Primary IEEE conference submission manuscript
+│   ├── archive_neurips_extended_report.tex # Archived internal extended-results technical report
+│   ├── EvoEval_paper_additions.tex    # Modular concurrent-work related-work section
+│   ├── references.bib                 # Harmonized bibliography database
+│   └── tables/                        # Standardized LaTeX tables
 ```
 
 ---
@@ -1347,7 +1351,8 @@ EvoEval explicitly reports both Linux Docker and Windows LocalSandbox results si
 To satisfy the standards of the NeurIPS 2027 Datasets & Benchmarks Track, this section documents the exact operational checklist for peer review and publication:
 
 ### 1. Document & Manuscript Deliverables
-- **Anonymous Double-Blind Manuscript**: `paper/main.tex` is complete with 9 LaTeX tables (`paper/tables/`) and 6 publication figures (`paper/figures/`). All author identities, affiliations, and organization links are strictly scrubbed in favor of the anonymous repository: [`https://anonymous.4open.science/r/EvoEval-NeurIPS2027/`](https://anonymous.4open.science/r/EvoEval-NeurIPS2027/).
+- **Primary Submission Manuscript**: [`paper/main.tex`](file:///c:/Users/kruti/EvoEval/paper/main.tex) is formatted under IEEE conference standards with the full author block from Vishwakarma Institute of Technology, Pune.
+- **Archived Extended Technical Report**: [`paper/archive_neurips_extended_report.tex`](file:///c:/Users/kruti/EvoEval/paper/archive_neurips_extended_report.tex) archives the extended double-blind report with the full 6-domain checklist and auxiliary appendices.
 - **Paper Checklist (NeurIPS 2027 Section 9)**: Fully answered across claims, limitations, reproducibility, compute, human subjects, and data governance. Exported to `neurips_checklist.md`.
 - **Pre-Submission PDF Compilation**: Upload `paper/` to Overleaf or run `pdflatex paper/main.tex` to visually verify bounding boxes, font embeddings, and table column widths.
 
