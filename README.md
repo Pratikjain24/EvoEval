@@ -196,8 +196,23 @@ evoeval/
 +-- configs/                  # Agent, experiment, and model YAMLs
 +-- docker/                   # Dockerfiles for sandbox & scorer
 +-- tests/                    # Unit, regression, and integration tests
-+-- paper/                    # NeurIPS LaTeX submission manuscript
++-- paper/                    # IEEE Conference submission manuscript (main.tex) & assets
 +-- docs/                     # Specifications and guides
+```
+
+---
+
+## Citation
+
+If you use EvoEval in your research, please cite our IEEE conference paper:
+
+```bibtex
+@inproceedings{jain2026evoeval,
+  title     = {EvoEval: Measuring Safety Drift and Capability Retention in Self-Evolving Code Agents},
+  author    = {Jain, Pratik P. and Pagare, Janhavi B. and Dengale, Aditya U. and Kharat, Naitik K. and Kadam, Shamika R. and Kadam, Vikrant K.},
+  booktitle = {Proceedings of the IEEE Conference on Artificial Intelligence and Software Engineering},
+  year      = {2026}
+}
 ```
 
 ---
