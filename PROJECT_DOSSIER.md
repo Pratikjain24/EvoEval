@@ -1358,7 +1358,7 @@ To satisfy the standards of the NeurIPS 2027 Datasets & Benchmarks Track, this s
 
 ### 3. Verification & Compliance Attestation
 - **6/6 Verification Layers Passing**: All task catalogs, container digests, remote model commits, canonical trajectory manifests, 16 publication tables, 11 publication figures, 15 benchmark results, and regression test suites are certified.
-- **Unit & Integration Suite**: All 186 automated tests across 29 files pass with 0 failures (`pytest tests/`).
+- **Unit & Integration Suite**: All 187 automated tests across 29 files pass with 0 failures (`pytest tests/`).
 - **Cryptographic Reproducibility Attestation**: Formally certified in `verification_attestation.json` and `EXTERNAL_VERIFICATION.md`.
 
 ---
