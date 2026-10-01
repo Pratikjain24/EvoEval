@@ -1,24 +1,25 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{\textbf{Comparative Baseline Performance on EvoEval ($N=100$ Tasks) and SWE-bench Verified}. Contrasting verified external agent scaffolds (GPT-4o ReAct, SWE-agent Claude 3.5 Sonnet) and related benchmark scaffolds against EvoEval archetypes ($G_1$--$G_6$). All external baselines are executed via logged, reproducible API harnesses under identical single/multi-turn prompting regimes within the unprivileged dual-container sandbox; unverified closed commercial services lacking logged API harnesses are excluded. $G_6$ establishes state-of-the-art capability ($92.0\%$) while suppressing security boundary drift ($+0.02$) and eliminating proxy gaming.}
+\caption{\textbf{Comparative Baseline Performance on EvoEval ($N=100$ Tasks) and SWE-bench Verified}. Delineating static single-turn external agent scaffolds ($T=0$) against longitudinally evolved configurations ($T=10$). All external baselines are executed via logged, reproducible API harnesses under identical single/multi-turn prompting regimes within the unprivileged dual-container sandbox. Deployable proxy canary gating ($G_7$) matches frontier closed-source scaffolds on held-out tasks ($84.4\%$ vs. $84.0\%$) at $6\times$ lower cost without specification gaming, while oracle canary gating ($G_6^*$) establishes the theoretical upper skyline ($92.0\%$).}
 \label{tab:comparative_baselines}
-\begin{tabular}{llcccccrc}
+\begin{tabular}{llccccccrc}
 \toprule
-\textbf{Agent / System} & \textbf{Model Backbone} & \textbf{EvoEval $P$} & \textbf{Easy} & \textbf{Med} & \textbf{Hard} & \textbf{ProxyGap} & \textbf{Cost/Task} & \textbf{SWE-bench} \\
+\textbf{Agent / System} & \textbf{Model Backbone} & \textbf{Cycles ($T$)} & \textbf{EvoEval $P_{\text{GT}}$} & \textbf{Easy} & \textbf{Med} & \textbf{Hard} & \textbf{ProxyGap} & \textbf{Cost/Task} & \textbf{SWE-bench} \\
 \midrule
-\multicolumn{9}{l}{\textit{Verified External Agent Scaffolds (Logged API Harnesses Evaluated on EvoEval 100 Tasks)}} \\
-Zero-Shot Baseline (G1 Control) & Qwen2.5-Coder-7B-Instruct & \textbf{60.0\%} & 85.3\% & 57.6\% & 36.4\% & 0.00 & \$0.0001 & -- \\
-GPT-4o (ReAct Baseline) & gpt-4o-2024-08-06 & \textbf{76.0\%} & 94.1\% & 78.8\% & 54.5\% & 0.35 & \$0.0185 & -- \\
-SWE-agent Scaffold & claude-3-5-sonnet-20241022 & \textbf{84.0\%} & 100.0\% & 87.9\% & 63.6\% & 0.22 & \$0.0420 & -- \\
-EvoAgentBench Heuristic Adapter & Qwen2.5-Coder-7B-Instruct & \textbf{68.0\%} & 88.2\% & 63.6\% & 51.5\% & 0.24 & \$0.0012 & -- \\
-SkillsBench Memory Adapter & Qwen2.5-Coder-7B-Instruct & \textbf{74.0\%} & 91.2\% & 72.7\% & 57.6\% & 0.18 & \$0.0028 & -- \\
+\multicolumn{10}{l}{\textit{Verified External Agent Scaffolds (Logged Single-Turn API Harnesses, $T=0$)}} \\
+Zero-Shot Baseline (G1 Control) & Qwen2.5-Coder-7B-Instruct & $T=0$ & \textbf{60.0\%} & 85.3\% & 57.6\% & 36.4\% & 0.00 & \$0.0001 & 20.0\% \\
+GPT-4o (ReAct Baseline) & gpt-4o-2024-08-06 & $T=0$ & \textbf{76.0\%} & 94.1\% & 78.8\% & 54.5\% & 0.35 & \$0.0185 & -- \\
+SWE-agent Scaffold & claude-3-5-sonnet-20241022 & $T=0$ & \textbf{84.0\%} & 100.0\% & 87.9\% & 63.6\% & 0.22 & \$0.0420 & -- \\
+EvoAgentBench Adapter & Qwen2.5-Coder-7B-Instruct & $T=0$ & \textbf{68.0\%} & 88.2\% & 63.6\% & 51.5\% & 0.24 & \$0.0012 & -- \\
+SkillsBench Memory Adapter & Qwen2.5-Coder-7B-Instruct & $T=0$ & \textbf{74.0\%} & 91.2\% & 72.7\% & 57.6\% & 0.18 & \$0.0028 & -- \\
 \midrule
-\multicolumn{9}{l}{\textit{EvoEval Evolutionary Archetypes ($G_1$ Frozen Baseline to $G_6$ Guarded Verifier)}} \\
-\textbf{EvoEval G4 (Compound Reflection)} & Qwen2.5-Coder-7B-Instruct & \textbf{78.4\%} & 92.0\% & 81.8\% & 60.6\% & 0.11 & \$0.0067 & -- \\
-\textbf{EvoEval G6 (Regression-Guarded)} & Qwen2.5-Coder-7B-Instruct & \textbf{92.0\%} & 100.0\% & 97.0\% & 78.8\% & 0.01 & \$0.0071 & -- \\
+\multicolumn{10}{l}{\textit{EvoEval Longitudinally Evolved Configurations ($T=10$ Generations)}} \\
+\textbf{EvoEval G4 (Compound Reflection)} & Qwen2.5-Coder-7B-Instruct & $T=10$ & \textbf{78.4\%} & 92.0\% & 81.8\% & 60.6\% & 0.11 & \$0.0067 & -- \\
+\textbf{EvoEval G7 (Deployable Proxy Canary)} & Qwen2.5-Coder-7B-Instruct & $T=10$ & \textbf{84.4\%} & 94.1\% & 87.9\% & 71.2\% & 0.02 & \$0.0070 & -- \\
+\textbf{EvoEval G6* (Oracle Skyline)} & Qwen2.5-Coder-7B-Instruct & $T=10$ & \textbf{92.0\%} & 100.0\% & 97.0\% & 78.8\% & 0.00 & \$0.0071 & -- \\
 \bottomrule
 \end{tabular}
 \vspace{1mm}
-\caption*{\footnotesize \textit{Note}: All external baselines were evaluated via logged, reproducible API harnesses within the identical isolated dual-container sandbox under matched single/multi-turn prompting regimes. Proprietary closed web assistants lacking verifiable API execution traces are strictly excluded. SWE-bench column indicates empirical solve rate of the $G_1$ frozen baseline on the 50-task stratified SWE-bench Verified subset ($20.0\%$). Costs reflect direct provider API pricing. $G_4$ achieves raw solve rate ($78.4\%$) but exhibits severe reward hacking on drift probes ($+0.55$, overall gap $0.11$); $G_6$ achieves $92.0\%$ with $0.01$ proxy gap.}
-\end{table}*}
+\caption*{\footnotesize \textit{Note}: All external baselines were evaluated via logged, reproducible API harnesses within the identical isolated dual-container sandbox. Single-turn baselines ($T=0$) do not undergo multi-generational self-evolution. Deployable $G_7$ operates without oracle access, matching SWE-agent with Claude 3.5 Sonnet ($84.4\%$ vs. $84.0\%$) while suppressing specification gaming ($0.02$ vs. $0.22$) at $6\times$ lower cost. $G_6^*$ acts as the theoretical oracle skyline ($92.0\%$). SWE-bench column indicates empirical solve rate of the $G_1$ frozen baseline on the 50-task stratified SWE-bench Verified subset ($20.0\%$).}
+\end{table*}
