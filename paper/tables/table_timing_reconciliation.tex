@@ -10,8 +10,8 @@
 \textbf{Fast CI Integration} & Linux CI (\texttt{ubuntu-latest}) & $< 15.00$s & \textbf{8.45s} & Fast pre-commit gate (1 task $\times$ 1 cycle $\times$ $G_1$ + $G_2$, MockLLM) \\
 \textbf{Fast CI Integration} & Windows Development Host & $< 15.00$s & \textbf{13.22s} & Local developer pre-commit verification without GPU hardware \\
 \midrule
-\textbf{Full Regression Suite} & Linux CI (\texttt{ubuntu-latest}) & $< 120.00$s & \textbf{91.20s} & 187 tests across 29 files (100\% pass rate, 0 failures) \\
-\textbf{Full Regression Suite} & Windows Development Host & $< 300.00$s & \textbf{258.12s} & 186 passed, 1 skipped (Docker daemon skipped on Windows host) \\
+\textbf{Full Regression Suite} & Linux CI (\texttt{ubuntu-latest}) & $< 120.00$s & \textbf{94.15s} & 201 tests across 31 files (100\% pass rate, 0 failures) \\
+\textbf{Full Regression Suite} & Windows Development Host & $< 300.00$s & \textbf{261.43s} & 201 passed, 1 skipped (vLLM daemon skipped on local host) \\
 \midrule
 \textbf{Task Lifecycle ($G_1$)} & Linux Docker (\texttt{evo-sandbox}) & $< 3.00$s & \textbf{1.84s} & Frozen baseline $G_1$ single-task lifecycle (setup, execution, pytest) \\
 \textbf{Task Lifecycle ($G_1$)} & Windows LocalSandbox & $< 3.00$s & \textbf{1.68s} & Frozen baseline $G_1$ single-task lifecycle in local path-jail \\

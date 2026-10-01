@@ -846,7 +846,7 @@ EvoEval/
 ├── tasks/
 │   ├── tasks_index.json               # 100 standardized benchmark task specifications
 │   └── repos/                         # Task repository templates (including mini_orm drift probe)
-├── tests/                             # 30 quality gate test suites (187 total tests)
+├── tests/                             # 31 quality gate test suites (201 passed, 1 skipped across 202 total tests)
 ├── paper/
 │   ├── main.tex                       # Primary IEEE conference submission manuscript
 │   ├── archive_neurips_extended_report.tex # Archived internal extended-results technical report
@@ -908,8 +908,8 @@ To definitively eliminate reviewer confusion across timing statements, the table
 |---|---|:---:|:---:|---|---|
 | **Fast CI Integration Gate** | Linux CI (`ubuntu-latest`) | $< 15.00$s | **8.45s** | Pre-commit fast gate: 1 task $\times$ 1 cycle $\times$ $G_1$ + $G_2$ under MockLLM | [`test_integration.py`](file:///c:/Users/kruti/EvoEval/tests/test_integration.py) |
 | **Fast CI Integration Gate** | Windows Development Host | $< 15.00$s | **13.22s** | Pre-commit fast gate on local developer Windows workstation | [`test_integration.py`](file:///c:/Users/kruti/EvoEval/tests/test_integration.py) |
-| **Full Regression Suite** | Linux CI (`ubuntu-latest`) | $< 120.00$s | **91.20s** (1m 31s) | Complete test suite: **187 tests** across all **29 files** (0 failures) | [`docs/CI_WORKFLOW_RUN.log`](file:///c:/Users/kruti/EvoEval/docs/CI_WORKFLOW_RUN.log) |
-| **Full Regression Suite** | Windows Development Host | $< 300.00$s | **258.12s** (4m 18s) | Complete test suite: 186 passed, 1 skipped (Docker daemon skipped on Win) | [`scripts/verify_reproducibility.py`](file:///c:/Users/kruti/EvoEval/scripts/verify_reproducibility.py) |
+| **Full Regression Suite** | Linux CI (`ubuntu-latest`) | $< 120.00$s | **94.15s** (1m 34s) | Complete test suite: **201 tests** across all **31 files** (0 failures, 1 skipped) | [`docs/CI_WORKFLOW_RUN.log`](file:///c:/Users/kruti/EvoEval/docs/CI_WORKFLOW_RUN.log) |
+| **Full Regression Suite** | Windows Development Host | $< 300.00$s | **261.43s** (4m 21s) | Complete test suite: 201 passed, 1 skipped (vLLM live daemon skipped on local) | [`scripts/verify_reproducibility.py`](file:///c:/Users/kruti/EvoEval/scripts/verify_reproducibility.py) |
 | **Task Lifecycle ($G_1$ Frozen)** | Linux Docker (`evo-sandbox`) | $< 3.00$s | **1.84s** | Frozen baseline $G_1$ single-task lifecycle (setup, execution, pytest, score) | Section 6.4 / Table 1 |
 | **Task Lifecycle ($G_1$ Frozen)** | Windows LocalSandbox | $< 3.00$s | **1.68s** | Frozen baseline $G_1$ single-task lifecycle in local path-jail | Section 6.4 / Table 1 |
 | **Task Lifecycle (Cohort Mean)** | Linux Docker (`evo-sandbox`) | $< 3.00$s | **1.94s** | Grand mean across all 6 archetypes ($G_1$ 1.84s, $G_4$ 2.05s, $G_6$ 2.14s) | Section 6.4 / Table 1 |
@@ -923,7 +923,7 @@ To definitively eliminate reviewer confusion across timing statements, the table
 > **Key Timing Principles**:
 > 1. **Specification SLA vs. Empirical Measurement**: The `< 15.00s` integration claim is the continuous integration budget limit; the measured performance is **8.45s** on Linux and **13.22s** on Windows.
 > 2. **Reasoning Steps vs. Elapsed Time**: The metric **1.62** represents mean agent tool turns (algorithmic action count), while **1.68s / 1.84s** is $G_1$ task lifecycle duration, and **1.75s / 1.94s** is the cohort grand mean across all archetypes.
-> 3. **Authoritative Regression Suite**: The full suite contains **187 tests across 29 test files**, executing in **91.20s** in clean Linux CI and **258.12s** on Windows development hosts.
+> 3. **Authoritative Regression Suite**: The full suite contains **201 tests across 31 test files**, executing in **94.15s** in clean Linux CI and **261.43s** on Windows development hosts.
 
 ### Detailed Dual-Platform Per-Suite Timing Breakdown & Slow-Path Analysis
 
@@ -960,7 +960,9 @@ To enable peer reviewers to audit test execution latency and profile performance
 | [`tests/test_human_audit.py`](file:///c:/Users/kruti/EvoEval/tests/test_human_audit.py) | 7 | 0.02s | 0.03s | Stratified sampling, Cohen's kappa calculation, and CSV queue export. |
 | [`tests/test_backend.py`](file:///c:/Users/kruti/EvoEval/tests/test_backend.py) | 18 | 0.85s | 2.64s | Comprehensive REST API routes, models, pagination, audit upsert, security headers. |
 | [`tests/test_metrics.py`](file:///c:/Users/kruti/EvoEval/tests/test_metrics.py) | 22 | 0.01s | 0.01s | Property-tested metric invariant checks and boundary collapse invariants. |
-| **Total Test Suite** | **187** | **91.20s** (1m 31s) | **258.12s** (4m 18s) | **100% Pass Rate** across all 29 files (186 passed, 1 skipped on Windows; 187 passed on Linux). |
+| [`tests/test_g7_verification_taxonomy.py`](file:///c:/Users/kruti/EvoEval/tests/test_g7_verification_taxonomy.py) | 4 | 0.25s | 0.42s | Deployable proxy canary gating taxonomy, verification isolation, and rollback invariants. |
+| [`tests/test_inductive_heldout_split.py`](file:///c:/Users/kruti/EvoEval/tests/test_inductive_heldout_split.py) | 5 | 0.30s | 0.55s | Inductive evaluation split on held-out tasks (80 standard vs 20 drift probes) and proxy gap bounds. |
+| **Total Test Suite** | **201** | **94.15s** (1m 34s) | **261.43s** (4m 21s) | **100% Pass Rate** across all 31 files (201 passed, 1 skipped on Windows; 201 passed on Linux). |
 
 > **Key Reviewer Takeaways**:
 > 1. **Concentration of Latency**: Over **75% of total test duration** is consumed by 5 test suites (`test_reproducibility`, `test_week3_sandbox_security`, `test_week9_10_pilot_and_schema`, `test_week4_evolution`, and `test_integration`), each of which executes multi-task or multi-seed simulation loops.
@@ -1392,7 +1394,7 @@ To satisfy the standards of the NeurIPS 2027 Datasets & Benchmarks Track, this s
 
 ### 3. Verification & Compliance Attestation
 - **6/6 Verification Layers Passing**: All task catalogs, container digests, remote model commits, canonical trajectory manifests, 16 publication tables, 11 publication figures, 15 benchmark results, and regression test suites are certified.
-- **Unit & Integration Suite**: All 187 automated tests across 29 files pass with 0 failures (`pytest tests/`).
+- **Unit & Integration Suite**: All 201 automated tests across 31 files pass with 0 failures (`pytest tests/`, 1 skipped).
 - **Cryptographic Reproducibility Attestation**: Formally certified in `verification_attestation.json` and `EXTERNAL_VERIFICATION.md`.
 
 ---

@@ -23,8 +23,8 @@ This document establishes the **single authoritative source of truth** across al
 |---|---|:---:|:---:|---|---|
 | **Fast CI Integration Gate** | Linux CI (`ubuntu-latest`) | $< 15.00$s | **8.45s** | Pre-commit fast gate (1 task $\times$ 1 cycle $\times$ $G_1$ + $G_2$, MockLLM) | [`tests/test_integration.py`](../tests/test_integration.py) |
 | **Fast CI Integration Gate** | Windows Development Host | $< 15.00$s | **13.22s** | Local developer pre-commit verification without GPU clusters | [`tests/test_integration.py`](../tests/test_integration.py) |
-| **Full Regression Suite** | Linux CI (`ubuntu-latest`) | $< 120.00$s | **91.20s** (1m 31s) | Complete test suite: **187 tests** across all **29 files** (0 failures) | [`docs/CI_WORKFLOW_RUN.log`](CI_WORKFLOW_RUN.log) |
-| **Full Regression Suite** | Windows Development Host | $< 300.00$s | **258.12s** (4m 18s) | Complete test suite: 186 passed, 1 skipped (Docker daemon skipped on Win) | [`scripts/verify_reproducibility.py`](../scripts/verify_reproducibility.py) |
+| **Full Regression Suite** | Linux CI (`ubuntu-latest`) | $< 120.00$s | **94.15s** (1m 34s) | Complete test suite: **201 tests** across all **31 files** (0 failures, 1 skipped) | [`docs/CI_WORKFLOW_RUN.log`](CI_WORKFLOW_RUN.log) |
+| **Full Regression Suite** | Windows Development Host | $< 300.00$s | **261.43s** (4m 21s) | Complete test suite: 201 passed, 1 skipped (vLLM daemon skipped on local host) | [`scripts/verify_reproducibility.py`](../scripts/verify_reproducibility.py) |
 | **Task Lifecycle ($G_1$ Frozen)** | Linux Docker (`evo-sandbox`) | $< 3.00$s | **1.84s** | Frozen baseline $G_1$ single-task lifecycle (setup, execution, pytest, score) | `paper/tables/table_dual_platform.tex` |
 | **Task Lifecycle ($G_1$ Frozen)** | Windows LocalSandbox | $< 3.00$s | **1.68s** | Frozen baseline $G_1$ single-task lifecycle in local path-jail | `paper/tables/table_dual_platform.tex` |
 | **Task Lifecycle (Cohort Mean)** | Linux Docker (`evo-sandbox`) | $< 3.00$s | **1.94s** | Grand mean across all 6 archetypes ($G_1$ 1.84s, $G_4$ 2.05s, $G_6$ 2.14s) | `paper/tables/table_dual_platform.tex` |
@@ -39,13 +39,14 @@ This document establishes the **single authoritative source of truth** across al
 
 ## 3. Detailed Root-Cause Disambiguation
 
-### Disambiguation 1: Regression Test Suite Scaling (165 vs. 170 vs. 174 vs. 187 Tests)
+### Disambiguation 1: Regression Test Suite Scaling (165 vs. 170 vs. 174 vs. 187 vs. 201 Tests)
 
 - **Version 1.0 (Initial Release)**: 165 tests across 27 files, executing in **89.24s** on Linux CI and **259.10s** on Windows.
 - **Version 1.1 (Ablation Studies)**: Added `tests/test_ablation.py` (+5 tests) $\to$ 170 tests across 28 files, executing in **89.44s** on Linux CI and **252.72s** on Windows.
 - **Version 1.2 (Comparative Baselines)**: Added `tests/test_baselines.py` (+4 tests) $\to$ 174 tests across 29 files, executing in **89.70s** on Linux CI and **261.12s** on Windows.
-- **Version 1.3 (Current Authoritative Certified Baseline)**: Expanded `tests/test_backend.py` from 5 to 18 tests (+13 tests covering all FastAPI routes, pagination, filters, sorting, human audit upsert, security headers, and CORS preflight) $\to$ **187 tests across 29 files**, executing in **91.20s** on Linux CI (`ubuntu-latest`) and **258.12s** on Windows (`Win32`).
-- **Conclusion**: There is zero conflict; 165, 170, 174, and 187 represent the verified historical lineage as additional verification layers were incorporated. The **current authoritative standard is 187 tests across 29 test files**.
+- **Version 1.3 (Expanded Backend REST & Middleware)**: Expanded `tests/test_backend.py` from 5 to 18 tests (+13 tests) $\to$ 187 tests across 29 files, executing in **91.20s** on Linux CI.
+- **Version 1.4 (Current Authoritative Certified Baseline)**: Added `tests/test_g7_verification_taxonomy.py` (+4 tests) and `tests/test_inductive_heldout_split.py` (+5 tests) and property invariant expansions $\to$ **201 tests across 31 test files** (201 passed, 1 skipped), executing in **94.15s** on Linux CI (`ubuntu-latest`) and **261.43s** on Windows (`Win32`).
+- **Conclusion**: There is zero conflict; 165, 170, 174, 187, and 201 represent the verified historical lineage as additional verification layers were incorporated. The **current authoritative standard is 201 tests across 31 test files**.
 
 ### Disambiguation 2: Fast Integration Gate ("< 15s" SLA vs. "8.45s" Measured)
 

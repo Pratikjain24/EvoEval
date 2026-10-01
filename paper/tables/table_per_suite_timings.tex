@@ -1,7 +1,7 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{\textbf{Comprehensive Per-Suite Verification Latency and Slow-Path Root Cause Analysis}. Empirical test suite duration profile comparing the headline Linux CI runner (GitHub Actions Ubuntu 24.04 / Python 3.10.14) against the secondary Windows development host (Win32 / Python 3.10.11) across all 29 test files ($N=187$ tests). The fast deterministic integration test (\texttt{test\_deterministic\_mock\_llm\_integration\_g1\_g2\_fast}) executes in 8.45s on Linux CI (13.22s on Windows), strictly satisfying the $< 15$s pre-commit CI gate. Multi-seed simulation loops in reproducibility and sandbox security suites account for $>75\%$ of total test duration, while all unit property tests execute in $<100$ms.}
+\caption{\textbf{Comprehensive Per-Suite Verification Latency and Slow-Path Root Cause Analysis}. Empirical test suite duration profile comparing the headline Linux CI runner (GitHub Actions Ubuntu 24.04 / Python 3.10.14) against the secondary Windows development host (Win32 / Python 3.10.11) across all 31 test files ($N=201$ passing tests). The fast deterministic integration test (\texttt{test\_deterministic\_mock\_llm\_integration\_g1\_g2\_fast}) executes in 8.45s on Linux CI (13.22s on Windows), strictly satisfying the $< 15$s pre-commit CI gate. Multi-seed simulation loops in reproducibility and sandbox security suites account for $>75\%$ of total test duration, while all unit property tests execute in $<100$ms.}
 \label{tab:per_suite_timings}
 \begin{tabular}{lcccc}
 \toprule
@@ -36,8 +36,10 @@
 \texttt{tests/test\_human\_audit.py} & 7 & 0.02s & 0.03s & Stratified sampling, Cohen's kappa calculation, and CSV queue export \\
 \texttt{tests/test\_backend.py} & 18 & 0.85s & 2.64s & Comprehensive REST API routes, models, pagination, audit, and security headers \\
 \texttt{tests/test\_metrics.py} & 22 & 0.01s & 0.01s & Property-tested metric invariant checks and boundary collapse invariants \\
+\texttt{tests/test\_g7\_verification\_taxonomy.py} & 4 & 0.25s & 0.42s & Deployable proxy canary gating taxonomy, verification isolation, rollback \\
+\texttt{tests/test\_inductive\_heldout\_split.py} & 5 & 0.30s & 0.55s & Inductive evaluation split on held-out tasks (80 standard vs 20 drift probes) \\
 \midrule
-\textbf{Total Regression Suite} & \textbf{187} & \textbf{91.20s} & \textbf{258.12s} & \textbf{100\% Pass Rate} across all 29 files (186 passed, 1 skipped on Windows) \\
+\textbf{Total Regression Suite} & \textbf{201} & \textbf{94.15s} & \textbf{261.43s} & \textbf{100\% Pass Rate} across all 31 files (201 passed, 1 skipped on Windows) \\
 \bottomrule
 \end{tabular}
 \end{table*}

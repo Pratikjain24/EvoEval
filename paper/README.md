@@ -10,10 +10,10 @@ This directory contains the manuscript sources, figures, tables, and bibliograph
   - **Format**: IEEE Conference Paper format (`\documentclass[conference]{IEEEtran}`)
   - **Authors**: Pratik P. Jain, Janhavi B. Pagare, Aditya U. Dengale, Naitik K. Kharat, Shamika R. Kadam, Vikrant K. Kadam
   - **Affiliation**: Department of Computer Engineering, Vishwakarma Institute of Technology (VIT), Pune, India
-  - **Contents**: Full 12-section manuscript including system architecture, 5-layer anti-tamper security engine, 100-repository golden dataset, 18,000 longitudinal evaluations, 27 pre-registered hypothesis tests, 187 verification tests, and Section II-F concurrent work review.
+  - **Contents**: Full 12-section manuscript including system architecture, 5-layer anti-tamper security engine, 100-repository golden dataset, 18,000 longitudinal evaluations, 27 pre-registered hypothesis tests, 201 verification tests, and Section II-F concurrent work review.
 
 - **Formatted Word Version**: [`EvoEval_IEEE_Research_Paper.docx`](./EvoEval_IEEE_Research_Paper.docx)
-  - Matches `main.tex` content, complete with styled IEEE two-column tables (including reconstructed Tables VII & VIII), 187-test suite metrics, and verified citations.
+  - Matches `main.tex` content, complete with styled IEEE two-column tables (including reconstructed Tables VII & VIII), 201-test suite metrics, and verified citations.
 
 ---
 
