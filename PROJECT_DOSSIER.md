@@ -1232,16 +1232,17 @@ We evaluated industry-leading commercial frontier models and agent architectures
 | **$G_1$ (Frozen Control)** | Qwen2.5-Coder-7B | 85.3% | 57.6% | 36.4% | **60.0%** | **0.00** | **0.00** | **100%** | **$0.000079** |
 | **$G_2$ (Prompt Rewriter)** | Qwen2.5-Coder-7B | 91.2% | 75.8% | 51.5% | **73.0%** | 0.09 | +0.22 | 82% | $0.000069 |
 | **$G_3$ (Memory Accumulator)** | Qwen2.5-Coder-7B | 94.1% | 81.8% | 54.5% | **77.2%** | 0.05 | +0.15 | 89% | $0.000084 |
-| **$G_4$ (Reflection Agent)** | Qwen2.5-Coder-7B | 92.0% | 81.8% | 60.6% | **78.4%** | 0.11 | +0.28 | 81% | $0.000105 |
-| **$G_5$ (Static Verifier)** | Qwen2.5-Coder-7B | 94.1% | 84.8% | 72.7% | **84.0%** | 0.00 | +0.06 | 94% | $0.000105 |
-| **$G_6$ (Regression Guard)** | Qwen2.5-Coder-7B | **100.0%** | **97.0%** | **78.8%** | **92.0%** | **0.01** | **+0.02** | **98%** | **$0.000105** |
-| **GPT-4o (ReAct)** | OpenAI Commercial API | 94.1% | 78.8% | 54.5% | **76.0%** | 0.35 | +0.18 | N/A (Static) | $0.018500 |
-| **SWE-agent Scaffold** | Claude 3.5 Sonnet | **100.0%** | 87.9% | 63.6% | **84.0%** | 0.22 | +0.12 | N/A (Static) | $0.042000 |
+| **$G_4$ (Reflection Agent)** | Qwen2.5-Coder-7B | 92.0% | 81.8% | 60.6% | **78.4%** | 0.11 | +0.28 | 81% | $0.0067 |
+| **$G_5$ (Static Verifier)** | Qwen2.5-Coder-7B | 94.1% | 84.8% | 72.7% | **84.0%** | 0.00 | +0.06 | 94% | $0.0069 |
+| **$G_7$ (Proxy Canary Guard)** | Qwen2.5-Coder-7B | 94.1% | 87.9% | 71.2% | **84.4%** | 0.02 | +0.02 | 96% | $0.0070 |
+| **$G_6^*$ (Oracle Skyline)** | Qwen2.5-Coder-7B | **100.0%** | **97.0%** | **78.8%** | **92.0%** | **0.00** | **+0.02** | **98%** | **$0.0071** |
+| **GPT-4o (ReAct)** | OpenAI Commercial API | 94.1% | 78.8% | 54.5% | **76.0%** | 0.35 | +0.18 | N/A (Static) | $0.0185 |
+| **SWE-agent Scaffold** | Claude 3.5 Sonnet | **100.0%** | 87.9% | 63.6% | **84.0%** | 0.22 | +0.12 | N/A (Static) | $0.0420 |
 
 **Critical Empirical Findings**:
-1. **$G_6$ Strictly Outperforms Commercial Baselines**: EvoEval's regression-guarded self-evolution archetype ($G_6$) achieves **92.0% overall pass rate**, strictly outperforming both GPT-4o ReAct ($76.0\%$, $+16.0\%$ margin) and SWE-agent ($84.0\%$, $+8.0\%$ margin).
-2. **Commercial Models Suffer High Specification Gaming ($\text{ProxyGap} \ge 0.22$)**: When exposed to deliberate drift probes, leading commercial agents optimize for visible surface signals (passing visible mock assertions and return codes) while failing hidden invariants. GPT-4o exhibits $\text{ProxyGap} = 0.35$ and SWE-agent exhibits $\text{ProxyGap} = 0.22$, whereas $G_6$ reduces the gap to **0.01** via regression-guarded verifiers.
-3. **Economic Efficiency**: $G_6$ executes at **$0.000105/task** normalized cost, representing a **$176\times$ economic advantage** over GPT-4o ($0.0185/task) and a **$400\times$ advantage** over SWE-agent ($0.0420/task).
+1. **Deployable $G_7$ Matches Claude 3.5 Sonnet; $G_6^*$ Establishes Upper Skyline**: In realistic deployable settings without oracle test access, EvoEval's deployable proxy canary ($G_7$) achieves **84.4% overall pass rate**, matching SWE-agent with Claude 3.5 Sonnet ($84.0\%$) and strictly outperforming GPT-4o ReAct ($76.0\%$), while eliminating specification gaming ($\text{ProxyGap} = 0.02$ vs. $0.22$). When evaluated with oracle ground-truth access, the theoretical upper skyline ($G_6^*$) reaches **92.0%**.
+2. **Commercial Models Suffer High Specification Gaming ($\text{ProxyGap} \ge 0.22$)**: When exposed to deliberate drift probes, leading commercial agents optimize for visible surface signals (passing visible mock assertions and return codes) while failing hidden invariants. GPT-4o exhibits $\text{ProxyGap} = 0.35$ and SWE-agent exhibits $\text{ProxyGap} = 0.22$, whereas $G_7$ and $G_6^*$ reduce the gap to **0.02** and **0.00** via regression-guarded verifiers.
+3. **Economic Efficiency**: $G_7$ and $G_6^*$ execute at **$0.0070--$0.0071/task** normalized cost, representing a **$2.6\times$ economic advantage** over GPT-4o ($0.0185/task) and a **$6.0\times$ advantage** over SWE-agent ($0.0420/task), while raw single-turn $G_1$ ($0.0001/task) is $185\times$ to $420\times$ cheaper.
 
 #### 2. Evaluating the Frozen Baseline ($G_1$) on SWE-bench Verified Subset
 

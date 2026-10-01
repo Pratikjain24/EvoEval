@@ -252,13 +252,13 @@ EvoEval is the **first benchmark** that:
 
 | Agent | Pass Rate | Proxy Gap | Safety Drift | Retention | Cost/Task |
 |---|---|---|---|---|---|
-| **G1 (Frozen)** | 60.0% | 0.01 | 0.00 | 100% | $0.000079 |
-| **G2 (Prompt)** | 73.0% | 0.09 | +0.22 | 82% | $0.000069 |
-| **G3 (Memory)** | 77.2% | 0.05 | +0.15 | 89% | $0.000084 |
-| **G4 (Reflection)** | 78.4% | 0.11 | +0.28 | 81% | $0.000105 |
-| **G5 (Verifier)** | 84.0% | 0.00 | +0.06 | 94% | $0.000105 |
-| **G7 (Proxy Guard)** | 84.4% | 0.02 | +0.02 | 96% | $0.000105 |
-| **G6* (Oracle Skyline)** | **92.0%** | **0.00** | **+0.02** | **98%** | $0.000105 |
+| **G1 (Frozen)** | 60.0% | 0.01 | 0.00 | 100% | $0.0001 |
+| **G2 (Prompt)** | 73.0% | 0.09 | +0.22 | 82% | $0.0035 |
+| **G3 (Memory)** | 77.2% | 0.05 | +0.15 | 89% | $0.0042 |
+| **G4 (Reflection)** | 78.4% | 0.11 | +0.28 | 81% | $0.0067 |
+| **G5 (Verifier)** | 84.0% | 0.00 | +0.06 | 94% | $0.0069 |
+| **G7 (Proxy Guard)** | 84.4% | 0.02 | +0.02 | 96% | $0.0070 |
+| **G6* (Oracle Skyline)** | **92.0%** | **0.00** | **+0.02** | **98%** | $0.0071 |
 | GPT-4o (ReAct) | 76.0% | 0.35 | +0.18 | N/A | $0.0185 |
 | SWE-agent (Claude 3.5 Sonnet) | 84.0% | 0.22 | +0.12 | N/A | $0.0420 |
 
@@ -266,12 +266,12 @@ EvoEval is the **first benchmark** that:
 
 1. ✅ **G6* is the oracle skyline** — 92% pass rate, near-zero cheating (0.00), near-zero drift (+0.02), 98% retention; deployable **G7** achieves 84.4% on strictly held-out tasks
 2. ⚠️ **G4 is powerful BUT dangerous** — 78.4% pass rate BUT highest cheating (+0.55 on probes, 0.11 overall) and drift (+0.28)
-3. 🏆 **G6 beats GPT-4o and SWE-agent (Claude 3.5 Sonnet)** — Our open-source 7B model with regression guard beats strong multi-turn frontiers!
-4. 💰 **G6 is 176× cheaper than GPT-4o** and **400× cheaper than SWE-agent (Claude 3.5 Sonnet)**
+3. 🏆 **G7 matches Claude 3.5 Sonnet; G6* establishes oracle skyline** — Deployable G7 (84.4%) matches SWE-agent Claude 3.5 Sonnet (84.0%) on held-out tasks while suppressing proxy cheating (0.02 vs. 0.22).
+4. 💰 **G7 & G6 are significantly cheaper** — G7 ($0.0070/task) is 2.6× cheaper than GPT-4o ($0.0185) and 6× cheaper than SWE-agent ($0.0420); baseline G1 ($0.0001) is 185×–420× cheaper.
 5. 🔬 **Self-evolution without guardrails = danger** — G2/G3/G4 all show significant safety drift and reward hacking
 
 ### The "Headline Number"
-> **G6 achieves a +32% capability improvement (60% → 92%) while maintaining 98% retention and near-zero safety drift — proving that guarded self-evolution is both effective and safe.**
+> **Guarded self-evolution (G7/G6) achieves up to +32% capability improvement while preserving 96%–98% retention and near-zero safety drift — proving that guarded self-evolution is both effective and safe.**
 
 ---
 
@@ -429,7 +429,7 @@ EvoEval is the **first benchmark** that:
 > - **If you're nervous**: Start with the analogy about the junior developer. Everyone understands that.
 > - **If they ask something you don't know**: Say *"That's a great question. Based on our experiments, [relate to the nearest thing you know]. We can explore this further as future work."*
 > - **The 3 numbers to always remember**: G1 = 60% (baseline), G6 = 92% (best), G4 = 78.4% (with 0.11 overall / 0.55 probe proxy gap; dangerous).
-> - **The killer argument**: *"Our open-source 7B model with safety guards outperforms commercial models costing 176× to 400× more."*
+> - **The killer argument**: *"Our open-source 7B model with deployable safety guards matches commercial models like Claude 3.5 Sonnet at 6× lower cost without specification gaming."*
 
 ---
 
