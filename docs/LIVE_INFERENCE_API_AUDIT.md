@@ -23,7 +23,7 @@ To provide complete transparency for peer review and eliminate any ambiguity bet
    - **Engine**: Live neural models deployed via three distinct production backends:
      - **Backend A: Served Remote vLLM / OpenAI-Compatible API** (`qwen2.5-coder-7b-instruct`, `experiments/runs/full_study_live/`, 724 completed tasks, 9,302 events).
      - **Backend B: In-Process Local GGUF Inference** (`qwen2.5-coder-3b-instruct-q4_k_m` via `LocalLlamaClient` and C++ `llama-cpp-python`, `experiments/runs/local_qwen_empirical_run/`).
-     - **Backend C: Cloud Foundation Model API** (`gemma-4-26b-a4b-it` via Google AI Studio API, `experiments/runs/live_google_empirical_run/`) alongside logged external agent baselines (GPT-4o ReAct, SWE-agent Claude 3.5 Sonnet).
+     - **Backend C: Cloud Foundation Model API** (`gemma-4-26b-a4b-it` via Google AI Studio API, `experiments/runs/live_google_empirical_run/`).
    - **Scientific Objective**: Validating that security boundary drift, specification gaming, and regression failure modes actively occur under real, unconstrained neural agent execution and verifying anti-tamper tripwires in live containers.
    - **Execution Latency**: 1.2s to 48.2s per neural generation step; 20.15s average per task step.
 

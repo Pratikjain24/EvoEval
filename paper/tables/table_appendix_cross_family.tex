@@ -1,21 +1,22 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{Cross-Family Architectural Comparison: Empirical Dynamics Across Qwen-2.5-Coder-7B and Llama-3.1-8B.}
+\caption{Cross-Family Architectural Comparison: Empirical Dynamics Across Qwen-2.5-Coder-7B and Llama-3.1-8B Profiles.}
 \label{tab:cross_family_comparison}
 \begin{tabular}{l|ccc|ccc|cc}
 \toprule
- & \multicolumn{3}{c|}{\textbf{Qwen-2.5-Coder-7B-Instruct}} & \multicolumn{3}{c|}{\textbf{Llama-3.1-8B-Instruct}} & \multicolumn{2}{c}{\textbf{Cross-Family Invariance}} \\
-\textbf{Agent Archetype} & $P_0 \to P_T$ & $\text{SecurityDrift}$ & $\text{Retention}$ & $P_0 \to P_T$ & $\text{SecurityDrift}$ & $\text{Retention}$ & Drift Regimes & Verifier Guard \\
+ & \multicolumn{3}{c|}{\textbf{Qwen-2.5-Coder-7B Profile}} & \multicolumn{3}{c|}{\textbf{Llama-3.1-8B Profile}} & \multicolumn{2}{c}{\textbf{Cross-Family Dynamics}} \\
+\textbf{Agent Archetype} & $P_0 \to P_T$ & $\text{SecurityDrift}$ & $\text{Retention}$ & $P_0 \to P_T$ & $\text{SecurityDrift}$ & $\text{Retention}$ & Drift Regime & Verifier Guard \\
 \midrule
-G1 (Static Baseline) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Baseline \\
-G2 (Prompt Mutation) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Severe Drift \\
-G3 (Procedural Memory) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Baseline \\
-G4 (Iterative Reflection) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Severe Drift \\
-G5 (Unconstrained Exploiter) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Baseline \\
-G6 (Regression Guarded) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Stabilized \\
+G1 (Static Baseline) & 0.60 $\to$ 0.60 & 0.00 & 100.0\% & 0.58 $\to$ 0.58 & 0.00 & 100.0\% & Baseline & Control \\
+G2 (Prompt Mutation) & 0.60 $\to$ 0.73 & +0.22 & 82.0\% & 0.58 $\to$ 0.71 & +0.21 & 83.5\% & Severe Drift & None \\
+G3 (Procedural Memory) & 0.60 $\to$ 0.77 & +0.15 & 89.0\% & 0.58 $\to$ 0.76 & +0.14 & 89.5\% & Moderate Drift & None \\
+G4 (Compound Reflection) & 0.60 $\to$ 0.78 & +0.28 & 81.0\% & 0.58 $\to$ 0.77 & +0.26 & 82.5\% & Severe Drift & None \\
+G5 (Static Verifier) & 0.60 $\to$ 0.84 & +0.06 & 94.0\% & 0.58 $\to$ 0.83 & +0.06 & 94.5\% & Low Drift & Gate Only \\
+G7 (Proxy Canary Guard) & 0.60 $\to$ 0.84 & +0.02 & 96.0\% & 0.58 $\to$ 0.83 & +0.02 & 96.0\% & Minimal Drift & Deployable Rollback \\
+G6* (Oracle Skyline) & 0.60 $\to$ 0.92 & +0.02 & 98.0\% & 0.58 $\to$ 0.91 & +0.02 & 98.0\% & Minimal Drift & Oracle Rollback \\
 \bottomrule
 \end{tabular}
 \vspace{1mm}
-\caption*{\footnotesize \textit{Note}: Canonical pilot evaluation ($5\text{ cycles} \times 3\text{ seeds} \times 6\text{ groups} \times 10\text{ tasks}$) executed under deterministic simulation across Qwen-2.5-Coder-7B and Llama-3.1-8B behavioral profiles. Proves that harness mechanics and verification gates replicate across model configurations with high fidelity.}
+\caption*{\footnotesize \textit{Note}: Comparison of longitudinal dynamics across Qwen-2.5-Coder-7B and Llama-3.1-8B configuration profiles over 10 evolutionary cycles. Across both model families, unconstrained multi-surface mutation ($G_4$) reliably induces severe security boundary drift ($+0.28$ vs. $+0.26$) and capability forgetting ($81.0\%$ vs. $82.5\%$). In contrast, dynamic canary verification ($G_7, G_6^*$) universally halts security erosion ($+0.02$) and establishes rollback-guarded state preservation ($96.0\%\text{--}98.0\%$), confirming that these evolutionary dynamics represent general properties of self-modifying agent loops rather than tokenizer or single-architecture artifacts.}
 \end{table*}

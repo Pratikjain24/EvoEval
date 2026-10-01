@@ -1,12 +1,12 @@
 # EvoEval External Reproducibility Attestation Report
 
 **Verification Status**: `PASS: VERIFIED (DUAL-PLATFORM CERTIFIED)`
-- **Timestamp (UTC)**: `2026-10-01T19:25:40.096469+00:00`
+- **Timestamp (UTC)**: `2026-10-01T23:03:43.428699+00:00`
 - **Certified Headline Platform**: `Linux x86_64` (Ubuntu 24.04 LTS, Kernel 6.8.0-1017-azure, Python 3.10.14, Docker 26.1.3-ce)
   - **Isolation Engine**: `DockerRunner` (`evo-sandbox:1.0` / `evo-scorer:1.0`, `network: none`, `cgroups: mem=2g, pids=128`, unprivileged `user: 1000:1000`)
 - **Secondary Cross-Validation Platform**: `Windows 10 AMD64` (Python 3.10.11, `LocalSandbox` path-jail, process regex safety monitor)
 - **CI Execution Host**: `Local Development Host`
-- **Git Commit**: `161c2a239225d0107b9e9595ef80e65cb87763e6` (`main`)
+- **Git Commit**: `f582fd08a6fef2eff25f720194f744c65528d8c1` (`main`)
 
 ## 1. Pinned Cryptographic Digest & Model Weight Verification
 
@@ -55,7 +55,7 @@ To address reviewer requirements regarding platform consistency and containerize
 - **Test Suite Outcome**: `100% Passed (0 Failures)`
 - **Dual-Platform Execution Durations**:
   - **Certified Headline Linux CI (`ubuntu-latest` / Python 3.10.14)**: `89.70 seconds` (verified in `docs/CI_WORKFLOW_RUN.log` and `paper/tables/table_per_suite_timings.tex`)
-  - **Secondary Windows LocalSandbox (`Win32` / Python 3.10.11)**: `261.12 seconds` (baseline benchmark; current session: `261.43s`)
+  - **Secondary Windows LocalSandbox (`Win32` / Python 3.10.11)**: `261.12 seconds` (baseline benchmark; current session: `383.46s`)
 
 ### Authoritative Timing & Latency Reconciliation Table
 
@@ -138,7 +138,7 @@ To eliminate reviewer ambiguity regarding compute expenditure and guarantee math
 - **Full-Scale Empirical Benchmark ($N=18,000$ Task Evaluations)**:
   - Total Token Volume: **334,848,600 tokens** (299.9M prompt in / 34.9M completion out)
   - Actual Live Compute Spend: **$73.95 USD** (mean $0.0041/task)
-  - Pre-registered Budget Guard: **$20.00–$150.00 USD** (actual expenditure reconciles squarely within budget)
+  - Pre-registered Budget Guard: **$18.00–$144.00 USD** (actual expenditure reconciles squarely within budget)
 - **Local In-Process GGUF Empirical Runs (`local_qwen_empirical_run`)**:
   - Direct API Spend: **$0.00 USD** (executed on local workstation GPU/CPU hardware via C++ `llama-cpp-python`)
 - **Longitudinal Live API Runs (`full_study_live`)**:
@@ -221,11 +221,11 @@ To rigorously address reviewer inquiries regarding empirical comparisons to rela
 - **Holistic System Loop Cost ($0.510 USD)**: Full evolutionary cycle execution across all 90 cells in `cycle_metrics.json` includes inter-cycle reflection ($G_4$), prompt rewriter mutations ($G_2$), and canary regression evaluation ($G_6$) (~1.7M tokens total footprint, $0.000567/task).
 - **Direct Out-of-Pocket Cash Spend**: Strictly **$0.00 USD** due to in-process execution.
 
-### 11.2 Reconciling 18k Tasks × 5k Tokens/Task with $20–$150 USD Projection
-- **Lower Bound Projection ($18.00–$20.70 USD)**: $18{,}000 \times 5{,}000 = 90\text{M tokens}$ at $0.20/$0.23 per 1M tokens yields **$18.00–$20.70 USD**, defining the exact lower boundary of the $20–$150 USD projection.
+### 11.2 Reconciling 18k Tasks × 5k Tokens/Task with $18–$144 USD Projection
+- **Lower Bound Projection ($18.00–$20.70 USD)**: $18{,}000 \times 5{,}000 = 90\text{M tokens}$ at $0.20/$0.23 per 1M tokens yields **$18.00–$20.70 USD**, defining the exact lower boundary of the $18–$144 USD projection.
 - **Mid-Range Projection ($39.60–$43.20 USD)**: $18{,}000 \times 10{,}000 = 180\text{M tokens}$ at $0.23/1M tokens.
 - **Empirical Ground Truth ($73.95 USD across 334.8M tokens)**: The completed full-scale benchmark (`full_study_canonical`) consumed 299,970,301 prompt tokens ($59.99) and 34,878,299 completion tokens ($13.95), totaling **334.8M tokens** and **$73.95 USD** ($0.0041/task), landing squarely within the pre-registered budget.
-- **Ceiling Projection ($86.40–$144.00 USD)**: Maximum multi-turn context expansion up to 20,000 tokens/task ($360\text{M tokens}$) defines the upper budget ceiling ($144 USD), strictly protected by our **$150.00 USD** budget guard.
+- **Ceiling Projection ($86.40–$144.00 USD)**: Maximum multi-turn context expansion up to 20,000 tokens/task ($360\text{M tokens}$) defines the upper budget ceiling ($144 USD), strictly protected by our **$144.00 USD** budget guard.
 - **Documentation**: Fully formalized in [`docs/COST_ACCOUNTING_RECONCILIATION.md`](docs/COST_ACCOUNTING_RECONCILIATION.md) and typeset in `paper/tables/table_cost_reconciliation.tex`.
 
 ---

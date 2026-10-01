@@ -2,9 +2,9 @@
   "attestation_version": "1.0.0",
   "benchmark_name": "EvoEval",
   "verification_status": "VERIFIED",
-  "timestamp_utc": "2026-10-01T19:25:40.096469+00:00",
+  "timestamp_utc": "2026-10-01T23:03:43.428699+00:00",
   "git": {
-    "commit": "161c2a239225d0107b9e9595ef80e65cb87763e6",
+    "commit": "f582fd08a6fef2eff25f720194f744c65528d8c1",
     "branch": "main",
     "dirty": "true"
   },
@@ -107,7 +107,7 @@
       "tests_passed": 201,
       "headline_linux_duration_sec": 89.7,
       "secondary_windows_duration_sec": 261.12,
-      "current_host_duration_seconds": 261.43
+      "current_host_duration_seconds": 383.46
     }
   }
 }

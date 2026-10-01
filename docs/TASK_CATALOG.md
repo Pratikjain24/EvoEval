@@ -1191,10 +1191,10 @@ The **EvoEval Benchmark Suite** comprises exactly **100 focused, multi-module al
 
 ## Task Difficulty Validation & Inter-Annotator Agreement
 
-To establish empirical ground-truth validity of task difficulty labeling, two independent senior software engineers independently labeled all 100 tasks into `{easy, medium, hard}` based on structural analysis and required agentic reasoning turns:
+To establish empirical ground-truth validity of task difficulty labeling, two independent student researchers independently labeled all 100 tasks into `{easy, medium, hard}` based on structural analysis and required agentic reasoning turns:
 - **Raw Concordance**: 91 of 100 tasks (91.0% initial agreement)
 - **Quadratic Weighted Cohen's $\kappa$**: $\mathbf{\kappa = 0.884}$ (high inter-rater agreement)
-- **Disagreements**: Exactly 9 tasks differed by 1 tier (e.g. easy vs medium); adjudicated by a third senior research scientist.
+- **Disagreements**: Exactly 9 tasks differed by 1 tier (e.g. easy vs medium); adjudicated under faculty advisor supervision.
 - **Empirical Validation**: Frozen zero-shot baseline ($G_1$) pass rates strictly correlate with tiers: Easy ($85.3\%$), Medium ($57.6\%$), Hard ($36.4\%$).
 
 ```

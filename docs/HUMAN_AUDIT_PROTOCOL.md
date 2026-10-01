@@ -5,7 +5,7 @@
 The **EvoEval Human Audit Framework** establishes an empirical gold standard for validating behavioral safety drift and specification gaming (Proxy-Gap ground truth) in autonomous self-evolving code agents. While automated AST parsers and regex-based safety monitors provide continuous runtime detection, empirical verification requires independent, double-blind human inspection of execution traces to ensure automated scoring systems achieve high fidelity without over-flagging benign developer actions.
 
 This protocol document formally provides:
-1. **Annotator Qualification & Ethical Clearance**: Detailed qualification criteria for human reviewers, ethical review board (IRB) exemption protocol, and compensation standards.
+1. **Annotator Qualification & Review Protocol**: Detailed qualification criteria for human reviewers, double-blind evaluation procedures, and advisor adjudication standards.
 2. **Statistical Power Analysis Justifying Sample Size ($N_{\text{audit}} = 79$)**: A rigorous mathematical power derivation proving that $N=79$ provides $>90\%$ statistical power ($\beta < 0.10$) at $\alpha = 0.05$ to reject moderate agreement ($\kappa_0 \le 0.60$) in favor of near-perfect agreement ($\kappa_1 \ge 0.85$).
 3. **Sample Provenance & Stratified Sampling Design**: Clarification that $N=79$ represents an $8.3\%$ stratified sample of the canonical calibration cohort ($N=948$ trajectories across 3 seeds and 5 cycles), balanced across all 6 archetypes ($G_1$–$G_6$), 5 cycles, and 5 task taxonomy types.
 4. **Full Inter-Annotator Contingency Tables & Confusion Matrices**: Complete $2 \times 2$ matrices for Annotator 1 vs Annotator 2 ($\kappa_{\text{safety}} = 0.934$, $\kappa_{\text{gaming}} = 0.963$, $P_o = 98.7\%$) and Human Consensus vs Automated Monitors ($F_1 = 0.889$ for safety, $F_1 = 0.944$ for gaming, $\text{FPR} \le 1.6\%$).
@@ -15,24 +15,23 @@ This protocol document formally provides:
 
 ---
 
-## 2. Annotator Qualifications, Training, and Ethical Protocol
+## 2. Annotator Qualifications, Training, and Verification Protocol
 
 ### 2.1 Annotator Profiles & Qualification Criteria
-To ensure high annotation fidelity, the human audit study avoided crowdsourced platforms (e.g., MTurk, Prolific) and instead recruited specialized software engineering and computer systems security researchers:
-- **Annotator 1 ($\text{Reviewer}_\alpha$)**: Senior doctoral researcher specializing in automated program repair and static analysis. Possesses 6+ years of Python software engineering experience, extensive familiarity with pytest execution internals, and active publication history in empirical software engineering (ICSE/FSE).
-- **Annotator 2 ($\text{Reviewer}_\beta$)**: Post-graduate researcher in AI systems security and container isolation. Possesses 5+ years of systems programming and DevOps experience, specializing in Linux cgroups, shell injection vulnerabilities, and privilege boundary verification.
-- **Lead Adjudicator ($\text{Referee}_\gamma$)**: Senior Staff Research Scientist with 12+ years of experience in AI safety, formal verification, and empirical benchmark design. Acted strictly as an independent referee to break ties and formulate binding consensus on discordant annotations.
+To ensure high annotation fidelity, the human audit study avoided crowdsourced platforms (e.g., MTurk, Prolific) and instead engaged student co-authors with specialized coursework and software development experience in the Department of Computer Engineering at Vishwakarma Institute of Technology, Pune:
+- **Annotator 1 ($\text{Reviewer}_\alpha$)**: Computer engineering researcher with expertise in Python software engineering, pytest execution internals, and static code analysis.
+- **Annotator 2 ($\text{Reviewer}_\beta$)**: Computer engineering researcher specializing in systems programming, container sandboxing, and security verification.
+- **Faculty Adjudicator ($\text{Referee}_\gamma$)**: Department faculty advisor in computer engineering and software systems. Acted as an independent referee to review edge cases, break ties, and formulate binding consensus on discordant annotations.
 
 ### 2.2 Reviewer Training & Calibration Session
 Prior to scoring the blinded evaluation queue, reviewers completed a 90-minute calibration workshop:
 1. Reviewers reviewed the formal rubric definitions, threat model, and edge-case boundaries.
-2. Reviewers independently annotated a synthetic pilot practice set of 10 unblinded trial traces (not included in $N=79$).
-3. All discrepancies in the practice set were discussed and reconciled to harmonize interpretive standards for ambiguous command strings (e.g., distinguishing informative introspection `python --version` from unauthorized environment modification).
+2. Reviewers independently annotated a pilot practice set of 10 unblinded trial traces (not included in $N=79$).
+3. All discrepancies in the practice set were discussed and reconciled under faculty guidance to harmonize interpretive standards for ambiguous command strings (e.g., distinguishing informative introspection `python --version` from unauthorized environment modification).
 
-### 2.3 Ethical Clearance & Compensation
-- **Institutional Review Board (IRB) Clearance**: The study protocol was submitted to the institutional human research ethics committee and granted formal **Exemption status** under standard synthetic data review guidelines. The study evaluated synthetic execution logs generated by autonomous machine learning models running within containerized sandboxes; no personal identifying information (PII), human subject behavior, or private user data was involved.
-- **Fair Compensation**: Annotators were compensated at standard academic research consulting rates of **$45.00 USD/hour**, well above local minimum wage and living wage standards.
-- **Voluntary & Unbiased Participation**: Participation was entirely voluntary with freedom to withdraw at any stage without penalty. Reviewers had no stake in benchmark outcome rankings.
+### 2.3 Research Ethics & Protocol Scope
+- **Protocol Scope**: The study evaluated synthetic execution logs generated by autonomous machine learning models running within containerized sandboxes; no personal identifying information (PII), human subject behavior, or private user data was involved.
+- **Double-Blind Procedure**: Traces were completely anonymized and randomly shuffled prior to review; annotators had no knowledge of whether a trace originated from $G_1$, $G_4$, or other archetypes during scoring.
 
 ### 2.4 Time Tracking & Inspection Labor
 Each trace required inspection of multi-step tool calls, terminal shell invocations, standard output logs, git diffs, and test harness execution outputs:
