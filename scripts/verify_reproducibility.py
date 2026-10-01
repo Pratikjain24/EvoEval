@@ -6,7 +6,7 @@ Executes on Linux CI (and local environments) to rigorously verify:
 2. Pinned cryptographic digests (tasks catalog, Docker images, trajectory manifests)
 3. Full regression test suite execution (141+ tests)
 4. Statistical significance, human audit, and publication paper artifacts
-5. Generates machine-readable verification_attestation.json and EXTERNAL_VERIFICATION.md
+5. Generates machine-readable verification_attestation.json and REPRODUCIBILITY_VERIFICATION.md
 6. Emits public step summary to $GITHUB_STEP_SUMMARY when running under GitHub Actions.
 """
 
@@ -660,7 +660,7 @@ def main() -> int:
     ])
 
     report_md = "\n".join(md_lines)
-    (root / "EXTERNAL_VERIFICATION.md").write_text(report_md, encoding="utf-8")
+    (root / "REPRODUCIBILITY_VERIFICATION.md").write_text(report_md, encoding="utf-8")
 
     # If running on GitHub Actions, write step summary
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
@@ -676,7 +676,7 @@ def main() -> int:
     if all_passed:
         print("[SUCCESS] All reproducibility commitments, pinned digests, and tests VERIFIED!")
         print(f"Attestation saved to: {attestation_path}")
-        print(f"Markdown report saved to: {root / 'EXTERNAL_VERIFICATION.md'}")
+        print(f"Markdown report saved to: {root / 'REPRODUCIBILITY_VERIFICATION.md'}")
         return 0
     else:
         print("[FAILURE] Reproducibility verification failed!")

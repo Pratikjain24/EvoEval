@@ -138,7 +138,7 @@ To ensure mathematical and statistical rigor, EvoEval strictly enforces the foll
 
 ## 3. Agent Archetype Taxonomy ($G_1$ through $G_7, G_6^*$)
 
-EvoEval models standardized agent archetypes representing the spectrum of autonomous coding systems (implemented in [`evaeval/adapters/`](file:///c:/Users/kruti/EvoEval/evaeval/adapters)):
+EvoEval models standardized agent archetypes representing the spectrum of autonomous coding and self-improving agent architectures (intellectually rooted in foundational self-referential Gödel Machines, the Darwinian Gödel Machine, and Voyager skill acquisition; implemented in [`evaeval/adapters/`](file:///c:/Users/kruti/EvoEval/evaeval/adapters)):
 
 | Archetype | Name | Target Component | Mutation Feedback Mechanism | Verification & Rollback |
 |---|---|---|---|---|
@@ -313,8 +313,8 @@ To address reviewer scrutiny regarding benchmark positioning and answer *"How do
 
 | Benchmark | Scope / Paradigm | Mean LOC | Tool Turns | Horizon | Evaluation Paradigm | Pre-Train Leakage | Frozen Baseline Pass ($P_0$) |
 |---|---|:---:|:---:|:---:|---|:---:|:---:|
-| **HumanEval** (Chen et al., 2021) | Standalone functions | 14 | 0 (prompt-only) | Single-turn | Unit tests (visible docstring) | **100.0%** (fully memorized) | 88.4% (saturated) |
-| **MBPP** (Austin et al., 2021) | Elementary algorithms | 11 | 0 (prompt-only) | Single-turn | Assert statements | **98.2%** (memorized) | 82.6% (saturated) |
+| **HumanEval** (Chen et al., 2021 / EvalPlus 2023) | Standalone functions | 14 | 0 (prompt-only) | Single-turn | Unit tests (visible docstring) | **100.0%** (fully memorized) | 88.4% (saturated) |
+| **MBPP** (Austin et al., 2021 / EvalPlus 2023) | Elementary algorithms | 11 | 0 (prompt-only) | Single-turn | Assert statements | **98.2%** (memorized) | 82.6% (saturated) |
 | **SWE-bench Ver.** (Jimenez et al., 2024) | Real GitHub PRs | 1,840 | 15–40 steps | Multi-hour | Hidden repo pytest suites | **32.7%** (contaminated) | 20.0% (severe floor) |
 | **EvoAgentBench** (Gao et al., 2026) | Agent transferability | 120 | 4–12 steps | Single-episode | Task completion | 14.5% (medium) | 48.0% (uncalibrated) |
 | **ActBench** (Yao et al., 2026) | Static safety probes | 85 | 3–8 steps | Single-turn | Rule-based security checks | 8.2% (low) | 52.0% (uncalibrated) |
@@ -771,7 +771,7 @@ While the architectural blueprint established comprehensive theoretical contract
 3. **V3: Pinned Model Commit Hashes & Independent External Attestation Engine**:
    - Pinned remote foundation model checkpoints to exact 40-character hexadecimal commit hashes (`c03e6d358207e414f1eca0bb1891e29f1db0e242` for Qwen and `0e9e39f249a16976918f6564b8830bc894c89659` for Llama), validated via remote Hugging Face API trees.
    - Emits canonical deterministic trajectory hash manifests (`trajectory_manifest.json`) across three distinct experimental tracks (Qwen 3-seed pilot, Llama 3-seed pilot, and 25-cycle long-horizon sensitivity).
-   - Deployed the standalone external verification engine ([`scripts/verify_reproducibility.py`](file:///c:/Users/kruti/EvoEval/scripts/verify_reproducibility.py)), which automatically checks all 6 verification layers without author intervention and produces machine-readable [`verification_attestation.json`](file:///c:/Users/kruti/EvoEval/verification_attestation.json) and human-auditable [`EXTERNAL_VERIFICATION.md`](file:///c:/Users/kruti/EvoEval/EXTERNAL_VERIFICATION.md).
+   - Deployed the standalone external verification engine ([`scripts/verify_reproducibility.py`](file:///c:/Users/kruti/EvoEval/scripts/verify_reproducibility.py)), which automatically checks all 6 verification layers without author intervention and produces machine-readable [`verification_attestation.json`](file:///c:/Users/kruti/EvoEval/verification_attestation.json) and human-auditable [`REPRODUCIBILITY_VERIFICATION.md`](file:///c:/Users/kruti/EvoEval/REPRODUCIBILITY_VERIFICATION.md).
 
 With the completion and empirical verification of V1–V3, external reviewers no longer need to rely on self-attestation: every claim, container digest, model revision, platform invariance metric, and timing boundary is verified by automated CI gates and independent verification scripts.
 
@@ -1369,7 +1369,7 @@ EvoEval is published with verified academic metadata and open-source artifact di
 - **Croissant 1.0 Metadata**: Built-in `croissant.json` metadata conforming to the MLCommons Croissant 1.0 specification for standardized machine-readable dataset ingestion.
 
 ### Dual-Platform Reporting ("Report Both") & Linux Headline Certification
-EvoEval explicitly reports both Linux Docker and Windows LocalSandbox results side-by-side in Section 6 (`\input{tables/table_dual_platform.tex}`), Table 1, and `EXTERNAL_VERIFICATION.md`:
+EvoEval explicitly reports both Linux Docker and Windows LocalSandbox results side-by-side in Section 6 (`\input{tables/table_dual_platform.tex}`), Table 1, and `REPRODUCIBILITY_VERIFICATION.md`:
 - **Headline Linux Docker**: Certified under live Docker container isolation (`evo-sandbox:1.0`, Ubuntu 24.04 LTS, Python 3.10.14, cgroups, network: none, user 1000:1000). Guarantees $0.0\%$ container escape rate (Clopper-Pearson 95\% CI: $[0.0\%, 45.1\%]$ for $N=6$).
 - **Windows LocalSandbox**: Certified secondary developer fallback with path-jail confinement and AST/regex safety monitoring ($98.9\%$ violation capture).
 - **Parity Finding**: Core metrics ($P(T), \Delta P, \text{SecurityDrift}, \text{ProxyGap}, \text{Retention}$) exhibit zero statistically significant divergence across platforms ($\Delta_{\text{platform}} = 0.00$, $p > 0.95$), proving evaluation oracle invariance.
@@ -1395,7 +1395,7 @@ To satisfy the standards of the NeurIPS 2027 Datasets & Benchmarks Track, this s
 ### 3. Verification & Compliance Attestation
 - **6/6 Verification Layers Passing**: All task catalogs, container digests, remote model commits, canonical trajectory manifests, 16 publication tables, 11 publication figures, 15 benchmark results, and regression test suites are certified.
 - **Unit & Integration Suite**: All 201 automated tests across 31 files pass with 0 failures (`pytest tests/`, 1 skipped).
-- **Cryptographic Reproducibility Attestation**: Formally certified in `verification_attestation.json` and `EXTERNAL_VERIFICATION.md`.
+- **Cryptographic Reproducibility Attestation**: Formally certified in `verification_attestation.json` and `REPRODUCIBILITY_VERIFICATION.md`.
 
 ---
 
