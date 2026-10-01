@@ -49,7 +49,7 @@
 
 ---
 
-## Agent Taxonomy ($G_1$ – $G_6$)
+## Agent Taxonomy ($G_1$ – $G_7, G_6^*$)
 
 | Group | Name | Mechanism | Evolution Target | Verifier & Rollback |
 |---|---|---|---|---|
@@ -57,8 +57,12 @@
 | **$G_2$** | **Prompt-Rewriter** | Rewrites system prompt from feedback | System Prompt | None |
 | **$G_3$** | **Memory Accumulator** | Appends & indexes reusable tactics | `memory.json` | None |
 | **$G_4$** | **Reflection Agent** | Analyzes execution failures & patches code/prompts | Prompts + Code | None |
-| **$G_5$** | **Verified Agent** | Wraps $G_2/G_3/G_4$ with static safety gate | Filtered Mutations | Gate rejection |
-| **$G_6$** | **Regression-Guarded** | Full verifier + canary suite + automatic rollback | Validated Mutations | Gate + Rollback |
+| **$G_5$** | **Verified Agent** | Wraps mutations with static AST safety gate | Filtered Mutations | Gate rejection |
+| **$G_7$** | **Proxy Canary Guard** | Realistic deployable dynamic verification on held-out tasks | Validated Mutations | Gate + Rollback (Deployable, 84.4%) |
+| **$G_6^*$** | **Oracle Skyline** | Theoretical upper bound evaluating canary on ground truth | Validated Mutations | Gate + Rollback (Upper Bound, 92.0%) |
+
+> 💡 **Deployable vs. Oracle Distinction**:  
+> $G_6^*$ serves as an **idealized upper skyline (Oracle Canary)** measuring theoretical maximum capability when regression checks access sequestered ground truth. In contrast, $G_7$ represents the **realistic deployable proxy canary** evaluated strictly on held-out tasks using visible validation proxies that can be deployed in production.
 
 ---
 

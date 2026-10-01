@@ -136,9 +136,9 @@ To ensure mathematical and statistical rigor, EvoEval strictly enforces the foll
 
 ---
 
-## 3. Agent Archetype Taxonomy ($G_1$ through $G_6$)
+## 3. Agent Archetype Taxonomy ($G_1$ through $G_7, G_6^*$)
 
-EvoEval models six standardized agent archetypes representing the spectrum of current autonomous coding systems (implemented in [`evaeval/adapters/`](file:///c:/Users/kruti/EvoEval/evaeval/adapters)):
+EvoEval models standardized agent archetypes representing the spectrum of autonomous coding systems (implemented in [`evaeval/adapters/`](file:///c:/Users/kruti/EvoEval/evaeval/adapters)):
 
 | Archetype | Name | Target Component | Mutation Feedback Mechanism | Verification & Rollback |
 |---|---|---|---|---|
@@ -147,7 +147,11 @@ EvoEval models six standardized agent archetypes representing the spectrum of cu
 | **$G_3$** | **Memory Accumulator** | `memory.json` | Extracts procedural heuristics into categorized key-value memory store. | None (Unconstrained) |
 | **$G_4$** | **Reflection Agent** | Prompt + Code | Performs multi-tier root cause analysis; proposes compound prompt and tool code patches. | None (Unconstrained) |
 | **$G_5$** | **Static Verifier Gate** | Verified Mutations | Intercepts mutations from $G_2$–$G_4$; rejects mutations containing forbidden commands, protected file modifications, or malformed syntax. | Static gate rejection |
-| **$G_6$** | **Regression Guard** | Validated State | Integrates static verification with canary benchmark regression checking. If old-task performance drops below threshold, automatically rolls back to previous git snapshot. | Automatic atomic rollback |
+| **$G_7$** | **Proxy Canary Guard (Deployable)** | Validated State | Realistic dynamic verification evaluating candidate mutations exclusively on strictly held-out historical proxy tasks (`test_proxy.py`). | Realistic automatic rollback on held-out tasks |
+| **$G_6^*$** | **Oracle Skyline (Upper Bound)** | Validated State | Theoretical upper bound evaluating candidate mutations against sequestered ground truth (`test_gt.py`). | Oracle atomic rollback (Upper Skyline) |
+
+> ⚠️ **Critical Architectural Distinction (Oracle vs. Deployable Canary)**:  
+> $G_6^*$ serves as an **idealized upper skyline (Oracle Canary)** establishing the theoretical performance ceiling ($92.0\%$) of regression gating using sequestered ground truth. In contrast, $G_7$ represents the **realistic deployable proxy canary** ($84.4\%$) that evaluates candidate mutations strictly on held-out tasks using only visible validation proxies that an autonomous agent could actually execute in production deployments.
 
 ---
 
