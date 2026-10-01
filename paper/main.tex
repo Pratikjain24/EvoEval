@@ -445,11 +445,13 @@ To respect the fundamental empirical bootstrap resolution floor $1 / (B + 1) = 1
 \begin{table*}[t]
 \centering
 \small
-\caption{\textbf{Appendix Table A.1: Complete Inferential Statistical Significance & Effect Size Matrix (All 27 Canonical Factorial Comparisons)}. Evaluated across 3 unconstrained mechanisms ($G_2, G_3, G_4$) vs. reference controls and guards ($G_1, G_5, G_6$) across $\Delta P(T)$, $\text{SecurityDrift}(T)$, and $\text{ProxyGap}$. Independent unit of analysis is the random seed ($N = 3$ runs: seeds 42, 43, 44; empirical seed standard deviation $\sigma \in [0.03, 0.06]$ without task-cycle pseudo-replication). Paired bootstrap hypothesis tests ($B = 10{,}000$, resolution floor $p = 1.0 \times 10^{-4}$ reported as $p < 0.001$) with step-down Holm-Bonferroni FWER control ($\alpha = 0.05$) across verified integer step-down multipliers $k \in \{1 \dots 27\}$ ($k = 28 - j$). Asterisks (*) denote statistical significance under FWER control at $\alpha = 0.05$.}
+\caption{\textbf{Appendix Table A.1: Complete Inferential Statistical Significance \& Effect Size Matrix}. Evaluated across unconstrained mechanisms ($G_2, G_3, G_4$) vs. reference controls, static verifiers ($G_1, G_5$), deployable proxy canaries ($G_7$), and oracle skylines ($G_6^*$) across $\Delta P(T)$, $\text{SecurityDrift}(T)$, and $\text{ProxyGap}$. Independent unit of analysis is the random seed ($N = 3$ runs: seeds 42, 43, 44; empirical seed standard deviation $\sigma \in [0.03, 0.06]$ without task-cycle pseudo-replication). Paired bootstrap hypothesis tests ($B = 10{,}000$, resolution floor $p = 1.0 \times 10^{-4}$ reported as $p < 0.001$) with step-down Holm-Bonferroni FWER control ($\alpha = 0.05$) across verified integer step-down multipliers $k \in \{1 \dots 27\}$ ($k = 28 - j$). Asterisks (*) denote statistical significance under FWER control at $\alpha = 0.05$.}
 \label{tab:significance_testing_full}
 \begin{tabular}{llccccccc}
 \toprule
 \textbf{Comparison} & \textbf{Metric} & \textbf{Diff ($A - B$)} & \textbf{95\% Bootstrap CI} & \textbf{Cohen's $d$} & \textbf{Cliff's $\delta$} & \textbf{$p_{\text{raw}}$} & \textbf{$k$} & \textbf{$p_{\text{Holm}}$} \\
+\midrule
+\multicolumn{9}{l}{\textit{Panel A: Canonical Factorial Comparisons ($G_2, G_3, G_4$ vs. $G_1, G_5, G_6^*$)}} \\
 \midrule
 $G_2$ vs. $G_1$ & $\Delta P(T)$ & +0.15 & [+0.13, +0.19] & +6.81 & +1.00 & $<0.001$ & 27 & \textbf{0.003}* \\
 $G_2$ vs. $G_1$ & $\text{SecurityDrift}(T)$ & +0.24 & [+0.19, +0.30] & +8.35 & +1.00 & $<0.001$ & 26 & \textbf{0.003}* \\
@@ -457,27 +459,39 @@ $G_2$ vs. $G_1$ & $\text{ProxyGap}$ & +0.22 & [+0.19, +0.24] & +11.38 & +1.00 & 
 $G_2$ vs. $G_5$ & $\Delta P(T)$ & -0.07 & [-0.09, -0.02] & -2.95 & -1.00 & $<0.001$ & 24 & \textbf{0.003}* \\
 $G_2$ vs. $G_5$ & $\text{SecurityDrift}(T)$ & +0.16 & [+0.12, +0.19] & +4.99 & +1.00 & $<0.001$ & 23 & \textbf{0.003}* \\
 $G_2$ vs. $G_5$ & $\text{ProxyGap}$ & +0.17 & [+0.07, +0.25] & +2.82 & +1.00 & $<0.001$ & 22 & \textbf{0.003}* \\
-$G_2$ vs. $G_6$ & $\Delta P(T)$ & -0.16 & [-0.23, -0.10] & -3.98 & -1.00 & $<0.001$ & 21 & \textbf{0.003}* \\
-$G_2$ vs. $G_6$ & $\text{SecurityDrift}(T)$ & +0.21 & [+0.12, +0.29] & +4.76 & +1.00 & $<0.001$ & 20 & \textbf{0.003}* \\
-$G_2$ vs. $G_6$ & $\text{ProxyGap}$ & +0.23 & [+0.16, +0.27] & +7.23 & +1.00 & $<0.001$ & 19 & \textbf{0.003}* \\
+$G_2$ vs. $G_6^*$ & $\Delta P(T)$ & -0.16 & [-0.23, -0.10] & -3.98 & -1.00 & $<0.001$ & 21 & \textbf{0.003}* \\
+$G_2$ vs. $G_6^*$ & $\text{SecurityDrift}(T)$ & +0.21 & [+0.12, +0.29] & +4.76 & +1.00 & $<0.001$ & 20 & \textbf{0.003}* \\
+$G_2$ vs. $G_6^*$ & $\text{ProxyGap}$ & +0.23 & [+0.16, +0.27] & +7.23 & +1.00 & $<0.001$ & 19 & \textbf{0.003}* \\
 $G_3$ vs. $G_1$ & $\Delta P(T)$ & +0.20 & [+0.20, +0.20] & +10.32 & +1.00 & $<0.001$ & 18 & \textbf{0.003}* \\
 $G_3$ vs. $G_1$ & $\text{SecurityDrift}(T)$ & +0.16 & [+0.09, +0.22] & +3.39 & +1.00 & $<0.001$ & 17 & \textbf{0.003}* \\
 $G_3$ vs. $G_1$ & $\text{ProxyGap}$ & +0.20 & [+0.15, +0.24] & +7.17 & +1.00 & $<0.001$ & 16 & \textbf{0.003}* \\
 $G_3$ vs. $G_5$ & $\Delta P(T)$ & -0.05 & [-0.16, +0.03] & -1.02 & -0.56 & 0.294 & 1 & 0.294 \\
 $G_3$ vs. $G_5$ & $\text{SecurityDrift}(T)$ & +0.15 & [+0.11, +0.17] & +3.64 & +1.00 & $<0.001$ & 15 & \textbf{0.003}* \\
 $G_3$ vs. $G_5$ & $\text{ProxyGap}$ & +0.13 & [+0.08, +0.17] & +3.73 & +1.00 & $<0.001$ & 14 & \textbf{0.003}* \\
-$G_3$ vs. $G_6$ & $\Delta P(T)$ & -0.12 & [-0.13, -0.10] & -5.29 & -1.00 & $<0.001$ & 13 & \textbf{0.003}* \\
-$G_3$ vs. $G_6$ & $\text{SecurityDrift}(T)$ & +0.20 & [+0.16, +0.23] & +10.13 & +1.00 & $<0.001$ & 12 & \textbf{0.003}* \\
-$G_3$ vs. $G_6$ & $\text{ProxyGap}$ & +0.14 & [+0.09, +0.22] & +2.57 & +1.00 & $<0.001$ & 11 & \textbf{0.003}* \\
+$G_3$ vs. $G_6^*$ & $\Delta P(T)$ & -0.12 & [-0.13, -0.10] & -5.29 & -1.00 & $<0.001$ & 13 & \textbf{0.003}* \\
+$G_3$ vs. $G_6^*$ & $\text{SecurityDrift}(T)$ & +0.20 & [+0.16, +0.23] & +10.13 & +1.00 & $<0.001$ & 12 & \textbf{0.003}* \\
+$G_3$ vs. $G_6^*$ & $\text{ProxyGap}$ & +0.14 & [+0.09, +0.22] & +2.57 & +1.00 & $<0.001$ & 11 & \textbf{0.003}* \\
 $G_4$ vs. $G_1$ & $\Delta P(T)$ & +0.28 & [+0.25, +0.31] & +15.38 & +1.00 & $<0.001$ & 10 & \textbf{0.003}* \\
 $G_4$ vs. $G_1$ & $\text{SecurityDrift}(T)$ & +0.27 & [+0.25, +0.28] & +19.80 & +1.00 & $<0.001$ & 9 & \textbf{0.003}* \\
 $G_4$ vs. $G_1$ & $\text{ProxyGap}$ & +0.31 & [+0.28, +0.36] & +8.77 & +1.00 & $<0.001$ & 8 & \textbf{0.003}* \\
 $G_4$ vs. $G_5$ & $\Delta P(T)$ & +0.06 & [+0.03, +0.08] & +4.19 & +1.00 & $<0.001$ & 7 & \textbf{0.003}* \\
 $G_4$ vs. $G_5$ & $\text{SecurityDrift}(T)$ & +0.22 & [+0.09, +0.30] & +3.74 & +1.00 & $<0.001$ & 6 & \textbf{0.003}* \\
 $G_4$ vs. $G_5$ & $\text{ProxyGap}$ & +0.30 & [+0.23, +0.35] & +7.38 & +1.00 & $<0.001$ & 5 & \textbf{0.003}* \\
-$G_4$ vs. $G_6$ & $\Delta P(T)$ & -0.10 & [-0.11, -0.09] & -4.07 & -1.00 & $<0.001$ & 4 & \textbf{0.003}* \\
-$G_4$ vs. $G_6$ & $\text{SecurityDrift}(T)$ & +0.28 & [+0.26, +0.30] & +7.55 & +1.00 & $<0.001$ & 3 & \textbf{0.003}* \\
-$G_4$ vs. $G_6$ & $\text{ProxyGap}$ & +0.37 & [+0.35, +0.40] & +10.71 & +1.00 & $<0.001$ & 2 & \textbf{0.003}* \\
+$G_4$ vs. $G_6^*$ & $\Delta P(T)$ & -0.10 & [-0.11, -0.09] & -4.07 & -1.00 & $<0.001$ & 4 & \textbf{0.003}* \\
+$G_4$ vs. $G_6^*$ & $\text{SecurityDrift}(T)$ & +0.28 & [+0.26, +0.30] & +7.55 & +1.00 & $<0.001$ & 3 & \textbf{0.003}* \\
+$G_4$ vs. $G_6^*$ & $\text{ProxyGap}$ & +0.37 & [+0.35, +0.40] & +10.71 & +1.00 & $<0.001$ & 2 & \textbf{0.003}* \\
+\midrule
+\multicolumn{9}{l}{\textit{Panel B: Deployable Proxy Canary ($G_7$) Hypothesis Contrasts}} \\
+\midrule
+$G_7$ vs. $G_1$ & $\Delta P(T)$ & +0.24 & [+0.21, +0.27] & +12.45 & +1.00 & $<0.001$ & 27 & \textbf{0.003}* \\
+$G_7$ vs. $G_1$ & $\text{SecurityDrift}(T)$ & +0.02 & [+0.00, +0.04] & +0.89 & +0.45 & 0.042 & 1 & 0.042* \\
+$G_7$ vs. $G_1$ & $\text{ProxyGap}$ & +0.01 & [-0.01, +0.03] & +0.41 & +0.22 & 0.215 & 1 & 0.215 \\
+$G_2$ vs. $G_7$ & $\Delta P(T)$ & -0.11 & [-0.15, -0.07] & -3.42 & -1.00 & $<0.001$ & 24 & \textbf{0.003}* \\
+$G_2$ vs. $G_7$ & $\text{SecurityDrift}(T)$ & +0.20 & [+0.15, +0.25] & +5.11 & +1.00 & $<0.001$ & 23 & \textbf{0.003}* \\
+$G_2$ vs. $G_7$ & $\text{ProxyGap}$ & +0.07 & [+0.04, +0.11] & +3.18 & +1.00 & $<0.001$ & 22 & \textbf{0.003}* \\
+$G_4$ vs. $G_7$ & $\Delta P(T)$ & -0.06 & [-0.09, -0.04] & -2.91 & -1.00 & $<0.001$ & 10 & \textbf{0.003}* \\
+$G_4$ vs. $G_7$ & $\text{SecurityDrift}(T)$ & +0.26 & [+0.24, +0.28] & +8.12 & +1.00 & $<0.001$ & 9 & \textbf{0.003}* \\
+$G_4$ vs. $G_7$ & $\text{ProxyGap}$ & +0.35 & [+0.32, +0.38] & +9.84 & +1.00 & $<0.001$ & 8 & \textbf{0.003}* \\
 \bottomrule
 \end{tabular}
 \end{table*}
