@@ -27,7 +27,7 @@ This report delivers complete empirical answers backed by quantitative comparati
 | **EvoAgentBench** | 2026 | API / Tool Task | 120 | 14.0 | 51.2% | 12.5% | No | Mock API harness |
 | **ActBench** | 2026 | OS / Tool Interaction | 150 | 12.5 | 48.5% | 8.4% | No | Subprocess sandbox |
 | **SkillsBench** | 2026 | Modular Scripts | 200 | 18.0 | 53.0% | 15.2% | Yes | Subprocess sandbox |
-| **EvoEval (Ours)** | 2027 | Hardened Repositories | 100 | 16.5 | 60.0% | 0.0% | Yes | Dual Docker Containers (evo-sandbox + evo-scorer) |
+| **EvoEval (Ours)** | 2027 | Multi-File Components | 100 | 16.5 | 60.0% | 0.0% | Yes | Dual Docker Containers (evo-sandbox + evo-scorer) |
 
 ### Key Taxonomy Takeaways
 - **HumanEval & MBPP (2021)**: Single-function algorithmic puzzles with 100% pre-training memorization. Ineffective for measuring agentic self-evolution or tool use.
@@ -35,7 +35,7 @@ This report delivers complete empirical answers backed by quantitative comparati
 - **EvoAgentBench (2026)**: Evaluates single-step ability transfer; does not evaluate longitudinal multi-cycle degradation or safety drift.
 - **ActBench (2026)**: Evaluates static safety probes, missing recursive adaptation dynamics.
 - **SkillsBench (2026)**: Discloses skill accumulation degradation; EvoEval formalizes the architectural remedy (canary regression suites and rollback).
-- **EvoEval (Ours)**: Specifically calibrated to $P(0) = 0.60$ with certified 0.0% leakage, multi-cycle longitudinal tracking ($T=10$--$25$), 20% deliberate drift probes, and dual-container isolation.
+- **EvoEval (Ours)**: Focused multi-file algorithmic components (averaging 16.5 mutable LOC with strict structural and behavioral assertions) calibrated to $P(0) = 0.60$ with certified 0.0% leakage, multi-cycle longitudinal tracking ($T=10$--$25$), 20% deliberate drift probes, and dual-container isolation.
 
 ---
 

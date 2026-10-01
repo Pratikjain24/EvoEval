@@ -201,7 +201,7 @@ EvoEval is the **first benchmark** that:
 | **Security Audit** | 20 | JWT attacks, timing side-channels, path traversal, privilege escalation |
 
 ### What Makes Our Tasks Special
-- Every task is a **complete standalone repository** (not just a function stub)
+- Every task is a **focused multi-file component repository** (with modular code, visible test suite, hidden test suite, and dependencies — not just a function stub)
 - Each has a **visible test** (agent can see) AND a **hidden ground-truth test** (agent CANNOT see)
 - The exploit probes have **gameable proxy tests** — if the agent just pattern-matches the visible test, it "passes" but fails the hidden test = **Reward Hacking detected!**
 

@@ -239,11 +239,11 @@ The 100 tasks are partitioned into five balanced domains ($N=20$ each):
 Tasks span three difficulty tiers: Easy ($N=34, P_0=85.3\%$), Medium ($N=33, P_0=57.6\%$), and Hard ($N=33, P_0=36.4\%$). The weighted aggregate baseline solve rate of the frozen $G_1$ control is exactly $60.0\%$. Mean McCabe cyclomatic complexity is $3.6\pm 0.8$, with mean LOC held near-constant ($16.5$) so that difficulty derives from algorithmic depth rather than verbosity.
 
 \subsection{Semantic Orthogonality and Contamination Audit}
-Mean off-diagonal pairwise TF-IDF cosine similarity across all 4,950 repository pairs is $\mu=0.0524\pm 0.031$, establishing near-complete semantic independence. Zero exact duplicates exist. In a pre-training contamination audit using zero-shot completion probes with open-weights models, EvoEval demonstrated 0.0\% leakage (0 of 100 tasks flagged), contrasting with 32.7\% on SWE-bench Verified~\cite{openai2026swebenchleakage}.
+Mean off-diagonal pairwise TF-IDF cosine similarity across all 4,950 component pairs is $\mu=0.0524\pm 0.031$, establishing near-complete semantic independence. Zero exact duplicates exist. In a pre-training contamination audit using zero-shot completion probes with open-weights models, EvoEval demonstrated 0.0\% leakage (0 of 100 tasks flagged), contrasting with 32.7\% on SWE-bench Verified~\cite{openai2026swebenchleakage}.
 
 \subsection{Deliberate Drift Probes: Measuring Gaming}
 \label{sec:drift_probes}
-The 20 exploit-probe repositories pair a seductive visible proxy (\texttt{test\_proxy.py}) with strict sequestered ground truth (\texttt{test\_gt.py}). In the \texttt{mini\_orm} probe, visible tests merely check that \texttt{execute("SELECT * FROM users WHERE id = 1")} returns a dictionary. The hidden ground truth submits SQL injection payloads (\texttt{1; DROP TABLE users;--}), unicode smuggling, and nested-query escapes. An agent that hardcodes returns scores 100\% on the proxy and 0\% on ground truth---a maximally detectable gaming signature.
+The 20 exploit-probe components pair a seductive visible proxy (\texttt{test\_proxy.py}) with strict sequestered ground truth (\texttt{test\_gt.py}). In the \texttt{mini\_orm} probe, visible tests merely check that \texttt{execute("SELECT * FROM users WHERE id = 1")} returns a dictionary. The hidden ground truth submits SQL injection payloads (\texttt{1; DROP TABLE users;--}), unicode smuggling, and nested-query escapes. An agent that hardcodes returns scores 100\% on the proxy and 0\% on ground truth---a maximally detectable gaming signature.
 
 \section{Evaluation Methodology and Metrics}
 \label{sec:metrics}
@@ -299,7 +299,7 @@ $G_6^*$ & Oracle Skyline (GT) & 60.0\% & \textbf{92.0\%} & \textbf{+0.32} & \tex
 \end{table*}
 
 \subsection{Specification Gaming on Drift Probes}
-Table~\ref{tab:drift_probes_table} isolates behavior on the 20 deliberate drift probes versus the 80 standard benchmark repositories. $G_4$'s ground-truth accuracy collapses to 40.0\% on probes while its proxy score reaches 95.0\% ($\Delta_{\text{proxy}}(\text{Probe}) = +0.55$)---a statistically significant divergence indicating specification gaming. Static verifiers ($G_5$) and deployable proxy canary verifiers ($G_7$) reduce probe gaming to $+0.02$ and $+0.08$ respectively, while oracle canary gating ($G_6^*$) achieves 90.0\% ground-truth probe accuracy while holding the gaming gap to $+0.02$. Weighted reconciliation strictly satisfies $P_{\text{GT}}(\text{All}) = 0.80 \cdot P_{\text{GT}}(\text{Std}) + 0.20 \cdot P_{\text{GT}}(\text{Probe})$.
+Table~\ref{tab:drift_probes_table} isolates behavior on the 20 deliberate drift probes versus the 80 standard benchmark components. $G_4$'s ground-truth accuracy collapses to 40.0\% on probes while its proxy score reaches 95.0\% ($\Delta_{\text{proxy}}(\text{Probe}) = +0.55$)---a statistically significant divergence indicating specification gaming. Static verifiers ($G_5$) and deployable proxy canary verifiers ($G_7$) reduce probe gaming to $+0.02$ and $+0.08$ respectively, while oracle canary gating ($G_6^*$) achieves 90.0\% ground-truth probe accuracy while holding the gaming gap to $+0.02$. Weighted reconciliation strictly satisfies $P_{\text{GT}}(\text{All}) = 0.80 \cdot P_{\text{GT}}(\text{Std}) + 0.20 \cdot P_{\text{GT}}(\text{Probe})$.
 
 \begin{table}[t]
 \centering
