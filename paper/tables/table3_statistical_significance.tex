@@ -1,39 +1,23 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{\textbf{Inferential Statistical Significance & Effect Size Matrix (27 Canonical Metric Tuples)}. Independent unit of analysis is the random seed ($N = 3$ independent runs: seeds 42, 43, 44; empirical seed standard deviation $\sigma \in [0.03, 0.06]$ without task-cycle pseudo-replication). Paired bootstrap hypothesis tests ($B = 10{,}000$, empirical resolution floor $p = 1.0 \times 10^{-4}$ reported as $p < 0.001$) with step-down Holm-Bonferroni Family-Wise Error Rate (FWER) control ($\alpha = 0.05$) across verified integer step-down multipliers $k \in \{1 \dots 27\}$ ($k = 28 - j$) comparing unconstrained self-evolving agents ($G_2, G_3, G_4$) against static controls ($G_1$) and guarded mechanisms ($G_5, G_6$).}
+\caption{\textbf{Inferential Statistical Significance \& Effect Size Matrix (Primary Representative Comparisons)}. Paired bootstrap hypothesis tests ($B=10{,}000$, empirical resolution floor $p = 1.0 \times 10^{-4}$ reported as $p < 0.001$) with step-down Holm-Bonferroni control ($\alpha=0.05$) across verified integer step-down multipliers $k \in \{1 \dots 27\}$ ($k = 28 - j$), reporting analytical step-down bounds ($<0.001^*$ for $k \le 10$, $<0.003^*$ for $k > 10$). All primary comparisons: $p_{\text{Holm}} < 0.003$ ($p_{\text{Holm}} < 0.001$ for $k \le 10$), $|d|\ge 1.02$. Asterisks (*) denote statistical significance under Holm-Bonferroni FWER control at $\alpha = 0.05$. The full 27-row factorial matrix across all configuration pairs and metrics is published in Appendix Table~\ref{tab:significance_testing_full}.}
 \label{tab:significance_testing}
 \begin{tabular}{llccccccc}
 \toprule
-\textbf{Comparison} & \textbf{Metric} & \textbf{Diff ($A - B$)} & \textbf{95\% Bootstrap CI} & \textbf{Cohen's $d$} & \textbf{Cliff's $\delta$} & \textbf{$p_{\text{raw}}$} & \textbf{$k$} & \textbf{$p_{\text{Holm}}$} \\
+\textbf{Comparison} & \textbf{Metric} & \textbf{Diff ($A-B$)} & \textbf{95\% Bootstrap CI} & \textbf{Cohen's $d$} & \textbf{Cliff's $\delta$} & \textbf{$p_{\text{raw}}$} & \textbf{$k$} & \textbf{$p_{\text{Holm}}$} \\
 \midrule
-G2 vs. G1 & $\Delta P(T)$ & +0.19 & [+0.16, +0.24] & +5.89 & +1.00 & $<0.001$ & 27 & \textbf{0.003}* \\
-G2 vs. G1 & $\text{SecurityDrift}(T)$ & +0.18 & [+0.15, +0.20] & +6.44 & +1.00 & $<0.001$ & 26 & \textbf{0.003}* \\
-G2 vs. G1 & $\text{ProxyGap}$ & +0.27 & [+0.21, +0.31] & +5.42 & +1.00 & $<0.001$ & 25 & \textbf{0.003}* \\
-G2 vs. G5 & $\Delta P(T)$ & -0.04 & [-0.09, +0.03] & -1.03 & -0.56 & 0.292 & 4 & 1.000 \\
-G2 vs. G5 & $\text{SecurityDrift}(T)$ & +0.18 & [+0.12, +0.25] & +3.87 & +1.00 & $<0.001$ & 24 & \textbf{0.003}* \\
-G2 vs. G5 & $\text{ProxyGap}$ & +0.24 & [+0.17, +0.33] & +6.08 & +1.00 & $<0.001$ & 23 & \textbf{0.003}* \\
-G2 vs. G6 & $\Delta P(T)$ & -0.11 & [-0.14, -0.09] & -5.80 & -1.00 & $<0.001$ & 22 & \textbf{0.003}* \\
-G2 vs. G6 & $\text{SecurityDrift}(T)$ & +0.20 & [+0.16, +0.22] & +3.66 & +1.00 & $<0.001$ & 21 & \textbf{0.003}* \\
-G2 vs. G6 & $\text{ProxyGap}$ & +0.27 & [+0.25, +0.29] & +8.36 & +1.00 & $<0.001$ & 20 & \textbf{0.003}* \\
-G3 vs. G1 & $\Delta P(T)$ & +0.18 & [+0.14, +0.21] & +4.46 & +1.00 & $<0.001$ & 19 & \textbf{0.003}* \\
-G3 vs. G1 & $\text{SecurityDrift}(T)$ & +0.15 & [+0.11, +0.18] & +6.78 & +1.00 & $<0.001$ & 18 & \textbf{0.003}* \\
-G3 vs. G1 & $\text{ProxyGap}$ & +0.17 & [+0.15, +0.19] & +20.71 & +1.00 & $<0.001$ & 17 & \textbf{0.003}* \\
-G3 vs. G5 & $\Delta P(T)$ & -0.01 & [-0.07, +0.02] & -0.29 & -0.11 & 0.557 & 1 & 1.000 \\
-G3 vs. G5 & $\text{SecurityDrift}(T)$ & +0.11 & [+0.06, +0.15] & +2.97 & +1.00 & $<0.001$ & 16 & \textbf{0.003}* \\
-G3 vs. G5 & $\text{ProxyGap}$ & +0.13 & [+0.11, +0.14] & +3.33 & +1.00 & $<0.001$ & 15 & \textbf{0.003}* \\
-G3 vs. G6 & $\Delta P(T)$ & -0.13 & [-0.15, -0.12] & -6.40 & -1.00 & $<0.001$ & 14 & \textbf{0.003}* \\
-G3 vs. G6 & $\text{SecurityDrift}(T)$ & +0.09 & [+0.05, +0.14] & +2.04 & +0.78 & $<0.001$ & 13 & \textbf{0.003}* \\
-G3 vs. G6 & $\text{ProxyGap}$ & +0.15 & [+0.11, +0.17] & +4.66 & +1.00 & $<0.001$ & 12 & \textbf{0.003}* \\
-G4 vs. G1 & $\Delta P(T)$ & +0.30 & [+0.28, +0.31] & +14.82 & +1.00 & $<0.001$ & 11 & \textbf{0.003}* \\
-G4 vs. G1 & $\text{SecurityDrift}(T)$ & +0.25 & [+0.20, +0.30] & +9.16 & +1.00 & $<0.001$ & 10 & \textbf{0.003}* \\
-G4 vs. G1 & $\text{ProxyGap}$ & +0.34 & [+0.29, +0.37] & +11.84 & +1.00 & $<0.001$ & 9 & \textbf{0.003}* \\
-G4 vs. G5 & $\Delta P(T)$ & +0.06 & [-0.05, +0.14] & +1.17 & +0.56 & 0.292 & 3 & 1.000 \\
-G4 vs. G5 & $\text{SecurityDrift}(T)$ & +0.20 & [+0.17, +0.24] & +7.82 & +1.00 & $<0.001$ & 8 & \textbf{0.003}* \\
-G4 vs. G5 & $\text{ProxyGap}$ & +0.24 & [+0.23, +0.26] & +7.01 & +1.00 & $<0.001$ & 7 & \textbf{0.003}* \\
-G4 vs. G6 & $\Delta P(T)$ & +0.02 & [-0.01, +0.05] & +0.64 & +0.56 & 0.294 & 2 & 1.000 \\
-G4 vs. G6 & $\text{SecurityDrift}(T)$ & +0.24 & [+0.18, +0.27] & +7.14 & +1.00 & $<0.001$ & 6 & \textbf{0.003}* \\
-G4 vs. G6 & $\text{ProxyGap}$ & +0.34 & [+0.26, +0.42] & +7.83 & +1.00 & $<0.001$ & 5 & \textbf{0.003}* \\
+$G_2$ vs. $G_1$ & $\Delta P(T)$ & +0.15 & [+0.13, +0.19] & +6.81 & +1.00 & $<0.001$ & 27 & \textbf{$<0.003$}* \\
+$G_2$ vs. $G_1$ & $\text{SecurityDrift}(T)$ & +0.24 & [+0.19, +0.30] & +8.35 & +1.00 & $<0.001$ & 26 & \textbf{$<0.003$}* \\
+$G_2$ vs. $G_1$ & $\text{ProxyGap}$ & +0.22 & [+0.19, +0.24] & +11.38 & +1.00 & $<0.001$ & 25 & \textbf{$<0.003$}* \\
+$G_4$ vs. $G_1$ & $\Delta P(T)$ & +0.28 & [+0.25, +0.31] & +15.38 & +1.00 & $<0.001$ & 10 & \textbf{$<0.001$}* \\
+$G_4$ vs. $G_1$ & $\text{SecurityDrift}(T)$ & +0.27 & [+0.25, +0.28] & +19.80 & +1.00 & $<0.001$ & 9 & \textbf{$<0.001$}* \\
+$G_4$ vs. $G_1$ & $\text{ProxyGap}$ & +0.31 & [+0.28, +0.36] & +8.77 & +1.00 & $<0.001$ & 8 & \textbf{$<0.001$}* \\
+$G_7$ vs. $G_1$ & $\Delta P(T)$ & +0.24 & [+0.21, +0.27] & +12.45 & +1.00 & $<0.001$ & 5 & \textbf{$<0.001$}* \\
+$G_4$ vs. $G_7$ & $\text{SecurityDrift}(T)$ & +0.26 & [+0.24, +0.28] & +8.12 & +1.00 & $<0.001$ & 4 & \textbf{$<0.001$}* \\
+$G_4$ vs. $G_7$ & $\text{ProxyGap}$ & +0.35 & [+0.32, +0.38] & +9.84 & +1.00 & $<0.001$ & 3 & \textbf{$<0.001$}* \\
+$G_4$ vs. $G_6^*$ & $\text{SecurityDrift}(T)$ & +0.28 & [+0.26, +0.30] & +7.55 & +1.00 & $<0.001$ & 2 & \textbf{$<0.001$}* \\
+$G_4$ vs. $G_6^*$ & $\text{ProxyGap}$ & +0.37 & [+0.35, +0.40] & +10.71 & +1.00 & $<0.001$ & 1 & \textbf{$<0.001$}* \\
 \bottomrule
 \end{tabular}
 \end{table*}
