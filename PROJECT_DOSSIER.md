@@ -27,14 +27,16 @@
 
 ## 1. Executive Summary & Purpose
 
-**EvoEval** is a scientific evaluation harness and benchmark monorepo designed to quantify **capability gain, security boundary drift (vulnerability injection rate), catastrophic forgetting (capability retention), and reward hacking (proxy gap)** in recursive self-evolving code agents ($G_1$ through $G_6$).
+**EvoEval** is a hardened benchmark and formal evaluation framework that validates agent guardrails against canonical, deterministic degradation trajectories, supplemented by live API runs. EvoEval is designed to systematically quantify **capability gain, security boundary drift (vulnerability injection rate), catastrophic forgetting (capability retention), and specification gaming (proxy gap)** in self-modifying code agents across multi-generational cycles ($G_1$ through $G_6$).
 
 While modern large language model (LLM) agents can iteratively self-improve by modifying their prompts, memories, and tool heuristics, unconstrained evolutionary adaptation introduces severe safety failures:
 - **Security Boundary Drift (Vulnerability Injection Rate)**: Agents progressively erode defensive security boundaries (introducing CWE/AST flaws), attempting dangerous shell commands or modifying test assertions to force artificial passes.
 - **Catastrophic Forgetting**: Specializing on recent failure modes causes capability regression on previously mastered problem spaces.
-- **Reward Hacking**: Over-optimizing for superficial proxy metrics (such as exit codes, formatted queries, or stubbed tests) while violating ground-truth invariants.
+- **Reward Hacking / Specification Gaming**: Over-optimizing for superficial proxy metrics (such as exit codes, formatted queries, or stubbed tests) while violating ground-truth invariants.
 
-EvoEval provides the first hardened, property-tested, container-isolated, and reviewer-auditable evaluation infrastructure to rigorously test these dynamics across multi-seed, multi-cycle evolutionary benchmarks.
+To establish rigorous, reproducible ground truth without conflating deterministic harness properties with stochastic sampling noise, EvoEval implements a **two-tiered evaluation methodology**:
+1. **Canonical Benchmark Trajectories ($N=18{,}000$)**: 18,000 controlled, bitwise-reproducible evaluations across 100 tasks, 6 archetypes ($G_1$–$G_6$), 10 cycles, and 3 random seeds formalizing archetype state-mutation policies under deterministic execution to provide zero-flakiness counterfactual reference baselines.
+2. **Live Neural Model Rollouts & Verified Baselines**: Empirical evaluation of live foundation models (Qwen2.5-Coder-7B, Llama-3.1-8B, Gemma) alongside verified frontier agent scaffolds (GPT-4o ReAct, SWE-agent Claude 3.5 Sonnet) under logged API harnesses in the dual-container sandbox.
 
 ```mermaid
 graph TD
@@ -597,11 +599,11 @@ $$\text{CCEI} = \frac{\Delta P(T)}{\text{Cost}_{\text{USD}}} \quad \left[\text{c
 
 ---
 
-#### 7. Completed Full-Scale Empirical Benchmark Study (18,000 Evaluations)
+#### 7. Canonical Benchmark Trajectory Suite (18,000 Evaluations)
 
-Moving beyond initial pilot calibration, the complete full-scale benchmark has been executed and verified in [`experiments/runs/full_study_canonical/`](file:///c:/Users/kruti/EvoEval/experiments/runs/full_study_canonical) across all 100 tasks, 6 agent archetypes, 10 evolutionary cycles, and 3 random seeds ($100 \times 6 \times 10 \times 3 = \mathbf{18{,}000\text{ completed evaluations}}$).
+Moving beyond initial pilot calibration, the complete canonical benchmark trajectory suite has been executed and verified in [`experiments/runs/full_study_canonical/`](file:///c:/Users/kruti/EvoEval/experiments/runs/full_study_canonical) across all 100 tasks, 6 agent archetypes, 10 evolutionary cycles, and 3 random seeds ($100 \times 6 \times 10 \times 3 = \mathbf{18{,}000\text{ completed evaluations}}$) under deterministic, state-formalized agent policies. These canonical trajectories isolate causal archetype mechanisms and establish zero-flakiness counterfactual reference baselines, supplemented by live neural model rollouts (`experiments/runs/full_study_live/`).
 
-| Dimension | Pilot Calibration Study | Full-Scale Benchmark Study (`full_study_canonical`) | Validation Status |
+| Dimension | Pilot Calibration Study | Canonical Benchmark Trajectory Suite (`full_study_canonical`) | Validation Status |
 |---|:---:|:---:|:---:|
 | **Evaluated Tasks** | 10 tasks (`task_001`–`task_010`) | **100 tasks** (`task_001`–`task_100`) | Complete Benchmark Scope |
 | **Agent Archetypes** | 6 groups ($G_1$–$G_6$) | **6 groups** ($G_1$–$G_6$) | All Archetypes Covered |

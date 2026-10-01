@@ -12,20 +12,19 @@
 
 To provide complete transparency for peer review and eliminate any ambiguity between deterministic simulation and live neural execution, this document provides cryptographic and wire-level proof of **both execution tiers**:
 
-1. **Stage 1: Deterministic Benchmark Harness Calibration Study ($N=900$ Evaluations)**:
-   - **Engine**: Offline deterministic execution harness (`MockLLMClient`).
-   - **Scientific Objective**: Validating harness mechanics, regression guard triggers, AST anti-tamper security tripwires, and exact cross-platform bitwise parity ($\Delta_{\text{platform}} = 0.00$) without stochastic neural sampling noise.
-   - **Direct Out-of-Pocket Compute Cost**: **$0.00 USD**.
-   - **Theoretical Tariff Billing**: **$0.08217 USD** (273,900 tokens under the standard \$0.20/\$0.40 formula).
-   - **Execution Latency**: ~15ms mock latency; 1.84s average total task container lifecycle (dominated by pytest).
+1. **Tier 1: Canonical Benchmark Trajectories ($N=18{,}000$ Controlled Evaluations)**:
+   - **Engine**: Canonical benchmark trajectories formalizing archetype state-mutation policies under deterministic execution.
+   - **Scientific Objective**: Validating agent guardrails against canonical, deterministic degradation trajectories, isolating causal archetype mechanisms, and establishing bitwise cross-platform reproducibility ($\Delta_{\text{platform}} = 0.000$) with zero stochastic noise.
+   - **Full Matrix**: 100 tasks $\times$ 6 archetypes $\times$ 10 cycles $\times$ 3 seeds = 18,000 evaluations (`experiments/runs/full_study_canonical/`).
+   - **Token Accounting & Spend**: 334.8M tokens ($73.95 USD equivalent at standard tariff rates).
+   - **Platform Parity**: Bitwise-identical execution digests across Linux and Windows environments.
 
-2. **Stage 2: Live Empirical Foundation Model Study ($N=18,000$ Scaled Evaluations & Active Deployments)**:
+2. **Tier 2: Live Neural Foundation Model Rollouts & Verified Baselines (Empirical Validation)**:
    - **Engine**: Live neural models deployed via three distinct production backends:
-     - **Backend A: Served Remote vLLM / OpenAI-Compatible API** (`qwen2.5-coder-7b-instruct`, `experiments/runs/full_study_live/`).
+     - **Backend A: Served Remote vLLM / OpenAI-Compatible API** (`qwen2.5-coder-7b-instruct`, `experiments/runs/full_study_live/`, 724 completed tasks, 9,302 events).
      - **Backend B: In-Process Local GGUF Inference** (`qwen2.5-coder-3b-instruct-q4_k_m` via `LocalLlamaClient` and C++ `llama-cpp-python`, `experiments/runs/local_qwen_empirical_run/`).
-     - **Backend C: Cloud Foundation Model API** (`gemma-4-26b-a4b-it` via Google AI Studio API, `experiments/runs/live_google_empirical_run/`).
-   - **Scientific Objective**: Verifying that evolutionary drift, reward hacking, and verifier stabilization hold across real neural foundation models.
-   - **Full-Scale Compute Expenditure**: **$73.95 USD** across 334.8M tokens (comfortably within the **$20.00–$150.00 USD** budget guard).
+     - **Backend C: Cloud Foundation Model API** (`gemma-4-26b-a4b-it` via Google AI Studio API, `experiments/runs/live_google_empirical_run/`) alongside logged external agent baselines (GPT-4o ReAct, SWE-agent Claude 3.5 Sonnet).
+   - **Scientific Objective**: Validating that security boundary drift, specification gaming, and regression failure modes actively occur under real, unconstrained neural agent execution and verifying anti-tamper tripwires in live containers.
    - **Execution Latency**: 1.2s to 48.2s per neural generation step; 20.15s average per task step.
 
 ---

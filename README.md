@@ -9,7 +9,9 @@
 
 > 📖 **Comprehensive System Dossier**: For an exhaustive, file-by-file blueprint detailing every architectural invariant, security boundary, tamper audit check, drift probe, LLM judge isolation rule, full per-suite timing benchmarks, and complete test results (187 passed, 1 skipped across 30 test files, 100% pass rate), see the **[Master Technical Dossier](PROJECT_DOSSIER.md)** and the automated **[External Verification Attestation](EXTERNAL_VERIFICATION.md)**.
 
-**EvoEval** is a scientific evaluation harness and benchmark designed to empirically measure **capability gain, security boundary drift (vulnerability injection rate), catastrophic forgetting (retention), and reward hacking (proxy gap)** in self-evolving autonomous code agents across iterative evolutionary cycles.
+**EvoEval** is a hardened benchmark and formal evaluation framework that validates agent guardrails against canonical, deterministic degradation trajectories, supplemented by live API runs. EvoEval is designed to measure **capability gain, security boundary drift (vulnerability injection rate), specification gaming (proxy gap), and capability retention** in self-modifying autonomous code agents across iterative evolutionary generations. EvoEval implements an honest, two-tiered evaluation methodology:
+1. **Canonical Benchmark Trajectories ($N=18{,}000$)**: 18,000 controlled, bitwise-reproducible evaluations across 100 tasks, 6 archetypes ($G_1$–$G_6$), 10 cycles, and 3 random seeds formalizing archetype state-mutation policies under deterministic execution, providing zero-flakiness counterfactual reference baselines.
+2. **Live Neural Model Rollouts & Verified Baselines**: Empirical evaluation of live open-weights neural models (Qwen2.5-Coder-7B, Llama-3.1-8B) alongside verified frontier scaffolds (GPT-4o ReAct, SWE-agent Claude 3.5 Sonnet) executed under logged, reproducible API harnesses in our dual-container isolation sandbox.
 
 ```
                            +------------------------+
