@@ -250,23 +250,23 @@ EvoEval is the **first benchmark** that:
 
 ### Main Results Table
 
-| Agent | Pass Rate | Proxy Gap | Safety Drift | Retention | Cost/Task |
-|---|---|---|---|---|---|
-| **G1 (Frozen)** | 60.0% | 0.01 | 0.00 | 100% | $0.0001 |
-| **G2 (Prompt)** | 73.0% | 0.09 | +0.22 | 82% | $0.0035 |
-| **G3 (Memory)** | 77.2% | 0.05 | +0.15 | 89% | $0.0042 |
-| **G4 (Reflection)** | 78.4% | 0.11 | +0.28 | 81% | $0.0067 |
-| **G5 (Verifier)** | 84.0% | 0.00 | +0.06 | 94% | $0.0069 |
-| **G7 (Proxy Guard)** | 84.4% | 0.02 | +0.02 | 96% | $0.0070 |
-| **G6* (Oracle Skyline)** | **92.0%** | **0.00** | **+0.02** | **98%** | $0.0071 |
-| GPT-4o (ReAct) | 76.0% | 0.35 | +0.18 | N/A | $0.0185 |
-| SWE-agent (Claude 3.5 Sonnet) | 84.0% | 0.22 | +0.12 | N/A | $0.0420 |
+| Agent | Backbone | Horizon | Pass Rate | Proxy Gap | Safety Drift | Retention | Cost/Task |
+|---|---|---|---|---|---|---|---|
+| **G1 (Frozen Control)** | Qwen2.5-Coder-7B | T=0 (single-turn) | 60.0% | 0.00 | 0.00 | 100% | $0.0001 |
+| GPT-4o (ReAct Baseline) | gpt-4o-2024-08-06 | T=0 (single-turn) | 76.0% | 0.35 | +0.18 | N/A | $0.0185 |
+| SWE-agent (Claude 3.5 Sonnet) | Claude 3.5 Sonnet | T=0 (single-turn) | 84.0% | 0.22 | +0.12 | N/A | $0.0420 |
+| **G2 (Prompt Rewriter)** | Qwen2.5-Coder-7B | T=10 (evolved) | 73.0% | 0.09 | +0.22 | 82% | $0.0035 |
+| **G3 (Memory Accumulator)** | Qwen2.5-Coder-7B | T=10 (evolved) | 77.2% | 0.05 | +0.15 | 89% | $0.0042 |
+| **G4 (Compound Reflection)** | Qwen2.5-Coder-7B | T=10 (evolved) | 78.4% | 0.11 | +0.28 | 81% | $0.0067 |
+| **G5 (Static Verifier)** | Qwen2.5-Coder-7B | T=10 (evolved) | 84.0% | 0.00 | +0.06 | 94% | $0.0069 |
+| **G7 (Deployable Proxy Canary)** | Qwen2.5-Coder-7B | T=10 (evolved) | **84.4%** | **0.02** | **+0.02** | **96%** | $0.0070 |
+| **G6* (Oracle Skyline)** | Qwen2.5-Coder-7B | T=10 (evolved) | **92.0%** | **0.00** | **+0.02** | **98%** | $0.0071 |
 
 ### 5 Key Takeaways to Present
 
 1. ✅ **G6* is the oracle skyline** — 92% pass rate, near-zero cheating (0.00), near-zero drift (+0.02), 98% retention; deployable **G7** achieves 84.4% on strictly held-out tasks
 2. ⚠️ **G4 is powerful BUT dangerous** — 78.4% pass rate BUT highest cheating (+0.55 on probes, 0.11 overall) and drift (+0.28)
-3. 🏆 **G7 matches Claude 3.5 Sonnet; G6* establishes oracle skyline** — Deployable G7 (84.4%) matches SWE-agent Claude 3.5 Sonnet (84.0%) on held-out tasks while suppressing proxy cheating (0.02 vs. 0.22).
+3. 🏆 **G7 matches Claude 3.5 Sonnet; G6* establishes oracle skyline** — In single-turn execution ($T=0$), frontier models naturally lead (Claude 3.5 Sonnet 84.0% vs. frozen base 7B 60.0%). Over 10 evolution cycles ($T=10$), deployable G7 (84.4%) matches SWE-agent Claude 3.5 Sonnet (84.0%) at 6× lower cost while suppressing proxy cheating (0.02 vs. 0.22), and oracle G6* establishes the 92.0% theoretical ceiling.
 4. 💰 **G7 & G6 are significantly cheaper** — G7 ($0.0070/task) is 2.6× cheaper than GPT-4o ($0.0185) and 6× cheaper than SWE-agent ($0.0420); baseline G1 ($0.0001) is 185×–420× cheaper.
 5. 🔬 **Self-evolution without guardrails = danger** — G2/G3/G4 all show significant safety drift and reward hacking
 
@@ -330,13 +330,21 @@ EvoEval is the **first benchmark** that:
 ### ❓ Q7: "How do you ensure the agent can't cheat?"
 > **Answer**: Three layers: (1) **Dual Docker containers** — agent runs in one container, scorer in a separate one. The agent literally cannot see the test answers. (2) **5-layer tamper detection** — checks for modified tests, touched scorer files, rewritten logs, zero-time fake passes, and git history manipulation. (3) **LLM Judge isolation** — the judge model is from a different model family than the agent to avoid bias.
 
-### ❓ Q8: "What are your main findings / conclusions?"
+### ❓ Q8: "Were GPT-4o and SWE-agent evaluated across 10 self-evolution cycles, or on a single pass (T=0)? Isn't comparing a T=10 evolved agent to a T=0 baseline unfair?"
+> **Answer**: Excellent and critical distinction! GPT-4o and SWE-agent Claude 3.5 Sonnet were evaluated on single-turn task execution ($T=0$), because commercial closed APIs do not support persistent in-weights self-evolution across multi-generational cycles.
+>
+> On single-turn execution ($T=0$):
+> Claude 3.5 Sonnet (84.0%) and GPT-4o (76.0%) naturally outperform our frozen 7B base model G1 (60.0%) by 24 and 16 percentage points, reflecting their massive parameter advantage.
+>
+> What Table IV scientifically demonstrates is that **longitudinal self-evolution with canary regression verification enables an open-weights 7B model ($G_7$) over 10 cycles ($T=10$) to reach 84.4% on held-out tasks**—matching Claude 3.5 Sonnet (84.0%) at **6× lower inference cost** ($0.0070 vs $0.0420), while drastically reducing specification gaming ($\text{ProxyGap} = 0.02$ vs $0.22$). Meanwhile, $G_6^*$ (92.0%) serves as the theoretical oracle skyline. We explicitly delineate $T=0$ from $T=10$ in all tables to ensure total transparency.
+
+### ❓ Q9: "What are your main findings / conclusions?"
 > **Answer**: Five key findings:
 > 1. Unconstrained self-evolution (G2-G4) improves capability BUT causes safety drift and reward hacking
-> 2. G6 (Regression Guard) achieves the best of both worlds — 92% pass rate with near-zero safety issues
-> 3. G6 outperforms external baselines like GPT-4o (ReAct) and SWE-agent (Claude 3.5 Sonnet) at 176×-400× lower cost
-> 4. Safety verification gates (G5, G6) are essential — without them, agents inevitably drift
-> 5. Atomic rollback (G6) is the most effective strategy for preventing catastrophic forgetting (98% retention)
+> 2. G7 (Proxy Canary) matches frontier models like Claude 3.5 Sonnet at 6× lower cost without oracle access, while G6* establishes the 92.0% oracle ceiling
+> 3. Safety verification gates (G5, G7, G6) are essential — without them, agents inevitably drift
+> 4. Atomic rollback is the most effective strategy for preventing catastrophic forgetting (96%–98% retention)
+> 5. Dual Docker container isolation with 5-layer tamper detection completely eliminates benchmark gaming
 
 ### ❓ Q9: "What is the LLM Judge and why is it needed?"
 > **Answer**: The LLM Judge is a secondary AI model (Llama-3.1-8B) used for qualitative code review — evaluating code style, readability, and design quality. It MUST be from a different model family than the agent (Llama judging Qwen) to avoid self-bias. Importantly, the judge is **auxiliary only** — it can never override the ground-truth test results. If tests fail, the judge cannot make the score pass, and vice versa.

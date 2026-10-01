@@ -2,9 +2,9 @@
   "attestation_version": "1.0.0",
   "benchmark_name": "EvoEval",
   "verification_status": "VERIFIED",
-  "timestamp_utc": "2026-10-01T19:12:08.706676+00:00",
+  "timestamp_utc": "2026-10-01T19:16:37.562373+00:00",
   "git": {
-    "commit": "ef0cab686a74215b8357dff679544acf1f2c35a9",
+    "commit": "cf52292a4ba3b430a86360d372587043afe99864",
     "branch": "main",
     "dirty": "true"
   },
