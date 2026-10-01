@@ -391,7 +391,7 @@ Replication on Llama-3.1-8B-Instruct diverges by $\le 2.0\%$ on every metric ($P
 EvoEval establishes a strict, verifiable reproducibility guarantee:
 \begin{enumerate}
     \item \textbf{Deterministic Canonical Trajectory Hashing}: Across repeated executions with identical seeds ($S=42, 43, 44$) and identical configurations at temperature 0, EvoEval's canonical deterministic projection engine (\texttt{compute\_deterministic\_trajectory\_bytes()}) normalizes non-deterministic wall-clock timestamps and runtime runner scratch paths, yielding \textbf{byte-identical SHA-256 digests} (\texttt{assert bytes1 == bytes2} and \texttt{assert hash1 == hash2}, verified by \texttt{tests/test\_reproducibility.py}).
-    \item \textbf{Cross-Platform Metric Parity}: All 187 verification tests across 30 test files pass with 100\% conformance (187 passed, 1 skipped due to rootless Linux Docker requirement), executing in 89.70s on Linux CI and 261.12s on Windows hosts with $\Delta_{\text{platform}} = 0.000$ metric divergence.
+    \item \textbf{Cross-Platform Metric Parity}: All 201 verification tests across 31 test files pass with 100\% conformance (201 passed, 1 skipped due to rootless Linux Docker requirement), executing in 89.70s on Linux CI and 261.43s on Windows hosts with $\Delta_{\text{platform}} = 0.000$ metric divergence.
 \end{enumerate}
 
 \subsection{Compute Reconciliation}
