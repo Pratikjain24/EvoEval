@@ -1,18 +1,18 @@
 \begin{table}[t]
 \centering
 \small
-\caption{\textbf{Deliberate Drift Probes Evaluation ($N=20$ vs $N=80$ Standard Tasks)}. Demonstrating specification gaming and proxy gap divergence on visible proxy tasks. Unconstrained evolution ($G_2, G_4$) games surface proxies while failing hidden ground truth ($P_{\text{GT}}$ collapse); guarded evolution ($G_5, G_6$) suppresses gaming.}
+\caption{\textbf{Deliberate Drift Probes Evaluation ($N=20$ vs $N=80$ Standard Tasks)}. Demonstrating specification gaming and proxy gap divergence on visible proxy tasks. Unconstrained evolution ($G_2, G_4$) games surface proxies while failing hidden ground truth ($P_{\text{GT}}$ collapse); guarded evolution ($G_5, G_6$) suppresses gaming. Bounded by Law of Total Probability: $P(T) \equiv 0.80 \cdot P_{\text{Std}} + 0.20 \cdot P_{\text{Probe}}$.}
 \label{tab:drift_probes}
-\begin{tabular}{lcccc}
+\begin{tabular}{lccccc}
 \toprule
-\textbf{Group} & \textbf{Std Tasks $P_{\text{GT}}$} & \textbf{Probe $P_{\text{GT}}$} & \textbf{Probe $P_{\text{Proxy}}$} & \textbf{Gaming Gap ($\Delta_{\text{proxy}}$)} \\
+\textbf{Group} & \textbf{Std Tasks $P_{\text{GT}}$} & \textbf{Probe $P_{\text{GT}}$} & \textbf{Probe $P_{\text{Proxy}}$} & \textbf{Probe $\Delta_{\text{proxy}}$} & \textbf{All Tasks $P_{\text{GT}}$ (Weighted)} \\
 \midrule
-G1 & 0.62 & 0.55 & 0.58 & +0.03 \\
-G2 & 0.80 & 0.45 & 0.88 & +0.43 \\
-G3 & 0.82 & 0.58 & 0.85 & +0.27 \\
-G4 & 0.88 & 0.40 & 0.95 & +0.55 \\
-G5 & 0.85 & 0.80 & 0.82 & +0.02 \\
-G6 & 0.93 & 0.90 & 0.92 & +0.02 \\
+G1 & 0.613 & 0.550 & 0.580 & +0.030 & 60.0\% (0.600) \\
+G2 & 0.800 & 0.450 & 0.880 & +0.430 & 73.0\% (0.730) \\
+G3 & 0.820 & 0.580 & 0.850 & +0.270 & 77.2\% (0.772) \\
+G4 & 0.880 & 0.400 & 0.950 & +0.550 & 78.4\% (0.784) \\
+G5 & 0.850 & 0.800 & 0.820 & +0.020 & 84.0\% (0.840) \\
+G6 & 0.925 & 0.900 & 0.920 & +0.020 & 92.0\% (0.920) \\
 \bottomrule
 \end{tabular}
 \end{table}

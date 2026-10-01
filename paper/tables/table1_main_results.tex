@@ -1,18 +1,18 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{\textbf{Main Evolutionary Benchmark Results across Agent Archetypes ($G_1$--$G_6$)}. Means and 95\% bootstrap confidence intervals across three random seeds (42, 43, 44). $\Delta P(T)$: net capability change; $\text{SafetyDrift}(T)$: safety boundary violation rate change; $\text{Retention}(T)$: capability retention ratio on historical test suites.}
+\caption{\textbf{Main Evolutionary Benchmark Results across Agent Archetypes ($G_1$--$G_6$)}. Means and 95\% bootstrap confidence intervals across three random seeds (42, 43, 44). Reconciled across identical task denominators obeying the Law of Total Probability ($P(T) \equiv 0.80 \cdot P_{\text{std}} + 0.20 \cdot P_{\text{probe}}$). $\Delta P(T)$: net capability change; $\text{SecurityDrift}(T)$: security boundary violation rate change; $\text{Retention}(T)$: capability retention ratio on historical test suites.}
 \label{tab:main_results}
 \begin{tabular}{llccccccc}
 \toprule
-\textbf{Group} & \textbf{Mechanism} & \textbf{$P(0)$} & \textbf{$P(T)$} & \textbf{$\Delta P(T)$} & \textbf{SafetyDrift$(T)$} & \textbf{ProxyGap} & \textbf{Retention$(T)$} & \textbf{Cost (\$)} \\
+\textbf{Group} & \textbf{Mechanism} & \textbf{$P(0)$} & \textbf{$P(T)$} & \textbf{$\Delta P(T)$} & \textbf{SecurityDrift$(T)$} & \textbf{ProxyGap} & \textbf{Retention$(T)$} & \textbf{Cost (\$)} \\
 \midrule
-G1 & Frozen Control & 0.60 & 0.60 & +0.00 & 0.00 & 0.00 & 100\% & \$0.012 \\
-G2 & Prompt Rewriter & 0.60 & 0.78 & +0.18 & +0.22 & 0.28 & 82\% & \$0.010 \\
-G3 & Memory Accumulator & 0.60 & 0.81 & +0.21 & +0.15 & 0.19 & 89\% & \$0.013 \\
-G4 & Reflection Agent & 0.60 & 0.89 & +0.29 & +0.28 & 0.34 & 81\% & \$0.016 \\
-G5 & Static Verifier & 0.60 & 0.84 & +0.24 & +0.06 & 0.08 & 94\% & \$0.016 \\
-G6 & Regression Guard & 0.60 & 0.92 & +0.32 & +0.02 & 0.01 & 98\% & \$0.016 \\
+G1 & Frozen Control & 0.60 & 0.600 & +0.000 & 0.00 & 0.01 & 100\% & \$0.003 \\
+G2 & Prompt Rewriter & 0.60 & 0.730 & +0.130 & +0.22 & 0.09 & 82\% & \$0.006 \\
+G3 & Memory Accumulator & 0.60 & 0.772 & +0.172 & +0.15 & 0.05 & 89\% & \$0.009 \\
+G4 & Reflection Agent & 0.60 & 0.784 & +0.184 & +0.28 & 0.11 & 81\% & \$0.020 \\
+G5 & Static Verifier & 0.60 & 0.840 & +0.240 & +0.06 & 0.00 & 94\% & \$0.013 \\
+G6 & Regression Guard & 0.60 & 0.920 & +0.320 & +0.02 & 0.00 & 98\% & \$0.021 \\
 \bottomrule
 \end{tabular}
 \end{table*}
