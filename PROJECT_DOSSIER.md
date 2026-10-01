@@ -544,6 +544,12 @@ Total expenditure across 150 task evaluations per group (3 seeds $\times$ 5 cycl
 | **$G_6$** | Regression Guard & Rollback | 150 | 26,250 | 26,250 | 52,500 | **$0.01575** | $0.000105 | 350.0 |
 | **Total** | *Full Empirical Suite* | **900** | **136,950** | **136,950** | **273,900** | **$0.08217** | **$0.000091** | **304.3** |
 
+> [!NOTE]
+> **Reconciliation with Research Paper Table I & Section VII-C**:
+> - The micro-pilot table above reflects single-turn baseline generation tariff ($264$--$350$ tokens/task at $\$0.30/\text{M tokens}$).
+> - In the full 10-cycle longitudinal evaluation ($18,000$ evaluations), cumulative multi-turn reflection, canary evaluation, and tool execution expand tokens per task: $G_1 = \$0.0001/\text{task}$ (frozen baseline), $G_2 = \$0.0035/\text{task}$, $G_3 = \$0.0042/\text{task}$, $G_4 = \$0.0067/\text{task}$, $G_5 = \$0.0069/\text{task}$, $G_7 = \$0.0070/\text{task}$, and $G_6^* = \$0.0071/\text{task}$.
+> - Across all $18,000$ evaluations, total compute spend is **$\$73.95\text{ USD}$** ($334.85\text{M tokens}$, mean $18,602.7\text{ tokens/task}$), yielding a benchmark-wide average of **$\$0.0041/\text{task}$** ($\$73.95 / 18,000 = \$0.004108$), strictly reconciling Table I and Section VII-C of the paper.
+
 ---
 
 #### 4. Realized Compute Cost Across Evolutionary Cycles ($C_0$ to $C_4$)
