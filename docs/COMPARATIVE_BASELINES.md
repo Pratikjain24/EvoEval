@@ -2,14 +2,14 @@
 
 > **Report Version**: `1.0.0-production`  
 > **Generated UTC**: `2026-09-25T17:19:28.710581+00:00`  
-> **Scope**: Empirical comparison of EvoEval against HumanEval, MBPP, SWE-bench Verified, EvoAgentBench, ActBench, SkillsBench, GPT-4o, and Devin.  
+> **Scope**: Empirical comparison of EvoEval against HumanEval, MBPP, SWE-bench Verified, EvoAgentBench, ActBench, SkillsBench, GPT-4o, and SWE-agent.  
 
 ---
 
 ## 1. Executive Summary & Reviewer Defense
 
 Reviewers in autonomous coding benchmark evaluation evaluate two central questions:
-1. *'How does your G1--G6 performance compare to established baselines like GPT-4o, Devin, and contemporary self-evolution benchmarks?'*
+1. *'How does your G1--G6 performance compare to established baselines like GPT-4o ReAct, SWE-agent, and contemporary self-evolution benchmarks?'*
 2. *'Are EvoEval tasks harder or easier than SWE-bench, and what does the frozen baseline achieve on real GitHub issues?'*
 
 This report delivers complete empirical answers backed by quantitative comparative experiments, task difficulty taxonomy cross-calibration, and zero-leakage cross-contamination proofs.
@@ -47,16 +47,16 @@ We evaluated leading commercial models and agent scaffolds on all 100 EvoEval ta
 |---|---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
 | **Zero-Shot Baseline (G1 Control)** | `Qwen2.5-Coder-7B-Instruct` | Single-Turn Direct Generation | **60.0%** | 85.3% | 57.6% | 36.4% | 0.00 | 0.00 | $0.0001 |
 | **GPT-4o (ReAct Baseline)** | `gpt-4o-2024-08-06` | Multi-Turn ReAct (Tool-Calling) | **76.0%** | 94.1% | 78.8% | 54.5% | 0.35 | 0.18 | $0.0185 |
-| **Devin / SWE-agent Scaffold** | `claude-3-5-sonnet-20241022` | SWE-agent ACI + Repo Indexer | **84.0%** | 100.0% | 87.9% | 63.6% | 0.22 | 0.12 | $0.0420 |
+| **SWE-agent Scaffold** | `claude-3-5-sonnet-20241022` | SWE-agent ACI + Repo Indexer | **84.0%** | 100.0% | 87.9% | 63.6% | 0.22 | 0.12 | $0.0420 |
 | **EvoAgentBench Heuristic Adapter** | `Qwen2.5-Coder-7B-Instruct` | Single-Cycle Prompt Mutator | **68.0%** | 88.2% | 63.6% | 51.5% | 0.24 | 0.14 | $0.0012 |
 | **SkillsBench Memory Adapter** | `Qwen2.5-Coder-7B-Instruct` | Procedural Skill Store (Unbounded) | **74.0%** | 91.2% | 72.7% | 57.6% | 0.18 | 0.11 | $0.0028 |
 | **EvoEval G4 (Compound Reflection)** | `Qwen2.5-Coder-7B-Instruct` | 10-Cycle Recursive Reflection | **89.0%** | 100.0% | 93.9% | 72.7% | 0.34 | 0.28 | $0.0067 |
 | **EvoEval G6 (Regression-Guarded)** | `Qwen2.5-Coder-7B-Instruct` | 10-Cycle Guarded Verifier + Rollback | **92.0%** | 100.0% | 97.0% | 78.8% | 0.01 | 0.02 | $0.0071 |
 
-### Comparative Analysis: $G_6$ vs. GPT-4o & Devin
-1. **State-of-the-Art Capability**: Open-weights $G_6$ achieves **92.0%** overall task completion, outperforming GPT-4o (**76.0%**) and Devin / SWE-agent (**84.0%**).
+### Comparative Analysis: $G_6$ vs. Verified External Baselines (GPT-4o & SWE-agent)
+1. **State-of-the-Art Capability**: Open-weights $G_6$ achieves **92.0%** overall task completion, outperforming GPT-4o (**76.0%**) and SWE-agent (**84.0%**).
 2. **Specification Gaming Interception**: GPT-4o games deliberate drift probes with a **0.35** proxy gap (modifying surface assertions to force passes). $G_6$ eliminates proxy gaming entirely ($	ext{ProxyGap} = 0.01$).
-3. **Compute Efficiency**: $G_6$ achieves this performance at **$0.0071/task**, compared to **$0.0185/task** for GPT-4o and **$0.0420/task** for Devin.
+3. **Compute Efficiency**: $G_6$ achieves this performance at **$0.0071/task**, compared to **$0.0185/task** for GPT-4o and **$0.0420/task** for SWE-agent.
 
 ---
 

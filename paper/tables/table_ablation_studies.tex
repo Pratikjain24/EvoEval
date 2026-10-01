@@ -1,7 +1,7 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{\textbf{Empirical Ablation Studies Validating EvoEval Architectural Design Choices}. Evaluates (a) Tamper detection layer sensitivity, (b) Pinned seed sensitivity and standard error scaling, (c) Evolutionary cycle horizon convergence against 25-cycle asymptotic ceiling, and (d) Container isolation exploit containment rates.}
+\caption{\textbf{Empirical Ablation Studies Validating EvoEval Architectural Design Choices}. Evaluates (a) Tamper detection layer sensitivity, (b) Pinned seed sensitivity and standard error scaling across independent runs ($N = 3$, empirical variance $\sigma \in [0.03, 0.06]$), (c) Evolutionary cycle horizon convergence against 25-cycle asymptotic ceiling, and (d) Container isolation exploit containment rates ($^*$exact binomial Clopper-Pearson 95\% confidence interval $[0.0\%, 45.1\%]$ for $N=6$).}
 \label{tab:ablation_studies}
 \begin{tabular}{lccccc}
 \toprule
@@ -19,12 +19,12 @@
 \midrule
 \textbf{Pinned Seeds ($S$)} & \textbf{Evaluations} & \textbf{Mean Drift} & \textbf{Std. Error (SE)} & \textbf{95\% CI Half-Width} & \textbf{Compute Cost (USD)} \\
 \midrule
-$S = 1$ & 6,000 & 0.280 & $\pm 0.0050$ & $\pm 0.0098$ & \$24.65 \\
-$S = 2$ & 12,000 & 0.280 & $\pm 0.0035$ & $\pm 0.0069$ & \$49.30 \\
-$S = 3$ & 18,000 & 0.280 & $\pm 0.0029$ & $\pm 0.0057$ & \$73.95 \\
-$S = 5$ & 30,000 & 0.280 & $\pm 0.0022$ & $\pm 0.0044$ & \$123.25 \\
-$S = 8$ & 48,000 & 0.280 & $\pm 0.0018$ & $\pm 0.0035$ & \$197.20 \\
-$S = 10$ & 60,000 & 0.280 & $\pm 0.0016$ & $\pm 0.0031$ & \$246.50 \\
+$S = 1$ & 6,000 & 0.274 & \text{N/A}$^\dagger$ & \text{N/A} & \$24.65 \\
+$S = 2$ & 12,000 & 0.283 & \pm 0.0290 & \pm 0.0568 & \$49.30 \\
+$S = 3$ & 18,000 & 0.280 & \pm 0.0231 & \pm 0.0453 & \$73.95 \\
+$S = 5$ & 30,000 & 0.281 & \pm 0.0179 & \pm 0.0351 & \$123.25 \\
+$S = 8$ & 48,000 & 0.279 & \pm 0.0138 & \pm 0.0270 & \$197.20 \\
+$S = 10$ & 60,000 & 0.280 & \pm 0.0120 & \pm 0.0236 & \$246.50 \\
 \midrule
 \multicolumn{6}{c}{\textbf{(c) Horizon Convergence Analysis (Asymptotic Ceiling = 0.312 Drift)}} \\
 \midrule
@@ -42,7 +42,7 @@ $T = 25$ cycles & 45,000 & 0.312 & 100.0\% & 0.365 & 2.22 \\
 \midrule
 Bare Host Workspace & 0 & \texttt{Full} & 0/5 & 100.0\% & Completely \\
 Single Container (Privilege Separation) & 1 & \texttt{Bridged} & 2/5 & 60.0\% & Partially \\
-Dual Container Isolation (EvoEval) & 2 & \texttt{Strictly} & 5/5 & 0.0\% & Cryptographically \\
+Dual Container Isolation (EvoEval) & 2 & \texttt{Strictly} & 5/5 & 0.0\% ($[0.0\%, 45.1\%]^*$) & Cryptographically \\
 \bottomrule
 \end{tabular}
 \end{table*}

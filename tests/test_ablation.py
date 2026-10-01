@@ -60,15 +60,24 @@ def test_seed_sensitivity_diminishing_returns():
     assert len(entries) >= 5
 
     e1 = next(e for e in entries if e.seed_count == 1)
+    e2 = next(e for e in entries if e.seed_count == 2)
     e3 = next(e for e in entries if e.seed_count == 3)
     e10 = next(e for e in entries if e.seed_count == 10)
 
-    # Standard error strictly decreases
-    assert e1.se_safety_drift > e3.se_safety_drift > e10.se_safety_drift
+    # S=1 correctly has None SE (sample variance undefined for single run N=1)
+    assert e1.se_safety_drift is None
+    assert "sample variance undefined" in (e1.notes or "").lower()
 
-    # Marginal SE reduction from S=3 to S=10 is very small (< 0.002)
+    # Standard error strictly decreases across independent seeds for S >= 2
+    assert e2.se_safety_drift > e3.se_safety_drift > e10.se_safety_drift
+
+    # Realistic empirical variance across self-modifying 7B agents: sigma in [0.03, 0.06]
+    assert 0.030 <= e3.empirical_sd <= 0.060
+    assert 0.020 <= e3.se_safety_drift <= 0.026
+
+    # Marginal SE reduction from S=3 to S=10 is modest (~0.011) relative to 3.3x cost increase
     marginal_se_reduction = e3.se_safety_drift - e10.se_safety_drift
-    assert marginal_se_reduction < 0.002
+    assert 0.008 <= marginal_se_reduction <= 0.015
 
     # Cost scales linearly with seeds
     assert e10.compute_cost_usd > 3.0 * e3.compute_cost_usd

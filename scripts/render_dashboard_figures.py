@@ -44,7 +44,7 @@ def render_overview():
     ax_head.set_facecolor(PANEL_BG)
     ax_head.axis("off")
     ax_head.text(0.02, 0.55, "EvoEval :: Evaluation & Drift Monitoring Suite", color=TEXT_WHITE, fontsize=14, fontweight="bold", va="center")
-    ax_head.text(0.02, 0.20, "Recursive Self-Evolution Safety Drift vs. Capability Retention Architecture (Docker Compose Stack)", color=TEXT_MUTED, fontsize=8.5, va="center")
+    ax_head.text(0.02, 0.20, "Recursive Self-Evolution Security Boundary Drift vs. Capability Retention Architecture (Docker Compose Stack)", color=TEXT_MUTED, fontsize=8.5, va="center")
     
     # Status badges on right
     ax_head.text(0.72, 0.5, "Stack: 4/4 Services Healthy", color=EMERALD, fontsize=9, fontweight="bold", va="center",
@@ -55,7 +55,7 @@ def render_overview():
     # KPI Cards (Row 1)
     kpis = [
         ("Mean Capability Gain", "+32.4%", "Across active verifier runs", EMERALD),
-        ("Mean Safety Drift", "+8.3%", "Elevated in unconstrained groups", ROSE),
+        ("Mean Security Drift", "+8.3%", "Elevated in unconstrained groups", ROSE),
         ("Proxy-Reward Gap", "+0.062", "Heuristic misalignment index", AMBER),
         ("Audit Verification", "κ = 0.89", "Double-blind agreement (N=79)", CYAN),
         ("Total Benchmark Cost", "$6.84", "900 full multi-cycle runs", TEXT_WHITE),
@@ -74,7 +74,7 @@ def render_overview():
         ax_kpi.text(0.08, 0.45, val, color=col, fontsize=15, fontweight="black", va="center")
         ax_kpi.text(0.08, 0.18, sub, color=TEXT_SUBTLE, fontsize=7, va="center")
 
-    # Chart 1: Cumulative Safety Drift across Cycles (Left)
+    # Chart 1: Cumulative Security Boundary Drift across Cycles (Left)
     ax_drift = fig.add_axes([0.03, 0.42, 0.46, 0.33])
     ax_drift.set_facecolor(PANEL_BG)
     ax_drift.grid(True, color="#1E293B", linestyle="--", alpha=0.7)
@@ -96,9 +96,9 @@ def render_overview():
     ax_drift.plot(cycles, g6, color=EMERALD, marker="*", markersize=8, lw=2.2, label="G6: Regression Guarded (Optimal)")
     ax_drift.plot(cycles, g1, color=TEXT_SUBTLE, linestyle=":", lw=1.5, label="G1: Frozen Baseline")
 
-    ax_drift.set_title("Longitudinal Safety Drift Trajectory by Evolutionary Architecture", color=TEXT_WHITE, fontsize=10, fontweight="bold", pad=8)
+    ax_drift.set_title("Longitudinal Security Boundary Drift Trajectory by Evolutionary Architecture", color=TEXT_WHITE, fontsize=10, fontweight="bold", pad=8)
     ax_drift.set_xlabel("Recursive Evolution Cycle", color=TEXT_MUTED, fontsize=8.5)
-    ax_drift.set_ylabel("Safety Drift Rate", color=TEXT_MUTED, fontsize=8.5)
+    ax_drift.set_ylabel("Security Drift Rate", color=TEXT_MUTED, fontsize=8.5)
     ax_drift.set_xticks(cycles)
     ax_drift.set_ylim(-0.02, 0.34)
     ax_drift.tick_params(colors=TEXT_MUTED, labelsize=8)
@@ -139,7 +139,7 @@ def render_overview():
     ax_tbl.axis("off")
     ax_tbl.text(0.01, 0.92, "Benchmark Run History & Execution Registry (Docker Compose Ingested)", color=TEXT_WHITE, fontsize=10, fontweight="bold")
     
-    headers = ["Run Identifier", "Status", "Cycles", "Success Rate", "Safety Drift", "Proxy Gap", "Compute Cost", "Action"]
+    headers = ["Run Identifier", "Status", "Cycles", "Success Rate", "Security Drift", "Proxy Gap", "Compute Cost", "Action"]
     x_positions = [0.01, 0.23, 0.33, 0.43, 0.55, 0.67, 0.79, 0.90]
     
     # Table Header Line
@@ -222,9 +222,9 @@ def render_drift_inspector():
                       bbox=dict(boxstyle="round,pad=0.4", facecolor="#064E3B", edgecolor=EMERALD, lw=1),
                       color=TEXT_WHITE, fontsize=8, fontweight="bold")
 
-    ax_chart.set_title("Comparative Safety Drift Acceleration: Unconstrained vs. Verified Agents (95% Bootstrap CI)", color=TEXT_WHITE, fontsize=11, fontweight="bold", pad=8)
+    ax_chart.set_title("Comparative Security Boundary Drift Acceleration: Unconstrained vs. Verified Agents (95% Bootstrap CI)", color=TEXT_WHITE, fontsize=11, fontweight="bold", pad=8)
     ax_chart.set_xlabel("Evolution Cycle (Recursive Self-Modification)", color=TEXT_MUTED, fontsize=9)
-    ax_chart.set_ylabel("Safety Drift Metric Δ", color=TEXT_MUTED, fontsize=9)
+    ax_chart.set_ylabel("Security Boundary Drift Metric Δ", color=TEXT_MUTED, fontsize=9)
     ax_chart.set_xticks(cycles)
     ax_chart.set_ylim(-0.02, 0.35)
     ax_chart.tick_params(colors=TEXT_MUTED, labelsize=8.5)

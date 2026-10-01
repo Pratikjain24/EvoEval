@@ -90,9 +90,16 @@ class ExperimentOrchestrator:
         elif group == "G5":
             base = ReflectionAgentAdapter()
             return VerifierAgentWrapper(base, group="G5")
-        elif group == "G6":
+        elif group in ("G6", "G6*"):
             base = ReflectionAgentAdapter()
-            return VerifierAgentWrapper(base, group="G6", config={"enable_rollback": True})
+            return VerifierAgentWrapper(
+                base, group="G6", config={"enable_rollback": True, "canary_target": "oracle"}
+            )
+        elif group == "G7":
+            base = ReflectionAgentAdapter()
+            return VerifierAgentWrapper(
+                base, group="G7", config={"enable_rollback": True, "canary_target": "proxy"}
+            )
         else:
             return StaticAgentAdapter(llm_client=self.llm_client)
 
@@ -672,6 +679,33 @@ class ExperimentOrchestrator:
         metrics_file = results_dir / "cycle_metrics.json"
         with open(metrics_file, "w", encoding="utf-8") as f:
             json.dump(all_cycle_metrics, f, indent=2)
+
+        # Compute and record inductive generalization gap reports across groups
+        gen_reports: Dict[str, Any] = {}
+        by_group: Dict[str, List[Dict[str, Any]]] = {}
+        for m in all_cycle_metrics:
+            by_group.setdefault(m["group"], []).append(m)
+
+        for grp, c_list in by_group.items():
+            if len(c_list) >= 2:
+                c0 = c_list[0]["success_rate"]
+                c_evolve_final = c_list[-2]["success_rate"] if len(c_list) > 2 else c_list[0]["success_rate"]
+                c_eval_final = c_list[-1]["success_rate"]
+                rep = self.task_loader.calculate_generalization_gap(
+                    p0_evolve=c0,
+                    pT_evolve=c_evolve_final,
+                    p0_eval=c0,
+                    pT_eval=c_eval_final,
+                    group=grp,
+                    n_evolve=len(train_tasks),
+                    n_eval=len(test_tasks),
+                )
+                gen_reports[grp] = rep.to_dict()
+
+        if gen_reports:
+            gen_file = results_dir / "generalization_gap.json"
+            with open(gen_file, "w", encoding="utf-8") as f:
+                json.dump(gen_reports, f, indent=2)
 
         # Generate cryptographic SHA-256 trajectory manifest for reviewer verification
         generate_trajectory_manifest(run_dir, self.config)

@@ -5,14 +5,27 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "evaeval"
 version = "0.1.0"
-description = "EvoEval: Measuring Safety Drift and Capability Retention in Self-Evolving Code Agents"
+description = "EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
 authors = [
-    { name = "EvoEval Research Team" }
+    { name = "Pratik P. Jain", email = "pratik.12620589@vit.edu" },
+    { name = "Janhavi B. Pagare", email = "janhavi.1252010010@vit.edu" },
+    { name = "Aditya U. Dengale", email = "aditya.1252010025@vit.edu" },
+    { name = "Naitik K. Kharat", email = "naitik.12620301@vit.edu" },
+    { name = "Shamika R. Kadam", email = "shamika.12620290@vit.edu" },
+    { name = "Vikrant K. Kadam", email = "vikrant.1252010030@vit.edu" }
 ]
-keywords = ["autonomous-agents", "evaluation", "safety-drift", "reward-hacking", "benchmarking"]
+
+[project.urls]
+Homepage = "https://github.com/evoeval/evoeval"
+Repository = "https://github.com/evoeval/evoeval"
+Documentation = "https://github.com/evoeval/evoeval#readme"
+"HuggingFace Dataset" = "https://huggingface.co/datasets/evoeval/evoeval-benchmark"
+"Issue Tracker" = "https://github.com/evoeval/evoeval/issues"
+
+keywords = ["autonomous-agents", "evaluation", "security-boundary-drift", "vulnerability-injection-rate", "reward-hacking", "benchmarking"]
 dependencies = [
     "pydantic>=2.0.0",
     "typer>=0.9.0",

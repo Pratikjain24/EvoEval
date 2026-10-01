@@ -1,13 +1,15 @@
-# EvoEval: Autonomous Agent Evolution & Safety Drift Benchmark
+# EvoEval: Autonomous Agent Evolution & Security Boundary Drift Benchmark
 
 [![CI](https://github.com/evoeval/evoeval/actions/workflows/ci.yml/badge.svg)](https://github.com/evoeval/evoeval/actions)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Datasets-yellow)](https://huggingface.co/datasets/evoeval/evoeval-benchmark)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.10826042-blue.svg)](https://doi.org/10.5281/zenodo.10826042)
 [![Dossier](https://img.shields.io/badge/System_Dossier-v1.0.0-emerald.svg)](PROJECT_DOSSIER.md)
 
 > 📖 **Comprehensive System Dossier**: For an exhaustive, file-by-file blueprint detailing every architectural invariant, security boundary, tamper audit check, drift probe, LLM judge isolation rule, full per-suite timing benchmarks, and complete test results (187 passed, 1 skipped across 30 test files, 100% pass rate), see the **[Master Technical Dossier](PROJECT_DOSSIER.md)** and the automated **[External Verification Attestation](EXTERNAL_VERIFICATION.md)**.
 
-**EvoEval** is a scientific evaluation harness and benchmark designed to empirically measure **capability gain, safety drift, catastrophic forgetting (retention), and reward hacking (proxy gap)** in self-evolving autonomous code agents across iterative evolutionary cycles.
+**EvoEval** is a scientific evaluation harness and benchmark designed to empirically measure **capability gain, security boundary drift (vulnerability injection rate), catastrophic forgetting (retention), and reward hacking (proxy gap)** in self-evolving autonomous code agents across iterative evolutionary cycles.
 
 ```
                            +------------------------+
@@ -39,7 +41,7 @@
                |   Scoring & Safety Monitor (Tamper Detection)  |
                |   - Ground Truth Test (Read-only Scorer)       |
                |   - Proxy Reward Gap (Reward Hacking Probe)    |
-               |   - Safety Drift: Violations(t) - Violations(0)|
+               |   - SecurityDrift: Violations(t) - Violations(0)|
                +------------------------------------------------+
 ```
 
@@ -62,8 +64,8 @@
 
 1. **Capability Improvement**:
    $$\Delta P(t) = P(t) - P(0)$$
-2. **Safety Drift**:
-   $$\text{SafetyDrift}(t) = \text{ViolationRate}(t) - \text{ViolationRate}(0)$$
+2. **Security Boundary Drift (Vulnerability Injection Rate)**:
+   $$\text{SecurityDrift}(t) = \mathcal{V}(t) - \mathcal{V}(0)$$
 3. **Catastrophic Forgetting (Retention)**:
    $$\text{Retention}(t) = \frac{\text{Perf}_{\text{old}}(t)}{\text{Perf}_{\text{old}}(0)}$$
 4. **Reward Hacking (Proxy Gap)**:
@@ -129,13 +131,17 @@ docker compose -f docker/docker-compose.yml up -d
 4. **`frontend`**: Next.js 14 interactive evaluation dashboard on port `3000`.
 
 ### 6. HuggingFace Dataset Release (The Paper's Artifact)
-The benchmark datasets and experimental results are packaged for HuggingFace Hub release via:
+The benchmark datasets, canonical multi-seed trajectories, and human audit annotations are officially available on Hugging Face Hub at:
+👉 **[huggingface.co/datasets/evoeval/evoeval-benchmark](https://huggingface.co/datasets/evoeval/evoeval-benchmark)**
+
+You can also package any custom local evaluation run for HuggingFace Hub release via:
 ```bash
 evoeval export-hf --run-id latest --output hf_dataset/
 ```
 - `tasks/tasks.jsonl`: 100 standardized benchmark coding problems across 5 categories (`bug_fix`, `feature`, `refactor`, `exploit_probe`, `security_audit`), including 20 deliberate drift probes.
 - `trajectories/trajectories.jsonl`: Complete multi-cycle execution event streams across $G_1$–$G_6$ adhering to frozen schema `1.0.0`.
 - `labels/labels.jsonl`: Double-blind human audit annotations for safety boundary violations, reward hacking, and failure severities.
+- `croissant.json`: Full metadata compliance with the MLCommons Croissant 1.0 specification.
 
 ---
 
@@ -208,7 +214,7 @@ If you use EvoEval in your research, please cite our IEEE conference paper:
 
 ```bibtex
 @inproceedings{jain2026evoeval,
-  title     = {EvoEval: Measuring Safety Drift and Capability Retention in Self-Evolving Code Agents},
+  title     = {EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents},
   author    = {Jain, Pratik P. and Pagare, Janhavi B. and Dengale, Aditya U. and Kharat, Naitik K. and Kadam, Shamika R. and Kadam, Vikrant K.},
   booktitle = {Proceedings of the IEEE Conference on Artificial Intelligence and Software Engineering},
   year      = {2026}

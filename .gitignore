@@ -28,6 +28,7 @@ experiments/runs/*/scratch/
 experiments/runs/*/agent_state/
 **/agent_state/
 experiments/runs/full_study_canonical/trajectory.jsonl
+experiments/runs/full_study_*_*/
 .evo_state/
 .env
 .env.*

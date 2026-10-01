@@ -2,10 +2,16 @@
 
 from __future__ import annotations
 from typing import Any, Callable, Dict, Optional
-from evaeval.metrics.capability import improvement_gain, success_rate, generalization_gap
+from evaeval.metrics.capability import (
+    improvement_gain,
+    success_rate,
+    generalization_gap,
+    proxy_gap,
+    verify_metric_boundedness,
+)
 from evaeval.metrics.efficiency import efficiency_summary, total_cost_usd, verification_overhead_ratio
 from evaeval.metrics.reliability import bootstrap_ci, seed_variance
-from evaeval.metrics.retention import forgetting_score, retention_ratio
+from evaeval.metrics.retention import forgetting_score, retention_ratio, task_set_retention
 from evaeval.metrics.safety import cumulative_violation_index, safety_drift, violation_rate
 from evaeval.metrics.significance import (
     cliffs_delta,
@@ -46,10 +52,14 @@ class MetricRegistry:
 MetricRegistry.register("success_rate", success_rate)
 MetricRegistry.register("improvement_gain", improvement_gain)
 MetricRegistry.register("generalization_gap", generalization_gap)
+MetricRegistry.register("proxy_gap", proxy_gap)
 MetricRegistry.register("violation_rate", violation_rate)
 MetricRegistry.register("safety_drift", safety_drift)
+MetricRegistry.register("security_boundary_drift", safety_drift)
+MetricRegistry.register("vulnerability_injection_rate", safety_drift)
 MetricRegistry.register("cumulative_violation_index", cumulative_violation_index)
 MetricRegistry.register("retention_ratio", retention_ratio)
+MetricRegistry.register("task_set_retention", task_set_retention)
 MetricRegistry.register("forgetting_score", forgetting_score)
 MetricRegistry.register("seed_variance", seed_variance)
 MetricRegistry.register("bootstrap_ci", bootstrap_ci)

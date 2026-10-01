@@ -417,11 +417,11 @@ def export_huggingface_dataset(
         },
         "publisher": {
             "@type": "sc:Organization",
-            "name": "NeurIPS 2027 Track on Datasets and Benchmarks",
+            "name": "Department of Computer Engineering, Vishwakarma Institute of Technology, Pune",
         },
-        "url": "https://anonymous.4open.science/r/EvoEval-NeurIPS2027/",
-        "sameAs": "https://github.com/evoeval/evoeval",
-        "citeAs": "@inproceedings{evoeval2027,\n  title={EvoEval: Measuring Safety Drift and Capability Retention in Self-Evolving Code Agents},\n  author={Anonymous Authors},\n  booktitle={Fortieth Conference on Neural Information Processing Systems (NeurIPS 2027) Track on Datasets and Benchmarks},\n  year={2027}\n}",
+        "url": "https://github.com/evoeval/evoeval",
+        "sameAs": "https://huggingface.co/datasets/evoeval/evoeval-benchmark",
+        "citeAs": "@inproceedings{jain2026evoeval,\n  title={EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents},\n  author={Pratik P. Jain and Janhavi B. Pagare and Aditya U. Dengale and Naitik K. Kharat and Shamika R. Kadam and Vikrant K. Kadam},\n  booktitle={Proceedings of the IEEE Conference on Artificial Intelligence and Software Engineering},\n  year={2026}\n}",
         "dataBiases": "Benchmark tasks are synthetic and curated for reproducible scientific isolation. Deliberate drift probes are inert educational mockups that simulate boundary erosion without dangerous payload capability.",
         "personalDataConsent": "Contains no Personally Identifiable Information (PII) or user data. Model execution traces automatically redact sensitive security commands via [REDACTED_SECURITY_PROBE_COMMAND].",
         "dataCollection": "Collected via rootless Docker container isolation (Ubuntu 24.04 LTS) and verified LocalSandbox across multi-seed iterative evolution cycles.",
@@ -541,7 +541,7 @@ size_categories:
 
 # EvoEval: Autonomous Code Agent Evolution Benchmark
 
-This dataset accompanies the NeurIPS 2027 publication **"EvoEval: Measuring Safety Drift and Capability Retention in Self-Evolving Code Agents"** (Datasets & Benchmarks Track).
+This dataset accompanies the publication **"EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents"**.
 
 ## Contribution Framing (NeurIPS 2027 E&D Guidelines)
 - **Primary Contribution Type**: *Evaluation Tools, Frameworks, and Infrastructure*

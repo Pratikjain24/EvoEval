@@ -16,8 +16,10 @@ from evaeval.metrics.significance import (
     cohens_d,
     hedges_g,
     holm_bonferroni_correction,
+    holm_bonferroni_step_down_detailed,
     interpret_effect_size,
     paired_bootstrap_test,
+    format_bootstrap_p,
 )
 
 
@@ -304,4 +306,92 @@ def test_runner_analysis_significance_module(tmp_path: Path):
     assert drift_res["cliffs_delta"] > 0.5
     assert drift_res["is_significant"] is True
     assert drift_json.exists()
+
+
+def test_bootstrap_resolution_floor_respect():
+    """Verify that empirical bootstrap p-values strictly respect the resolution floor.
+
+    For B=10,000 resamples:
+    - Minimum possible p-value is 1 / (B + 1) = 1.0e-4 (0.00010).
+    - Even with extreme divergence (d = 100.0, extreme_count = 0), p-value is bounded
+      at 0.0001 (1.0e-4) and NEVER outputs a parametric float like 1.2e-11.
+    - format_bootstrap_p properly formats floor values as '<0.001' or '1.0e-4'.
+    """
+    # Extremely separated samples: mean diff = 100.0
+    a = [100.0, 100.5, 99.5]
+    b = [0.0, 0.5, -0.5]
+
+    res = paired_bootstrap_test(a, b, n_bootstraps=10000, seed=42)
+    # Must respect floor: 1 / 10001 bounded to 0.0001 (1.0e-4)
+    assert res.p_value >= 0.0001
+    assert pytest.approx(res.p_value, rel=1e-3) == 0.0001
+    # Must NEVER be a tiny parametric float like 1.2e-11
+    assert res.p_value > 1e-6
+
+    # Test format_bootstrap_p helper
+    # 1. Inequality style (default)
+    assert format_bootstrap_p(res.p_value, n_bootstraps=10000, style="inequality") == "<0.001"
+    assert format_bootstrap_p(res.p_value, n_bootstraps=10000, style="inequality", include_symbol=True) == "p < 0.001"
+    assert format_bootstrap_p(res.p_value, n_bootstraps=10000, style="inequality", latex=True) == "$<0.001$"
+    assert format_bootstrap_p(res.p_value, n_bootstraps=10000, style="inequality", latex=True, include_symbol=True) == "$p < 0.001$"
+
+    # 2. Scientific style
+    assert format_bootstrap_p(res.p_value, n_bootstraps=10000, style="scientific") == "1.0e-4"
+    assert format_bootstrap_p(res.p_value, n_bootstraps=10000, style="scientific", include_symbol=True) == "p = 1.0e-4"
+    assert format_bootstrap_p(res.p_value, n_bootstraps=10000, style="scientific", latex=True) == "$1.0 \\times 10^{-4}$"
+    assert format_bootstrap_p(res.p_value, n_bootstraps=10000, style="scientific", latex=True, include_symbol=True) == "$p = 1.0 \\times 10^{-4}$"
+
+    # 3. Non-floor values format normally
+    p_non_floor = 0.034
+    assert format_bootstrap_p(p_non_floor, n_bootstraps=10000, style="inequality") == "0.034"
+    assert format_bootstrap_p(p_non_floor, n_bootstraps=10000, style="inequality", include_symbol=True) == "p = 0.034"
+
+
+def test_strict_integer_rank_holm_multipliers_27_tuples():
+    """Verify that Holm-Bonferroni correction strictly uses integer step-down multipliers k in {1 ... 27}.
+    
+    Validates:
+    1. Multipliers k_j = 28 - j are strictly integers in {1 ... 27}.
+    2. Non-integer multipliers (e.g. 0.0028 -> 0.0040, factor 1.428) are impossible.
+    3. Monotonicity: adjusted p-values are strictly non-decreasing in sorted order.
+    4. Rank set is a permutation of {1 ... 27} and multiplier set is a permutation of {1 ... 27}.
+    """
+    # 27 synthetic raw p-values spanning floor to non-significant
+    rng = np.random.default_rng(999)
+    raw_p = [0.0001] * 20 + list(rng.uniform(0.001, 0.50, size=7))
+    assert len(raw_p) == 27
+
+    adj_p, rejected, ranks, multipliers = holm_bonferroni_step_down_detailed(raw_p, alpha=0.05)
+
+    # 1. Lengths match
+    assert len(adj_p) == 27
+    assert len(ranks) == 27
+    assert len(multipliers) == 27
+
+    # 2. Ranks and multipliers are exact permutations of 1..27
+    assert sorted(ranks) == list(range(1, 28))
+    assert sorted(multipliers) == list(range(1, 28))
+
+    # 3. Invariant: rank + multiplier == 28 for every test
+    for r, m in zip(ranks, multipliers):
+        assert isinstance(r, int)
+        assert isinstance(m, int)
+        assert r + m == 28
+
+    # 4. Invariant: in sorted order, adjusted p-values are non-decreasing
+    sorted_indices = sorted(range(27), key=lambda i: ranks[i])
+    sorted_adj = [adj_p[i] for i in sorted_indices]
+    for i in range(len(sorted_adj) - 1):
+        assert sorted_adj[i] <= sorted_adj[i + 1]
+
+    # 5. Specifically test the reviewer scenario:
+    # A single test with raw p = 0.0028 at rank 24 has multiplier k = 28 - 24 = 4.
+    # Its unadjusted step is 4 * 0.0028 = 0.0112 (NEVER 0.0040).
+    test_raw = [0.0001] * 23 + [0.0028, 0.010, 0.050, 0.200]
+    adj_test, _, _, mults_test = holm_bonferroni_step_down_detailed(test_raw, alpha=0.05)
+    # The multiplier for 0.0028 (rank 24) must be exactly 4 (28 - 24)
+    idx_0028 = test_raw.index(0.0028)
+    assert mults_test[idx_0028] == 4
+    # The step value is 4 * 0.0028 = 0.0112, so adj_p >= 0.0112, never 0.0040
+    assert adj_test[idx_0028] >= 0.0112
 

@@ -6,7 +6,7 @@
 \begin{tabular}{l|ccc|ccc|cc}
 \toprule
  & \multicolumn{3}{c|}{\textbf{Qwen-2.5-Coder-7B-Instruct}} & \multicolumn{3}{c|}{\textbf{Llama-3.1-8B-Instruct}} & \multicolumn{2}{c}{\textbf{Cross-Family Invariance}} \\
-\textbf{Agent Archetype} & $P_0 \to P_T$ & $\text{SafetyDrift}$ & $\text{Retention}$ & $P_0 \to P_T$ & $\text{SafetyDrift}$ & $\text{Retention}$ & Drift Regimes & Verifier Guard \\
+\textbf{Agent Archetype} & $P_0 \to P_T$ & $\text{SecurityDrift}$ & $\text{Retention}$ & $P_0 \to P_T$ & $\text{SecurityDrift}$ & $\text{Retention}$ & Drift Regimes & Verifier Guard \\
 \midrule
 G1 (Static Baseline) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Baseline \\
 G2 (Prompt Mutation) & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & 0.40 $\to$ 0.40 & +0.00 & 100.0\% & Identical & Severe Drift \\

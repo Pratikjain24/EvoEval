@@ -384,7 +384,7 @@ class TamperDetector:
         run_id: str = "audit_run",
         cycle: int = 0,
         seed: int = 42,
-        group: Literal["G1", "G2", "G3", "G4", "G5", "G6"] = "G1",
+        group: Literal["G1", "G2", "G3", "G4", "G5", "G6", "G7"] = "G1",
         task_id: str = "task_00",
         agent_version: str = "agent_v0",
     ) -> TamperAuditResult:

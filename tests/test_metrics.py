@@ -15,7 +15,9 @@ from evaeval.metrics.capability import (
     capability_summary,
     generalization_gap,
     improvement_gain,
+    proxy_gap,
     success_rate,
+    verify_metric_boundedness,
 )
 from evaeval.metrics.efficiency import (
     efficiency_summary,
@@ -33,10 +35,13 @@ from evaeval.metrics.retention import (
     forgetting_score,
     retention_ratio,
     retention_trajectory,
+    task_set_retention,
 )
 from evaeval.metrics.safety import (
     cumulative_violation_index,
     safety_drift,
+    security_boundary_drift,
+    vulnerability_injection_rate,
     safety_summary,
     violation_rate,
 )
@@ -126,7 +131,13 @@ def test_property_safety_summary_consistency():
     assert pytest.approx(summary["violation_rate_0"]) == violation_rate(1, 10)
     assert pytest.approx(summary["violation_rate_latest"]) == violation_rate(5, 10)
     assert pytest.approx(summary["safety_drift"]) == safety_drift(5, 10, 1, 10)
+    assert pytest.approx(summary["security_boundary_drift"]) == safety_drift(5, 10, 1, 10)
+    assert pytest.approx(summary["vulnerability_injection_rate"]) == safety_drift(5, 10, 1, 10)
     assert summary["total_violations"] == 9.0
+
+    # Verify alias function identity
+    assert security_boundary_drift(5, 10, 1, 10) == safety_drift(5, 10, 1, 10)
+    assert vulnerability_injection_rate(5, 10, 1, 10) == safety_drift(5, 10, 1, 10)
 
 
 # =====================================================================
@@ -174,6 +185,30 @@ def test_property_retention_trajectory_invariants():
     traj = retention_trajectory(baseline, repeated_perf)
     assert len(traj) == 4
     assert all(pytest.approx(r) == 1.0 for r in traj)
+
+
+def test_property_task_set_retention_mathematical_invariants():
+    """Property: Retention(t) = (1 / max(|H_0|, 1)) * sum_{tau in H_0} 1[eval(tau, S_t) == PASS].
+    Checks denominator guarding max(|H_0|, 1), [0, 1] bounds, and catastrophic forgetting detection.
+    """
+    # 1. Identical tasks: perfect retention (1.0)
+    h_0 = ["task_1", "task_2", "task_3", "task_4"]
+    assert task_set_retention(h_0, h_0) == 1.0
+
+    # 2. Catastrophic forgetting: half retained
+    h_t = ["task_1", "task_2"]
+    assert pytest.approx(task_set_retention(h_t, h_0)) == 0.5
+
+    # 3. Total forgetting: zero retained
+    assert task_set_retention([], h_0) == 0.0
+
+    # 4. Empty baseline |H_0| = 0: denominator max(|H_0|, 1) = 1 prevents division-by-zero
+    assert task_set_retention([], []) == 1.0
+    assert task_set_retention(["task_new"], []) == 1.0
+
+    # 5. New tasks outside H_0 do not inflate historical retention above 1.0
+    h_t_expanded = ["task_1", "task_2", "task_3", "task_4", "task_new_1", "task_new_2"]
+    assert task_set_retention(h_t_expanded, h_0) == 1.0
 
 
 # =====================================================================
@@ -236,6 +271,56 @@ def test_property_capability_summary_consistency():
     assert summary["p_latest"] == 1.0
     assert pytest.approx(summary["delta_p"]) == 0.5
     assert summary["generalization_gap"] == 0.0
+
+
+def test_property_proxy_gap_boundedness_under_identical_denominator():
+    """Property: Delta_proxy = P_Proxy - P_GT calculated across identical task denominators.
+    Guarantees: max(P_GT + Delta_proxy) <= 1.000 across all valid configurations.
+    """
+    # 1. Identical performance: Delta_proxy == 0.0, P_GT + Delta_proxy == P_GT <= 1.0
+    scores = [1.0, 1.0, 0.0, 1.0, 0.0]
+    gap = proxy_gap(scores, scores)
+    assert pytest.approx(gap) == 0.0
+    assert verify_metric_boundedness(success_rate(scores), gap)
+
+    # 2. Extreme gaming: Proxy 100%, GT 0% -> Delta_proxy = +1.0
+    proxy_all_pass = [1.0] * 20
+    gt_all_fail = [0.0] * 20
+    gap_max = proxy_gap(proxy_all_pass, gt_all_fail)
+    assert pytest.approx(gap_max) == 1.0
+    p_gt_0 = success_rate(gt_all_fail)
+    assert pytest.approx(p_gt_0 + gap_max) == 1.0
+    assert verify_metric_boundedness(p_gt_0, gap_max)
+
+    # 3. G4 drift probe scenario (20 probes): Probe P_GT = 0.40, Probe P_Proxy = 0.95
+    gt_probes = [1.0] * 8 + [0.0] * 12    # 8/20 = 40%
+    proxy_probes = [1.0] * 19 + [0.0] * 1  # 19/20 = 95%
+    gap_probe = proxy_gap(proxy_probes, gt_probes)
+    assert pytest.approx(gap_probe) == 0.55
+    p_gt_probe = success_rate(gt_probes)
+    assert pytest.approx(p_gt_probe + gap_probe) == 0.95
+    assert (p_gt_probe + gap_probe) <= 1.000
+    assert verify_metric_boundedness(p_gt_probe, gap_probe)
+
+    # 4. G4 whole benchmark scenario (100 tasks): 80 std (88% pass) + 20 probes (GT 40%, Proxy 95%)
+    # Total P_GT = 0.80 * 0.88 + 0.20 * 0.40 = 0.784
+    # Total P_Proxy = 0.80 * 0.88 + 0.20 * 0.95 = 0.894
+    gt_100 = ([1.0] * 70 + [0.0] * 10) + ([1.0] * 8 + [0.0] * 12)  # 70/80 = 87.5% ~ 88%
+    proxy_100 = ([1.0] * 70 + [0.0] * 10) + ([1.0] * 19 + [0.0] * 1)
+    gap_100 = proxy_gap(proxy_100, gt_100)
+    p_gt_100 = success_rate(gt_100)
+    assert pytest.approx(p_gt_100 + gap_100) == success_rate(proxy_100)
+    assert (p_gt_100 + gap_100) <= 1.000
+    assert verify_metric_boundedness(p_gt_100, gap_100)
+
+    # 5. Denominator mismatch prevention: different length raises ValueError
+    with pytest.raises(ValueError, match="Denominator mismatch"):
+        proxy_gap([1.0] * 10, [1.0] * 20)
+
+    # 6. verify_metric_boundedness helper flags impossible sums > 1.0
+    assert verify_metric_boundedness(0.89, 0.11) is True
+    assert verify_metric_boundedness(0.89, 0.34) is False  # 1.23 > 1.000!
+    assert verify_metric_boundedness(0.78, 0.28) is False  # 1.06 > 1.000!
 
 
 # =====================================================================
@@ -343,6 +428,8 @@ def test_property_metric_registry_comprehensive():
     """Property: MetricRegistry correctly dispatches to underlying metric functions."""
     registered = MetricRegistry.list_metrics()
     assert "safety_drift" in registered
+    assert "security_boundary_drift" in registered
+    assert "vulnerability_injection_rate" in registered
     assert "retention_ratio" in registered
     assert "improvement_gain" in registered
     assert "success_rate" in registered
@@ -352,7 +439,20 @@ def test_property_metric_registry_comprehensive():
     drift_direct = safety_drift(2, 10, 1, 10)
     drift_registry = MetricRegistry.compute("safety_drift", 2, 10, 1, 10)
     assert pytest.approx(drift_registry) == drift_direct
+    assert pytest.approx(MetricRegistry.compute("security_boundary_drift", 2, 10, 1, 10)) == drift_direct
+    assert pytest.approx(MetricRegistry.compute("vulnerability_injection_rate", 2, 10, 1, 10)) == drift_direct
 
     ret_direct = retention_ratio(0.7, 1.0)
     ret_registry = MetricRegistry.compute("retention_ratio", 0.7, 1.0)
     assert pytest.approx(ret_registry) == ret_direct
+
+    assert "task_set_retention" in registered
+    task_ret_direct = task_set_retention(["t1"], ["t1", "t2"])
+    task_ret_reg = MetricRegistry.compute("task_set_retention", ["t1"], ["t1", "t2"])
+    assert pytest.approx(task_ret_reg) == task_ret_direct == 0.5
+
+    assert "proxy_gap" in registered
+    p_scores = [1.0, 1.0, 0.0]
+    g_scores = [1.0, 0.0, 0.0]
+    reg_gap = MetricRegistry.compute("proxy_gap", p_scores, g_scores)
+    assert pytest.approx(reg_gap) == proxy_gap(p_scores, g_scores)

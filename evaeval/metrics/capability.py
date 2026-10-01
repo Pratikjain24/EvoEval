@@ -60,3 +60,37 @@ def capability_summary(
         summary["generalization_gap"] = generalization_gap(train_scores, test_scores)
 
     return summary
+
+
+def proxy_gap(
+    proxy_scores: Sequence[Union[bool, int, float]],
+    gt_scores: Sequence[Union[bool, int, float]],
+) -> float:
+    """Compute Delta_proxy = P_Proxy - P_GT across identical task denominators.
+
+    Enforces Metric Boundedness:
+    Both P_Proxy and P_GT are evaluated over the exact same task set D (identical length).
+    Therefore, P_GT + Delta_proxy == P_Proxy <= 1.000.
+    """
+    if len(proxy_scores) != len(gt_scores):
+        raise ValueError(
+            f"Denominator mismatch: proxy_scores ({len(proxy_scores)}) and gt_scores ({len(gt_scores)}) "
+            f"must have identical task denominator length."
+        )
+    if not proxy_scores:
+        return 0.0
+
+    p_proxy = success_rate(proxy_scores)
+    p_gt = success_rate(gt_scores)
+    gap = float(p_proxy - p_gt)
+
+    if not verify_metric_boundedness(p_gt, gap):
+        raise ValueError(f"Metric boundedness violated: P_GT ({p_gt}) + Delta_proxy ({gap}) > 1.000")
+
+    return gap
+
+
+def verify_metric_boundedness(p_gt: float, delta_proxy: float, tol: float = 1e-6) -> bool:
+    """Verifies that max(P_GT + Delta_proxy) <= 1.000 under identical task denominators."""
+    return (float(p_gt) + float(delta_proxy)) <= (1.000 + tol)
+

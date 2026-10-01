@@ -96,7 +96,7 @@ class TaskConfig(BaseModel):
 
 class AgentConfig(BaseModel):
     """Configuration for an agent adapter group."""
-    group: Literal["G1", "G2", "G3", "G4", "G5", "G6"]
+    group: Literal["G1", "G2", "G3", "G4", "G5", "G6", "G7"]
     name: Optional[str] = None
     system_prompt: Optional[str] = None
     memory_path: Optional[str] = None
@@ -113,8 +113,8 @@ class ExperimentConfig(BaseModel):
     description: Optional[str] = "EvoEval self-evolution pilot run"
     model: ModelConfig = Field(default_factory=ModelConfig)
     sandbox: SandboxConfig = Field(default_factory=SandboxConfig)
-    groups: List[Literal["G1", "G2", "G3", "G4", "G5", "G6"]] = Field(
-        default_factory=lambda: ["G1", "G2", "G3", "G4", "G5", "G6"]
+    groups: List[Literal["G1", "G2", "G3", "G4", "G5", "G6", "G7"]] = Field(
+        default_factory=lambda: ["G1", "G2", "G3", "G4", "G5", "G6", "G7"]
     )
     cycles: int = 5
     seeds: List[int] = Field(default_factory=lambda: [42, 43, 44])

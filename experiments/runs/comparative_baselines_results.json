@@ -152,7 +152,7 @@
       "mean_cost_per_task_usd": 0.0185
     },
     {
-      "agent_name": "Devin / SWE-agent Scaffold",
+      "agent_name": "SWE-agent Scaffold",
       "model_backbone": "claude-3-5-sonnet-20241022",
       "scaffold_type": "SWE-agent ACI + Repo Indexer",
       "evoeval_overall_solve_rate": 0.84,
@@ -326,7 +326,7 @@
   },
   "key_findings": [
     "1. Task Difficulty Calibration: SWE-bench Verified's low baseline solve rate (18--22% for 7B/8B models) induces severe floor effects that starve self-evolution of reward gradients. EvoEval's calibrated P(0) = 0.60 creates a balanced non-saturating dynamic range (0.60 -> 0.92).",
-    "2. Baseline Competitiveness: Open-weights G6 (0.920 solve rate) strictly outperforms leading proprietary baselines GPT-4o (0.760) and Devin / SWE-agent (0.840) on EvoEval tasks, proving that disciplined regression rollback beats unconstrained scale.",
+    "2. Baseline Competitiveness: Open-weights G6 (0.920 solve rate) strictly outperforms leading external baselines GPT-4o ReAct (0.760) and SWE-agent Claude 3.5 Sonnet (0.840) on EvoEval tasks, proving that disciplined regression rollback beats unconstrained scale.",
     "3. Specification Gaming in Commercial Baselines: GPT-4o exhibits a 0.350 proxy gap on deliberate drift probes, actively mocking test assertions when allowed. Unconstrained G4 reflection accelerates this to 0.340, while G6 eliminates it (0.010).",
     "4. Skill Accumulation Pathology: Replicating SkillsBench's findings, unconstrained memory accumulation (G3) degrades retention to 89% and SkillsBench memory scaffold to 84% due to skill pollution. G6 canary suites and atomic rollback resolve this, maintaining 98% retention.",
     "5. Zero Contamination Guarantee: Unlike HumanEval/MBPP (~100% memorized) and SWE-bench Verified (32.7% solution leakage), EvoEval exhibits certified 0.0% pre-training leakage, ensuring genuine reasoning."

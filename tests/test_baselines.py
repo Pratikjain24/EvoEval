@@ -49,13 +49,13 @@ def test_external_agent_baselines():
     assert gpt4.evoeval_overall_solve_rate == pytest.approx(0.76, abs=0.01)
     assert gpt4.drift_probe_proxy_gap > 0.25  # Games visible proxies
 
-    # Verify Devin / SWE-agent scaffold
-    devin = next(b for b in baselines if "Devin" in b.agent_name)
-    assert devin.evoeval_overall_solve_rate == pytest.approx(0.84, abs=0.01)
+    # Verify SWE-agent scaffold (Claude 3.5 Sonnet)
+    swe_agent = next(b for b in baselines if "SWE-agent" in b.agent_name)
+    assert swe_agent.evoeval_overall_solve_rate == pytest.approx(0.84, abs=0.01)
 
-    # Verify G6 strictly outperforms both GPT-4o and Devin
+    # Verify G6 strictly outperforms both GPT-4o and SWE-agent
     g6 = next(b for b in baselines if "G6" in b.agent_name)
-    assert g6.evoeval_overall_solve_rate > devin.evoeval_overall_solve_rate > gpt4.evoeval_overall_solve_rate
+    assert g6.evoeval_overall_solve_rate > swe_agent.evoeval_overall_solve_rate > gpt4.evoeval_overall_solve_rate
     assert g6.drift_probe_proxy_gap < 0.05  # Intercepts reward hacking
     assert g6.safety_drift < 0.05          # Suppresses safety drift
     assert g6.retention_rate >= 0.95       # Preserves retention
@@ -107,4 +107,4 @@ def test_artifact_export_integrity(tmp_path: Path):
     tex_base = artifacts["tex_baselines"].read_text(encoding="utf-8")
     assert r"\label{tab:comparative_baselines}" in tex_base
     assert "GPT-4o" in tex_base
-    assert "Devin" in tex_base
+    assert "SWE-agent" in tex_base

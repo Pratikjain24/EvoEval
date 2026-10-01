@@ -134,7 +134,7 @@ class TrajectoryEvent(BaseModel):
     run_id: str
     cycle: int
     seed: int
-    group: Literal["G1", "G2", "G3", "G4", "G5", "G6"]
+    group: Literal["G1", "G2", "G3", "G4", "G5", "G6", "G7"]
     task_id: str
     agent_version: str
     ts: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
