@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 import pytest
 
-from evaeval.runner.baselines import (
+from sage.runner.baselines import (
     BenchmarkTaxonomyEntry,
     ComparativeBaselinesEngine,
     ComparativeBaselinesReport,
@@ -15,7 +15,7 @@ from evaeval.runner.baselines import (
 
 
 def test_taxonomy_comparison_coverage():
-    """Verify taxonomy includes HumanEval, MBPP, SWE-bench, EvoAgentBench, ActBench, SkillsBench, EvoEval."""
+    """Verify taxonomy includes HumanEval, MBPP, SWE-bench, EvoAgentBench, ActBench, SkillsBench, SAGE."""
     engine = ComparativeBaselinesEngine()
     taxonomy = engine.get_benchmark_taxonomy()
     assert len(taxonomy) >= 8
@@ -27,53 +27,53 @@ def test_taxonomy_comparison_coverage():
     assert any("EvoAgentBench" in n for n in names)
     assert any("ActBench" in n for n in names)
     assert any("SkillsBench" in n for n in names)
-    assert any("EvoEval" in n for n in names)
+    assert any("SAGE" in n for n in names)
 
-    # Verify EvoEval is the only benchmark with 0.0% contamination and dual-container isolation
-    evoeval = next(b for b in taxonomy if "EvoEval" in b.benchmark_name)
-    assert evoeval.contamination_rate_pct == 0.0
-    assert evoeval.baseline_solve_rate_p0 == 0.60
-    assert evoeval.supports_longitudinal_evolution is True
-    assert evoeval.has_deliberate_drift_probes is True
-    assert "Dual Docker" in evoeval.isolated_execution_sandbox
+    # Verify SAGE is the only benchmark with 0.0% contamination and dual-container isolation
+    sage = next(b for b in taxonomy if "SAGE" in b.benchmark_name)
+    assert sage.contamination_rate_pct == 0.0
+    assert sage.baseline_solve_rate_p0 == 0.60
+    assert sage.supports_longitudinal_evolution is True
+    assert sage.has_deliberate_drift_probes is True
+    assert "Dual Docker" in sage.isolated_execution_sandbox
 
 
 def test_external_agent_baselines():
-    """Verify performance metrics of commercial baselines and EvoEval archetypes."""
+    """Verify performance metrics of commercial baselines and SAGE archetypes."""
     engine = ComparativeBaselinesEngine()
     baselines = engine.get_external_agent_baselines()
     assert len(baselines) >= 6
 
     # Verify GPT-4o solve rate and proxy gap
     gpt4 = next(b for b in baselines if "GPT-4o" in b.agent_name)
-    assert gpt4.evoeval_overall_solve_rate == pytest.approx(0.76, abs=0.01)
+    assert gpt4.sage_overall_solve_rate == pytest.approx(0.76, abs=0.01)
     assert gpt4.drift_probe_proxy_gap > 0.25  # Games visible proxies
 
     # Verify SWE-agent scaffold (Claude 3.5 Sonnet)
     swe_agent = next(b for b in baselines if "SWE-agent" in b.agent_name)
-    assert swe_agent.evoeval_overall_solve_rate == pytest.approx(0.84, abs=0.01)
+    assert swe_agent.sage_overall_solve_rate == pytest.approx(0.84, abs=0.01)
 
     # Verify G6 strictly outperforms both GPT-4o and SWE-agent
     g6 = next(b for b in baselines if "G6" in b.agent_name)
-    assert g6.evoeval_overall_solve_rate > swe_agent.evoeval_overall_solve_rate > gpt4.evoeval_overall_solve_rate
+    assert g6.sage_overall_solve_rate > swe_agent.sage_overall_solve_rate > gpt4.sage_overall_solve_rate
     assert g6.drift_probe_proxy_gap < 0.05  # Intercepts reward hacking
     assert g6.safety_drift < 0.05          # Suppresses safety drift
     assert g6.retention_rate >= 0.95       # Preserves retention
 
 
 def test_g1_swebench_verified_comparison():
-    """Verify G1 baseline solve rate on SWE-bench Verified vs. EvoEval."""
+    """Verify G1 baseline solve rate on SWE-bench Verified vs. SAGE."""
     engine = ComparativeBaselinesEngine()
     g1_perf = engine.get_g1_cross_benchmark_performance()
     assert len(g1_perf) >= 4
 
     qwen_swe = next(p for p in g1_perf if "SWE-bench" in p.benchmark_name and "Qwen" in p.model_name)
-    qwen_evo = next(p for p in g1_perf if "EvoEval" in p.benchmark_name and "Qwen" in p.model_name)
+    qwen_evo = next(p for p in g1_perf if "SAGE" in p.benchmark_name and "Qwen" in p.model_name)
 
     # SWE-bench Verified solve rate is ~20%
     assert 0.15 <= qwen_swe.solve_rate <= 0.25
 
-    # EvoEval solve rate is calibrated to exactly 60%
+    # SAGE solve rate is calibrated to exactly 60%
     assert qwen_evo.solve_rate == pytest.approx(0.60, abs=0.01)
 
     # SWE-bench takes significantly more turns and time

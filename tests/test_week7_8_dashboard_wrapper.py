@@ -11,13 +11,13 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from evaeval.adapters.base import EvolutionFeedback, EvolutionOutcome
-from evaeval.adapters.prompt_agent import PromptAgentAdapter
-from evaeval.adapters.wrapper import VerifierAgentWrapper
-from evaeval.dashboard_backend.db.models import init_db
-from evaeval.dashboard_backend.main import app
-from evaeval.scoring.proxy_gap import ProxyGapAnalyzer
-from evaeval.scoring.tamper_detect import TamperDetector
+from sage.adapters.base import EvolutionFeedback, EvolutionOutcome
+from sage.adapters.prompt_agent import PromptAgentAdapter
+from sage.adapters.wrapper import VerifierAgentWrapper
+from sage.dashboard_backend.db.models import init_db
+from sage.dashboard_backend.main import app
+from sage.scoring.proxy_gap import ProxyGapAnalyzer
+from sage.scoring.tamper_detect import TamperDetector
 
 
 # =====================================================================

@@ -12,15 +12,15 @@ import tempfile
 from pathlib import Path
 import pytest
 
-from evaeval.adapters.base import AgentState, EvolutionFeedback, TaskSpec
-from evaeval.adapters.memory_agent import MemoryAgentAdapter
-from evaeval.adapters.reflection_agent import ReflectionAgentAdapter
-from evaeval.environment.sandbox import LocalSandbox
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.evolution.snapshots import SnapshotManager
-from evaeval.runner.audit_export import AuditExporter
-from evaeval.trajectory.schema import CostRecord, SafetyCheckPayload, TaskEndPayload, TrajectoryEvent
-from evaeval.trajectory.writer import TrajectoryWriter
+from sage.adapters.base import AgentState, EvolutionFeedback, TaskSpec
+from sage.adapters.memory_agent import MemoryAgentAdapter
+from sage.adapters.reflection_agent import ReflectionAgentAdapter
+from sage.environment.sandbox import LocalSandbox
+from sage.environment.task_loader import TaskLoader
+from sage.evolution.snapshots import SnapshotManager
+from sage.runner.audit_export import AuditExporter
+from sage.trajectory.schema import CostRecord, SafetyCheckPayload, TaskEndPayload, TrajectoryEvent
+from sage.trajectory.writer import TrajectoryWriter
 
 
 # =====================================================================

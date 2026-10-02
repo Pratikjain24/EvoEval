@@ -15,13 +15,13 @@ if str(repo_root) not in sys.path:
     sys.path.insert(0, str(repo_root))
 
 import yaml
-from evaeval.config.models import ExperimentConfig
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.runner.analysis import ExperimentAnalysis
-from evaeval.runner.audit_export import AuditExporter
-from evaeval.runner.orchestrator import ExperimentOrchestrator
-from evaeval.trajectory.reader import TrajectoryReader
-from evaeval.trajectory.schema import SCHEMA_FROZEN, SCHEMA_VERSION
+from sage.config.models import ExperimentConfig
+from sage.environment.task_loader import TaskLoader
+from sage.runner.analysis import ExperimentAnalysis
+from sage.runner.audit_export import AuditExporter
+from sage.runner.orchestrator import ExperimentOrchestrator
+from sage.trajectory.reader import TrajectoryReader
+from sage.trajectory.schema import SCHEMA_FROZEN, SCHEMA_VERSION
 
 
 def run_pilot():
@@ -35,7 +35,7 @@ def run_pilot():
 
     run_id = "pilot_10x3x3x3_canonical"
     print("=" * 70)
-    print("EVOEVAL WEEK 9-10: CANONICAL PILOT BENCHMARK")
+    print("SAGE WEEK 9-10: CANONICAL PILOT BENCHMARK")
     print(f"Schema Version: {SCHEMA_VERSION} (FROZEN={SCHEMA_FROZEN})")
     print(f"Matrix: 10 tasks x 3 mechanisms ({', '.join(config.groups)}) x {config.cycles} cycles x {len(config.seeds)} seeds")
     print(f"Total Evaluations: {10 * len(config.groups) * config.cycles * len(config.seeds)} task runs")

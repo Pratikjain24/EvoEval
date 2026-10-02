@@ -1,6 +1,6 @@
-# EvoEval Paper Manuscripts & Assets
+# SAGE Paper Manuscripts & Assets
 
-This directory contains the manuscript sources, figures, tables, and bibliography for the **EvoEval** research paper.
+This directory contains the manuscript sources, figures, tables, and bibliography for the **SAGE** research paper.
 
 ---
 
@@ -12,7 +12,7 @@ This directory contains the manuscript sources, figures, tables, and bibliograph
   - **Affiliation**: Department of Computer Engineering, Vishwakarma Institute of Technology (VIT), Pune, India
   - **Contents**: Full 12-section manuscript including system architecture, 5-layer anti-tamper security engine, 100-repository golden dataset, 18,000 longitudinal evaluations, 27 pre-registered hypothesis tests, 201 verification tests, and Section II-F concurrent work review.
 
-- **Formatted Word Version**: [`EvoEval_IEEE_Research_Paper.docx`](./EvoEval_IEEE_Research_Paper.docx)
+- **Formatted Word Version**: [`SAGE_IEEE_Research_Paper.docx`](./SAGE_IEEE_Research_Paper.docx)
   - Matches `main.tex` content, complete with styled IEEE two-column tables (including reconstructed Tables VII & VIII), 201-test suite metrics, and verified citations.
 
 ---
@@ -31,9 +31,9 @@ This directory contains the manuscript sources, figures, tables, and bibliograph
 | :--- | :--- | :--- |
 | [`main.tex`](./main.tex) | LaTeX | **Primary IEEE Conference submission target** |
 | [`IEEEtran.cls`](./IEEEtran.cls) | Class File | Official IEEE LaTeX class file |
-| [`EvoEval_paper_additions.tex`](./EvoEval_paper_additions.tex) | LaTeX Module | Section II-F Related Work additions on concurrent studies |
+| [`SAGE_paper_additions.tex`](./SAGE_paper_additions.tex) | LaTeX Module | Section II-F Related Work additions on concurrent studies |
 | [`references.bib`](./references.bib) | BibTeX | Unified bibliography with all concurrent citations & author corrections |
-| [`EvoEval_IEEE_Research_Paper.docx`](./EvoEval_IEEE_Research_Paper.docx) | Word Document | Fully formatted IEEE paper matching `main.tex` |
+| [`SAGE_IEEE_Research_Paper.docx`](./SAGE_IEEE_Research_Paper.docx) | Word Document | Fully formatted IEEE paper matching `main.tex` |
 | [`archive_neurips_extended_report.tex`](./archive_neurips_extended_report.tex) | LaTeX (Archived) | Extended technical report & appendix archive |
 | `figures/` | Directory | High-resolution publication figures (PDF / PNG) |
 | `tables/` | Directory | Modular LaTeX tables imported into `main.tex` |

@@ -1,7 +1,7 @@
 """Security & Anti-Tamper Quality Gate: Scorer Invisibility & Container Isolation.
 
 Verifies the METR RE-Bench isolation pattern:
-1. Scorer runs in a separate image (evo-scorer:1.0) with dedicated unprivileged user (1001:1001).
+1. Scorer runs in a separate image (sage-scorer:1.0) with dedicated unprivileged user (1001:1001).
 2. Tests and evaluated workspace are mounted strictly read-only (:ro) in the scorer container.
 3. The agent container cannot mount, read, write, or even list the scorer volume.
 4. Shell commands attempting to inspect, list, or access scorer volumes are blocked (exit code 126).
@@ -13,11 +13,11 @@ import stat
 from pathlib import Path
 import pytest
 
-from evaeval.config.models import SandboxConfig, TaskConfig
-from evaeval.environment.docker_runner import DockerRunner
-from evaeval.environment.safety_monitor import SafetyMonitor
-from evaeval.environment.sandbox import LocalSandbox
-from evaeval.scoring.hidden_scorer import HiddenScorer
+from sage.config.models import SandboxConfig, TaskConfig
+from sage.environment.docker_runner import DockerRunner
+from sage.environment.safety_monitor import SafetyMonitor
+from sage.environment.sandbox import LocalSandbox
+from sage.scoring.hidden_scorer import HiddenScorer
 
 
 def _handle_remove_readonly(func, path, exc_info):
@@ -41,8 +41,8 @@ def temp_workspace(tmp_path: Path):
 def test_separate_images_configuration(temp_workspace: Path):
     """Verify agent and scorer use distinct container images."""
     cfg = SandboxConfig()
-    assert cfg.image == "evo-sandbox:1.0"
-    assert cfg.scorer_image == "evo-scorer:1.0"
+    assert cfg.image == "sage-sandbox:1.0"
+    assert cfg.scorer_image == "sage-scorer:1.0"
     assert cfg.image != cfg.scorer_image
     assert cfg.user == "1000:1000"
     assert cfg.scorer_user == "1001:1001"
@@ -51,7 +51,7 @@ def test_separate_images_configuration(temp_workspace: Path):
 def test_agent_cannot_run_scorer_image(temp_workspace: Path):
     """Agent container cannot run using the dedicated scorer image."""
     runner = DockerRunner(
-        config=SandboxConfig(image="evo-scorer:1.0", scorer_image="evo-scorer:1.0"),
+        config=SandboxConfig(image="sage-scorer:1.0", scorer_image="sage-scorer:1.0"),
         workspace_dir=temp_workspace,
     )
     with pytest.raises(PermissionError, match="Agent container cannot run using the dedicated scorer image"):
@@ -63,7 +63,7 @@ def test_scorer_cannot_run_agent_image(temp_workspace: Path):
     runner = DockerRunner(workspace_dir=temp_workspace)
     mounts = [f"{str(temp_workspace)}:/eval_harness/workspace:ro"]
     with pytest.raises(PermissionError, match="Scorer must run in a separate image"):
-        runner.validate_scorer_isolation(mounts=mounts, image="evo-sandbox:1.0")
+        runner.validate_scorer_isolation(mounts=mounts, image="sage-sandbox:1.0")
 
 
 def test_scorer_non_root_identity_enforced(temp_workspace: Path):
@@ -116,7 +116,7 @@ def test_build_scorer_docker_args(temp_workspace: Path, tmp_path: Path):
     args = runner.build_scorer_docker_args("tests/test_gt.py", tests_dir=tests_dir)
     assert "--user" in args and "1001:1001" in args
     assert "--network" in args and "none" in args
-    assert "evo-scorer:1.0" in args
+    assert "sage-scorer:1.0" in args
     assert "pytest" in args and "tests/test_gt.py" in args
 
     # Check read-only volume mounts
@@ -265,7 +265,7 @@ def test_hidden_scorer_rebench_mitigation_docstring():
     assert doc is not None
     assert "RE-Bench" in doc
     assert "43x" in doc
-    assert "evo-scorer:1.0" in doc
+    assert "sage-scorer:1.0" in doc
     assert "scorer:1001" in doc
 
 

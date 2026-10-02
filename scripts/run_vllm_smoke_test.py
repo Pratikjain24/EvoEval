@@ -30,15 +30,15 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from evaeval.config.models import ExperimentConfig, ModelConfig, SandboxConfig, TasksSplitConfig
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.llm.client import MockLLMClient, OpenAICompatibleClient
-from evaeval.runner.orchestrator import ExperimentOrchestrator
-from evaeval.trajectory.reader import TrajectoryReader
+from sage.config.models import ExperimentConfig, ModelConfig, SandboxConfig, TasksSplitConfig
+from sage.environment.task_loader import TaskLoader
+from sage.llm.client import MockLLMClient, OpenAICompatibleClient
+from sage.runner.orchestrator import ExperimentOrchestrator
+from sage.trajectory.reader import TrajectoryReader
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="EvoEval Real-LLM (vLLM) Smoke Test Runner")
+    parser = argparse.ArgumentParser(description="SAGE Real-LLM (vLLM) Smoke Test Runner")
     parser.add_argument(
         "--api-base",
         type=str,
@@ -133,7 +133,7 @@ def measure_mock_vs_real_drift(
 def main() -> int:
     args = parse_args()
     print("=" * 80)
-    print("EvoEval Real-LLM (vLLM) Smoke Test & Drift Analysis Runner")
+    print("SAGE Real-LLM (vLLM) Smoke Test & Drift Analysis Runner")
     print("=" * 80)
     print(f"Target Endpoint: {args.api_base}")
     print(f"Target Model:    {args.model}")

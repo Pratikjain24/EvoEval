@@ -6,7 +6,7 @@ Simulates reviewer audit workflow:
   directly from the raw JSON Lines stream without cached state.
 - Regenerates all four publication figures (safety_drift.png, proxy_gap.png, retention_curve.png,
   capability_vs_safety.png) and validates PNG headers and non-zero byte sizes.
-- Validates the Typer CLI `evoeval analyze --recompute` workflow.
+- Validates the Typer CLI `sage analyze --recompute` workflow.
 """
 
 from __future__ import annotations
@@ -14,8 +14,8 @@ import json
 from pathlib import Path
 import pytest
 from typer.testing import CliRunner
-from evaeval.runner.analysis import ExperimentAnalysis
-from evaeval.runner.cli import app
+from sage.runner.analysis import ExperimentAnalysis
+from sage.runner.cli import app
 
 PNG_MAGIC_BYTES = b"\x89PNG\r\n\x1a\n"
 CANONICAL_TRAJECTORY = Path("experiments/runs/pilot_10x3x3x3_canonical/trajectory.jsonl")
@@ -103,7 +103,7 @@ def test_regenerate_all_figures_in_clean_environment(clean_reviewer_environment:
 
 
 def test_cli_analyze_recompute_in_clean_environment(clean_reviewer_environment: Path):
-    """Reviewer test: CLI invocation 'evoeval analyze --recompute' regenerates figures from raw trajectory."""
+    """Reviewer test: CLI invocation 'sage analyze --recompute' regenerates figures from raw trajectory."""
     clean_dir = clean_reviewer_environment
     out_dir = clean_dir / "cli_figures"
 

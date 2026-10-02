@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render publication-quality figures representing the EvoEval 4-service dashboard.
+"""Render publication-quality figures representing the SAGE 4-service dashboard.
 
 Generates 4 figures matching the Next.js dark-mode dashboard UI:
 1. dashboard_overview.png
@@ -43,7 +43,7 @@ def render_overview():
     ax_head = fig.add_axes([0.03, 0.92, 0.94, 0.06])
     ax_head.set_facecolor(PANEL_BG)
     ax_head.axis("off")
-    ax_head.text(0.02, 0.55, "EvoEval :: Evaluation & Drift Monitoring Suite", color=TEXT_WHITE, fontsize=14, fontweight="bold", va="center")
+    ax_head.text(0.02, 0.55, "SAGE :: Evaluation & Drift Monitoring Suite", color=TEXT_WHITE, fontsize=14, fontweight="bold", va="center")
     ax_head.text(0.02, 0.20, "Recursive Self-Evolution Security Boundary Drift vs. Capability Retention Architecture (Docker Compose Stack)", color=TEXT_MUTED, fontsize=8.5, va="center")
     
     # Status badges on right

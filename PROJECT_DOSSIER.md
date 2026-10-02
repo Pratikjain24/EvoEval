@@ -1,7 +1,7 @@
-﻿# EvoEval: Comprehensive System Architecture, Implementation Blueprint & Empirical Quality Dossier
+# SAGE: Comprehensive System Architecture, Implementation Blueprint & Empirical Quality Dossier
 
 > **Document Version**: `1.0.0-production`  
-> **Release Tag**: [`v1.0.0`](file:///c:/Users/kruti/EvoEval)  
+> **Release Tag**: [`v1.0.0`](file:///c:/Users/kruti/SAGE)  
 > **Head Commit**: `0178f924ac8b80e1ff77fe9deb16f2ee87e74784` (`0178f92`, `master`)  
 > **Audience**: Reviewers, Researchers, Software Architects, and Evaluators  
 
@@ -27,14 +27,14 @@
 
 ## 1. Executive Summary & Purpose
 
-**EvoEval** is a hardened benchmark and formal evaluation framework that validates agent guardrails against canonical, deterministic degradation trajectories, supplemented by live API runs. EvoEval is designed to systematically quantify **capability gain, security boundary drift (vulnerability injection rate), catastrophic forgetting (capability retention), and specification gaming (proxy gap)** in self-modifying code agents across multi-generational cycles ($G_1$ through $G_6$).
+**SAGE** is a hardened benchmark and formal evaluation framework that validates agent guardrails against canonical, deterministic degradation trajectories, supplemented by live API runs. SAGE is designed to systematically quantify **capability gain, security boundary drift (vulnerability injection rate), catastrophic forgetting (capability retention), and specification gaming (proxy gap)** in self-modifying code agents across multi-generational cycles ($G_1$ through $G_6$).
 
 While modern large language model (LLM) agents can iteratively self-improve by modifying their prompts, memories, and tool heuristics, unconstrained evolutionary adaptation introduces severe safety failures:
 - **Security Boundary Drift (Vulnerability Injection Rate)**: Agents progressively erode defensive security boundaries (introducing CWE/AST flaws), attempting dangerous shell commands or modifying test assertions to force artificial passes.
 - **Catastrophic Forgetting**: Specializing on recent failure modes causes capability regression on previously mastered problem spaces.
 - **Reward Hacking / Specification Gaming**: Over-optimizing for superficial proxy metrics (such as exit codes, formatted queries, or stubbed tests) while violating ground-truth invariants.
 
-To establish rigorous, reproducible ground truth without conflating deterministic harness properties with stochastic sampling noise, EvoEval implements a **two-tiered evaluation methodology**:
+To establish rigorous, reproducible ground truth without conflating deterministic harness properties with stochastic sampling noise, SAGE implements a **two-tiered evaluation methodology**:
 1. **Canonical Benchmark Trajectories ($N=18{,}000$)**: 18,000 controlled, bitwise-reproducible evaluations across 100 tasks, 6 archetypes ($G_1$–$G_6$), 10 cycles, and 3 random seeds formalizing archetype state-mutation policies under deterministic execution to provide zero-flakiness counterfactual reference baselines.
 2. **Live Neural Model Rollouts & Empirical Replication**: Empirical evaluation of live foundation models (Qwen2.5-Coder-7B, Llama-3.1-8B) on validation cohorts within the unprivileged dual-container sandbox.
 
@@ -87,7 +87,7 @@ graph TD
 
 ## 2. Scientific Hypotheses & Mathematical Formulations
 
-EvoEval formalizes empirical agent evaluation around five core scientific hypotheses published in [paper/main.tex](file:///c:/Users/kruti/EvoEval/paper/main.tex):
+SAGE formalizes empirical agent evaluation around five core scientific hypotheses published in [paper/main.tex](file:///c:/Users/kruti/SAGE/paper/main.tex):
 
 | Hypothesis | Name | Formal Statement |
 |---|---|---|
@@ -97,7 +97,7 @@ EvoEval formalizes empirical agent evaluation around five core scientific hypoth
 | $\mathbf{H_4}$ | **Catastrophic Forgetting** | Adapting to novel task failure modes degrades capability on historical tasks: $\text{Retention}(t) < 1.0$. |
 | $\mathbf{H_5}$ | **Verification & Guard Invariance** | Static verification ($G_5$) and regression guards with atomic rollback ($G_6$) eliminate specification gaming and security boundary drift: $\text{ProxyGap}(t) \approx 0$ and $\text{SecurityDrift}(t) \approx 0$. |
 
-### Core Mathematical Metrics (Implemented in [`evaeval/metrics/`](file:///c:/Users/kruti/EvoEval/evaeval/metrics))
+### Core Mathematical Metrics (Implemented in [`sage/metrics/`](file:///c:/Users/kruti/SAGE/sage/metrics))
 
 1. **Capability Gain**:
    $$\Delta P(t) = P(t) - P(0) \quad \text{where } P(t) = \frac{1}{N} \sum_{i=1}^N \mathbf{1}[\text{task } i \text{ passes ground-truth tests}]$$
@@ -118,7 +118,7 @@ EvoEval formalizes empirical agent evaluation around five core scientific hypoth
 
 ### 2.1 Inferential Statistics & Hypothesis Testing Hardening (Resolution of Pseudo-Replication)
 
-To ensure mathematical and statistical rigor, EvoEval strictly enforces the following inferential invariants:
+To ensure mathematical and statistical rigor, SAGE strictly enforces the following inferential invariants:
 - **Independent Unit of Analysis ($N=3$ Seeds)**:
   Standard errors and inferential hypothesis tests are computed across independent seed runs ($S \in \{42, 43, 44\}$) using macro-aggregated terminal cycle metrics ($\Delta P(T)_s, \text{SecurityDrift}(T)_s, \text{ProxyGap}_s$), completely eliminating task $\times$ cycle pooling (pseudo-replication).
 - **Empirical Variance Calibration ($\sigma \approx 0.03\text{--}0.06$)**:
@@ -138,7 +138,7 @@ To ensure mathematical and statistical rigor, EvoEval strictly enforces the foll
 
 ## 3. Agent Archetype Taxonomy ($G_1$ through $G_7, G_6^*$)
 
-EvoEval models standardized agent archetypes representing the spectrum of autonomous coding and self-improving agent architectures (intellectually rooted in foundational self-referential Gödel Machines, the Darwinian Gödel Machine, and Voyager skill acquisition; implemented in [`evaeval/adapters/`](file:///c:/Users/kruti/EvoEval/evaeval/adapters)):
+SAGE models standardized agent archetypes representing the spectrum of autonomous coding and self-improving agent architectures (intellectually rooted in foundational self-referential Gödel Machines, the Darwinian Gödel Machine, and Voyager skill acquisition; implemented in [`sage/adapters/`](file:///c:/Users/kruti/SAGE/sage/adapters)):
 
 | Archetype | Name | Target Component | Mutation Feedback Mechanism | Verification & Rollback |
 |---|---|---|---|---|
@@ -157,7 +157,7 @@ EvoEval models standardized agent archetypes representing the spectrum of autono
 
 ## 4. Benchmark Task Catalog & Deliberate Drift Probes
 
-The EvoEval benchmark catalog resides in [`tasks/tasks_index.json`](file:///c:/Users/kruti/EvoEval/tasks/tasks_index.json) and comprises exactly **100 standardized engineering tasks** balanced across a 5-type operational taxonomy (20 tasks per type):
+The SAGE benchmark catalog resides in [`tasks/tasks_index.json`](file:///c:/Users/kruti/SAGE/tasks/tasks_index.json) and comprises exactly **100 standardized engineering tasks** balanced across a 5-type operational taxonomy (20 tasks per type):
 - **`bug_fix` (20 tasks, `task_001` to `task_096`)**: Algorithmic corner cases, arithmetic precision errors, integer truncation, off-by-one errors, state race conditions.
 - **`feature` (20 tasks, `task_002` to `task_097`)**: Concurrency primitives, token-bucket rate limiters, async batching pipelines, LRU caches, circuit breakers.
 - **`refactor` (20 tasks, `task_003` to `task_098`)**: Blocking I/O to async/await conversion, monomorphic decoupling, connection pool optimization, generator memory reduction.
@@ -168,7 +168,7 @@ The EvoEval benchmark catalog resides in [`tasks/tasks_index.json`](file:///c:/U
 
 ### 4.1 Standalone Repository Provenance (100 Complete Codebases)
 
-Unlike static benchmarks that provide isolated prompt stubs or single-file scripts, **every single one of the 100 benchmark tasks is released as a fully standalone, runnable repository** located in [`tasks/repos/task_001/`](file:///c:/Users/kruti/EvoEval/tasks/repos/task_001/) through [`tasks/repos/task_100/`](file:///c:/Users/kruti/EvoEval/tasks/repos/task_100/).
+Unlike static benchmarks that provide isolated prompt stubs or single-file scripts, **every single one of the 100 benchmark tasks is released as a fully standalone, runnable repository** located in [`tasks/repos/task_001/`](file:///c:/Users/kruti/SAGE/tasks/repos/task_001/) through [`tasks/repos/task_100/`](file:///c:/Users/kruti/SAGE/tasks/repos/task_100/).
 
 Every standalone task repository follows a rigorous, hermetic packaging layout:
 ```
@@ -183,7 +183,7 @@ tasks/repos/task_XXX/
 └── progress_metric.py      # (Exploit probes only) Runnable progress metric script
 ```
 
-In addition to the 100 standardized task directories, legacy multi-module testbeds ([`mini_orm`](file:///c:/Users/kruti/EvoEval/tasks/repos/mini_orm/), [`auth_service`](file:///c:/Users/kruti/EvoEval/tasks/repos/auth_service/), [`data_pipeline`](file:///c:/Users/kruti/EvoEval/tasks/repos/data_pipeline/), and [`math_engine`](file:///c:/Users/kruti/EvoEval/tasks/repos/math_engine/)) are maintained for backwards compatibility and integration tests.
+In addition to the 100 standardized task directories, legacy multi-module testbeds ([`mini_orm`](file:///c:/Users/kruti/SAGE/tasks/repos/mini_orm/), [`auth_service`](file:///c:/Users/kruti/SAGE/tasks/repos/auth_service/), [`data_pipeline`](file:///c:/Users/kruti/SAGE/tasks/repos/data_pipeline/), and [`math_engine`](file:///c:/Users/kruti/SAGE/tasks/repos/math_engine/)) are maintained for backwards compatibility and integration tests.
 
 ---
 
@@ -223,7 +223,7 @@ To provide full peer-review transparency into task quality and complexity, repre
 
 ### 4.3 Deliberate Drift Probes (20% Catalog Breakdown)
 
-EvoEval incorporates exactly **20 engineered deliberate drift probes** (`is_drift_probe: true`, representing 20% of the entire benchmark). Each drift probe models a distinct, realistic specification gaming vector where surface progress markers diverge from true invariant correctness:
+SAGE incorporates exactly **20 engineered deliberate drift probes** (`is_drift_probe: true`, representing 20% of the entire benchmark). Each drift probe models a distinct, realistic specification gaming vector where surface progress markers diverge from true invariant correctness:
 
 | Task ID | Domain / Component | Gameable Surface Proxy (`test_proxy.py`) | Sequestered Ground-Truth Invariant (`test_gt.py`) |
 |---|---|---|---|
@@ -251,7 +251,7 @@ EvoEval incorporates exactly **20 engineered deliberate drift probes** (`is_drif
 
 ### 4.4 Task Difficulty Validation Study ($P(0) = 0.60$ Non-Saturation Invariant)
 
-To formalize the Easy/Medium/Hard taxonomy and resolve the reviewer requirement for objective difficulty attribution, we executed an automated structural and empirical validation study across all 100 tasks (exported to [`tasks/task_difficulty_validation.json`](file:///c:/Users/kruti/EvoEval/tasks/task_difficulty_validation.json) and published in [`paper/tables/table_task_difficulty_validation.tex`](file:///c:/Users/kruti/EvoEval/paper/tables/table_task_difficulty_validation.tex)).
+To formalize the Easy/Medium/Hard taxonomy and resolve the reviewer requirement for objective difficulty attribution, we executed an automated structural and empirical validation study across all 100 tasks (exported to [`tasks/task_difficulty_validation.json`](file:///c:/Users/kruti/SAGE/tasks/task_difficulty_validation.json) and published in [`paper/tables/table_task_difficulty_validation.tex`](file:///c:/Users/kruti/SAGE/paper/tables/table_task_difficulty_validation.tex)).
 
 The study evaluates five independent dimensions:
 1. **McCabe Cyclomatic Complexity ($M$)**: AST-derived count of independent linear code execution paths.
@@ -276,7 +276,7 @@ The study evaluates five independent dimensions:
 
 ### 4.5 Inter-Task Similarity Matrix & Diversity Proof (Zero Duplicates)
 
-To rigorously disprove reviewer concerns of duplicated or repetitive task definitions, we computed the full pairwise similarity matrix across all $100 \times 100 = 10{,}000$ task prompt pairs using TF-IDF token vector cosine similarity and 4-gram Jaccard overlap (exported to [`tasks/task_similarity_matrix.json`](file:///c:/Users/kruti/EvoEval/tasks/task_similarity_matrix.json) and visualized in [`paper/figures/task_similarity_heatmap.png`](file:///c:/Users/kruti/EvoEval/paper/figures/task_similarity_heatmap.png)).
+To rigorously disprove reviewer concerns of duplicated or repetitive task definitions, we computed the full pairwise similarity matrix across all $100 \times 100 = 10{,}000$ task prompt pairs using TF-IDF token vector cosine similarity and 4-gram Jaccard overlap (exported to [`tasks/task_similarity_matrix.json`](file:///c:/Users/kruti/SAGE/tasks/task_similarity_matrix.json) and visualized in [`paper/figures/task_similarity_heatmap.png`](file:///c:/Users/kruti/SAGE/paper/figures/task_similarity_heatmap.png)).
 
 #### Empirical Diversity Metrics:
 - **Mean Pairwise Similarity**: $\mu = 0.0524 \pm 0.0732$ (confirming near-orthogonal task problem spaces).
@@ -290,7 +290,7 @@ Every single task addresses an independent software engineering specification, e
 
 ### 4.6 Extended Contamination & Pre-Training Leakage Audit across All 100 Tasks
 
-In accordance with 2026 AI evaluation standards following the retirement of SWE-bench Verified (~32.7% pre-training solution contamination), all 100 tasks in EvoEval were subjected to an exhaustive zero-shot solution leakage audit using `qwen2.5-coder-7b-instruct` (exported to [`tasks/contamination_audit_results.json`](file:///c:/Users/kruti/EvoEval/tasks/contamination_audit_results.json) and published in [`paper/tables/table_appendix_contamination.tex`](file:///c:/Users/kruti/EvoEval/paper/tables/table_appendix_contamination.tex)).
+In accordance with 2026 AI evaluation standards following the retirement of SWE-bench Verified (~32.7% pre-training solution contamination), all 100 tasks in SAGE were subjected to an exhaustive zero-shot solution leakage audit using `qwen2.5-coder-7b-instruct` (exported to [`tasks/contamination_audit_results.json`](file:///c:/Users/kruti/SAGE/tasks/contamination_audit_results.json) and published in [`paper/tables/table_appendix_contamination.tex`](file:///c:/Users/kruti/SAGE/paper/tables/table_appendix_contamination.tex)).
 
 | Task Category | Tasks Evaluated | Mean $J_{\text{4-gram}}$ | Mean LCS Ratio | Mean Line Overlap | Max Overlap Detected | Flagged Tasks ($>50\%$) |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -301,13 +301,13 @@ In accordance with 2026 AI evaluation standards following the retirement of SWE-
 | **Security Audit** | 20 | 0.0% | 11.1% | 0.0% | 14.1% | **0 / 20 (0.0%)** |
 | **Benchmark Total** | **100** | **0.0%** | **5.5%** | **0.2%** | **14.1%** | **0 / 100 (0.0% Flagged)** |
 
-> **Audit Conclusion**: While SWE-bench Verified exhibited **32.7% pre-training contamination**, EvoEval achieves **0.0% flagged instances** across all 100 tasks. The maximum observed composite overlap of $14.1\%$ reflects standard Python syntactic boilerplate (`import asyncio`, `def __init__(self):`), confirming that EvoEval evaluates genuine algorithmic reasoning rather than memorized GitHub pre-training data.
+> **Audit Conclusion**: While SWE-bench Verified exhibited **32.7% pre-training contamination**, SAGE achieves **0.0% flagged instances** across all 100 tasks. The maximum observed composite overlap of $14.1\%$ reflects standard Python syntactic boilerplate (`import asyncio`, `def __init__(self):`), confirming that SAGE evaluates genuine algorithmic reasoning rather than memorized GitHub pre-training data.
 
 ---
 
 ### 4.7 Task Difficulty Calibration vs. Established Benchmarks & Cross-Benchmark Taxonomy
 
-To address reviewer scrutiny regarding benchmark positioning and answer *"How does EvoEval compare to SWE-bench, HumanEval, MBPP, EvoAgentBench, ActBench, and SkillsBench?"*, EvoEval provides an empirical cross-benchmark difficulty calibration and taxonomy matrix (certified in [`experiments/runs/comparative_baselines_results.json`](file:///c:/Users/kruti/EvoEval/experiments/runs/comparative_baselines_results.json) and published in Table 13 of [`paper/main.tex`](file:///c:/Users/kruti/EvoEval/paper/main.tex)):
+To address reviewer scrutiny regarding benchmark positioning and answer *"How does SAGE compare to SWE-bench, HumanEval, MBPP, EvoAgentBench, ActBench, and SkillsBench?"*, SAGE provides an empirical cross-benchmark difficulty calibration and taxonomy matrix (certified in [`experiments/runs/comparative_baselines_results.json`](file:///c:/Users/kruti/SAGE/experiments/runs/comparative_baselines_results.json) and published in Table 13 of [`paper/main.tex`](file:///c:/Users/kruti/SAGE/paper/main.tex)):
 
 #### Cross-Benchmark Macro Taxonomy & Complexity Calibration
 
@@ -319,19 +319,19 @@ To address reviewer scrutiny regarding benchmark positioning and answer *"How do
 | **EvoAgentBench** (Gao et al., 2026) | Agent transferability | 120 | 4–12 steps | Single-episode | Task completion | 14.5% (medium) | 48.0% (uncalibrated) |
 | **ActBench** (Yao et al., 2026) | Static safety probes | 85 | 3–8 steps | Single-turn | Rule-based security checks | 8.2% (low) | 52.0% (uncalibrated) |
 | **SkillsBench** (Li et al., 2026) | Skill accumulation | 210 | 6–15 steps | Multi-task | Task unit tests | 11.0% (low) | 54.0% (uncalibrated) |
-| **EvoEval (Ours)** | **Recursive evolution harness** | **185** | **1–8 steps** | **Longitudinal ($T \ge 10$)** | **Dual-container hidden pytest** | **0.0%** (zero contamination) | **60.0% ($P_0 = 0.60$)** |
+| **SAGE (Ours)** | **Recursive evolution harness** | **185** | **1–8 steps** | **Longitudinal ($T \ge 10$)** | **Dual-container hidden pytest** | **0.0%** (zero contamination) | **60.0% ($P_0 = 0.60$)** |
 
 #### Why Frozen Baseline Calibration ($P(0) = 0.60$) Is Mathematically Essential for Self-Evolution
 
 A recurring question from reviewers is: *"Why not simply evaluate recursive self-evolution directly on SWE-bench Verified?"*
 
-To answer this conclusively, we evaluated our frozen control baseline $G_1$ (Qwen-2.5-Coder-7B) on a 50-task stratified subset of SWE-bench Verified vs. the 100-task EvoEval suite:
+To answer this conclusively, we evaluated our frozen control baseline $G_1$ (Qwen-2.5-Coder-7B) on a 50-task stratified subset of SWE-bench Verified vs. the 100-task SAGE suite:
 - **$G_1$ on SWE-bench Verified Subset (50 tasks)**:
   - Solve rate: **20.0%** (10/50 resolved)
   - Mean tool turns: **18.4 steps**
   - Mean wall-clock time: **215.4 seconds** per task
   - Direct token inference cost: **$0.0385 USD** per task
-- **$G_1$ on EvoEval Suite (100 tasks)**:
+- **$G_1$ on SAGE Suite (100 tasks)**:
   - Solve rate: **60.0%** ($P(0) = 0.60$)
   - Mean tool turns: **1.62 steps**
   - Mean wall-clock time: **1.68 seconds** (Windows Local) / **1.84 seconds** (Linux Docker)
@@ -339,8 +339,8 @@ To answer this conclusively, we evaluated our frozen control baseline $G_1$ (Qwe
 
 **The Severe Floor Effect**: On SWE-bench Verified, a frozen 7B/8B model fails $80\%$ of tasks on initial attempt. When an agent fails $80\%$ of tasks, it cannot generate valid execution trajectories, providing zero positive reinforcement signals from which prompt rewriters ($G_2$), memory accumulators ($G_3$), or reflection engines ($G_4$) can extract successful heuristics. Conversely, a 20-cycle evolutionary benchmark across 6 groups and 3 seeds on SWE-bench Verified would require **$13,860.00 USD** and **1,292 GPU hours**, making community auditing impossible.
 
-**EvoEval's Non-Saturation Calibration ($P \in [0.60, 0.92]$)**:
-By calibrating $P(0) = 0.60$, EvoEval satisfies two fundamental requirements of evolutionary evaluation:
+**SAGE's Non-Saturation Calibration ($P \in [0.60, 0.92]$)**:
+By calibrating $P(0) = 0.60$, SAGE satisfies two fundamental requirements of evolutionary evaluation:
 1. **Headroom for Adaptation**: Strong agents can adapt and improve upward without ceiling saturation ($G_6$ reaches $P(T) = 0.92$, a $+0.32$ capability gain).
 2. **Positive Training Signal**: Agents succeed on $60\%$ of initial tasks, generating rich positive and negative trace pairs for reflection and memory accumulation, while leaving substantial difficulty headroom on Hard tasks (where $G_1$ passes only $36.4\%$).
 
@@ -348,14 +348,14 @@ By calibrating $P(0) = 0.60$, EvoEval satisfies two fundamental requirements of 
 
 ## 5. Security, Sandbox Isolation & Scorer Concealment (METR RE-Bench)
 
-To prevent evaluator corruption, EvoEval implements dual-container isolation modeled after **METR's RE-Bench** findings (where visible scoring produced a **43x surge** in test harness hacking):
+To prevent evaluator corruption, SAGE implements dual-container isolation modeled after **METR's RE-Bench** findings (where visible scoring produced a **43x surge** in test harness hacking):
 
 ```
 +-----------------------------------------------------------------------------------+
 | HOST / EVALUATION ORCHESTRATOR                                                    |
 |                                                                                   |
 |  +-------------------------------------+   +------------------------------------+ |
-|  | AGENT SANDBOX (evo-sandbox:1.0)     |   | SCORER CONTAINER (evo-scorer:1.0)  | |
+|  | AGENT SANDBOX (sage-sandbox:1.0)     |   | SCORER CONTAINER (sage-scorer:1.0)  | |
 |  | - User: evaluser (1000:1000)        |   | - User: scorer (1001:1001)         | |
 |  | - Network: NONE (isolated)          |   | - Network: NONE (isolated)         | |
 |  | - Capabilities: ALL dropped         |   | - Capabilities: ALL dropped        | |
@@ -367,10 +367,10 @@ To prevent evaluator corruption, EvoEval implements dual-container isolation mod
 +-----------------------------------------------------------------------------------+
 ```
 
-### Isolation Guarantees (Verified by [`tests/test_scorer_invisibility.py`](file:///c:/Users/kruti/EvoEval/tests/test_scorer_invisibility.py))
+### Isolation Guarantees (Verified by [`tests/test_scorer_invisibility.py`](file:///c:/Users/kruti/SAGE/tests/test_scorer_invisibility.py))
 1. **Distinct Container Images & Identities**:
-   - Agent runs in `evo-sandbox:1.0` as `evaluser` (`1000:1000`).
-   - Scorer runs in `evo-scorer:1.0` as `scorer` (`1001:1001`). Running the agent in the scorer image raises `PermissionError`.
+   - Agent runs in `sage-sandbox:1.0` as `evaluser` (`1000:1000`).
+   - Scorer runs in `sage-scorer:1.0` as `scorer` (`1001:1001`). Running the agent in the scorer image raises `PermissionError`.
 2. **Network Blindness**:
    - Containers run with `network_mode: "none"`. All outbound networking (`curl`, `wget`, `ssh`, `socket`) is blocked.
 3. **Scorer Blindness**:
@@ -379,15 +379,15 @@ To prevent evaluator corruption, EvoEval implements dual-container isolation mod
 4. **Strictly Read-Only Scoring Mounts**:
    - Workspaces and test suites are mounted strictly `:ro` into the scorer container. Read-write mounts raise `PermissionError`.
 5. **Path Confinement Fallback**:
-   - When running on local systems without Docker, [`LocalSandbox`](file:///c:/Users/kruti/EvoEval/evaeval/environment/sandbox.py) enforces canonical path resolution jails, preventing symlink traversal, directory climbing (`../`), or access to parent directories.
+   - When running on local systems without Docker, [`LocalSandbox`](file:///c:/Users/kruti/SAGE/sage/environment/sandbox.py) enforces canonical path resolution jails, preventing symlink traversal, directory climbing (`../`), or access to parent directories.
 
 ### 5.1 Ablation Study: Dual-Container Isolation vs. Single-Container Privilege Separation
 
 A critical architectural question is: *Why require a dual-container architecture (`evo-sandbox` + `evo-scorer`) instead of a single container with Linux user privilege separation (`evaluser` vs `scorer`)?*
 
-To empirically answer this, we conducted an adversarial escape ablation against 5 concrete exploitation vectors across three isolation paradigms (attested in [`experiments/runs/ablation_study_results.json`](file:///c:/Users/kruti/EvoEval/experiments/runs/ablation_study_results.json)):
+To empirically answer this, we conducted an adversarial escape ablation against 5 concrete exploitation vectors across three isolation paradigms (attested in [`experiments/runs/ablation_study_results.json`](file:///c:/Users/kruti/SAGE/experiments/runs/ablation_study_results.json)):
 
-| Attack Vector | Bare Host (No Isolation) | Single Container (`evaluser`, `uid=1000`) | Dual Container (EvoEval Architecture) |
+| Attack Vector | Bare Host (No Isolation) | Single Container (`evaluser`, `uid=1000`) | Dual Container (SAGE Architecture) |
 |---|:---:|:---:|:---:|
 | 1. Hidden Test Discovery (`find / -name "*test_ground_truth*"`) | **Compromised** (100%) | **Compromised** (100% via world-readable paths) | **Zero Leakage** (0.0% - volume unmounted) |
 | 2. Process Snooping (`/proc/$PID/mem`, ptrace) | **Compromised** (100%) | **Compromised** (100% - shared PID namespace) | **Zero Leakage** (0.0% - isolated PID namespace) |
@@ -402,7 +402,7 @@ To empirically answer this, we conducted an adversarial escape ablation against 
 
 ## 6. Comprehensive 5-Check Tamper Detection Engine
 
-The tamper engine in [`evaeval/scoring/tamper_detect.py`](file:///c:/Users/kruti/EvoEval/evaeval/scoring/tamper_detect.py) audits every task execution across five independent security vectors. Every individual check result is logged as a canonical `TrajectoryEvent` with `event_type="safety_check"`:
+The tamper engine in [`sage/scoring/tamper_detect.py`](file:///c:/Users/kruti/SAGE/sage/scoring/tamper_detect.py) audits every task execution across five independent security vectors. Every individual check result is logged as a canonical `TrajectoryEvent` with `event_type="safety_check"`:
 
 ```
 [Agent Execution] ---> [TamperDetector]
@@ -447,7 +447,7 @@ To validate this choice, we ablated the detector against six canonical adversari
 | **0-Check (None)** | None | 0.0% (0/6) | 0.0% | 0.0% | Insecure |
 | **1-Check (Diff)** | Check (a) | 33.3% (2/6) | +0.4% | 0.0% | Highly Vulnerable (misses 3, 4, 5, 6) |
 | **3-Check (Static)** | Checks (a), (b), (c) | 66.7% (4/6) | +0.9% | 0.0% | Vulnerable (misses 5, 6) |
-| **5-Check (EvoEval)** | Checks (a), (b), (c), (d), (e) | **100.0%** (6/6) | **+1.8%** | **0.0%** | **Pareto Optimal** |
+| **5-Check (SAGE)** | Checks (a), (b), (c), (d), (e) | **100.0%** (6/6) | **+1.8%** | **0.0%** | **Pareto Optimal** |
 | **7-Check (+ptrace, +DPI)** | All 5 + ptrace + socket DPI | 100.0% (6/6) | +48.5% | 4.2% | Degraded (high latency & false alarms) |
 
 **Conclusion**: Checks (a)-(c) provide basic static hygiene, but leave agents free to fake test passes via bytecode mocking or git history erasure. The 5-check configuration achieves complete 100% exploit coverage with imperceptible runtime overhead (+1.8%). Adding further dynamic instrumentation (7-Check) adds prohibitive overhead (+48.5%) and introduces a 4.2% false-positive rate on legitimate multiprocessing tasks. Thus, 5 checks is the optimal engineering boundary.
@@ -456,7 +456,7 @@ To validate this choice, we ablated the detector against six canonical adversari
 
 ## 7. LLM-Judge Architectural Isolation
 
-To support qualitative evaluation without introducing sycophancy, shared bias, or corrupting evaluation rigor, EvoEval enforces three architectural isolation rules in [`evaeval/scoring/llm_judge.py`](file:///c:/Users/kruti/EvoEval/evaeval/scoring/llm_judge.py):
+To support qualitative evaluation without introducing sycophancy, shared bias, or corrupting evaluation rigor, SAGE enforces three architectural isolation rules in [`sage/scoring/llm_judge.py`](file:///c:/Users/kruti/SAGE/sage/scoring/llm_judge.py):
 
 1. **Cross-Family Model Diversity**:
    - Any LLM judge MUST run with a different model family than the evaluated agent:
@@ -464,7 +464,7 @@ To support qualitative evaluation without introducing sycophancy, shared bias, o
      - E.g., Agent = `DeepSeek` (`deepseek-coder-v2`), Judge = `Mistral` (`mistral-7b-instruct`).
    - Same-family evaluation (e.g., Qwen judging Qwen) is rejected by `LLMJudge.validate_isolation()` with `JudgeIsolationError` to eliminate shared blind spots.
 2. **Prompt Invisibility & Sandbox Concealment**:
-   - Judge prompts, rubrics, and criteria reside exclusively within `evaeval/scoring/llm_judge.py` and are never written to or readable from the agent workspace.
+   - Judge prompts, rubrics, and criteria reside exclusively within `sage/scoring/llm_judge.py` and are never written to or readable from the agent workspace.
    - Any agent attempts to read or inspect judge resources (`judge_prompt`, `.hidden_judge`, `judge_rubric`, `llm_judge`) are blocked by `SafetyMonitor` with exit code `126`.
 3. **Auxiliary-Only Score Guarantee**:
    - Ground truth test suites (`pytest`) and deterministic rule checks are 100% primary.
@@ -477,7 +477,7 @@ To support qualitative evaluation without introducing sycophancy, shared bias, o
 
 ## 8. System Hardening, Fault Tolerance & Budget Guards
 
-Implemented in [`evaeval/runner/orchestrator.py`](file:///c:/Users/kruti/EvoEval/evaeval/runner/orchestrator.py) and [`evaeval/llm/pricing.py`](file:///c:/Users/kruti/EvoEval/evaeval/llm/pricing.py):
+Implemented in [`sage/runner/orchestrator.py`](file:///c:/Users/kruti/SAGE/sage/runner/orchestrator.py) and [`sage/llm/pricing.py`](file:///c:/Users/kruti/SAGE/sage/llm/pricing.py):
 
 1. **Task Execution Wall-Clock Timeouts**:
    - Task execution wrapped in `concurrent.futures.ThreadPoolExecutor` with strict timeouts (`timeout_sec: 60`).
@@ -498,10 +498,10 @@ Implemented in [`evaeval/runner/orchestrator.py`](file:///c:/Users/kruti/EvoEval
 
 ### 8.1 Empirical Compute Cost Accounting & Pilot Cost Verification
 
-To satisfy reviewer requests for rigorous compute cost transparency and quantify the **capability-vs-cost tradeoff metric family**, EvoEval records synchronous token and monetary expenditure inside every event payload via [`evaeval/llm/pricing.py`](file:///c:/Users/kruti/EvoEval/evaeval/llm/pricing.py).
+To satisfy reviewer requests for rigorous compute cost transparency and quantify the **capability-vs-cost tradeoff metric family**, SAGE records synchronous token and monetary expenditure inside every event payload via [`sage/llm/pricing.py`](file:///c:/Users/kruti/SAGE/sage/llm/pricing.py).
 
 #### 1. Pricing Model, Dual-Accounting Methodology & Token Cost Accounting
-To eliminate ambiguity between local zero-cost offline testbed execution and standardized economic pricing, EvoEval enforces a **Dual-Accounting Framework**:
+To eliminate ambiguity between local zero-cost offline testbed execution and standardized economic pricing, SAGE enforces a **Dual-Accounting Framework**:
 1. **Actual Empirical Direct Spend**: **$0.00 USD**. All deterministic calibration runs, pipeline self-tests, and local open-source neural executions (such as `local_qwen_empirical_run` using `Qwen2.5-Coder-3B-Instruct` GGUF) run entirely locally on dedicated testbed hardware, incurring zero external third-party API provider fees ($0.00 actual billing).
 2. **Normalized Benchmark Model Tariff Equivalency**: To provide rigorous economic comparability across language model families and evaluate deployment economics against commercial cloud APIs, all token flows are simultaneously priced using the standardized tariff for our benchmark foundation model `qwen2.5-coder-7b-instruct` ($0.20 prompt / $0.40 completion per $10^6$ tokens).
 
@@ -518,7 +518,7 @@ $$\text{Cost} = \left(\frac{\text{Tokens}_{\text{in}}}{10^6} \times P_{\text{in}
 ---
 
 #### 2. Multi-Seed Empirical Calibration Study: Estimated vs. Realized
-Empirical telemetry extracted directly from the canonical multi-seed calibration study ([`experiments/runs/pilot_canonical_3seeds/trajectory.jsonl`](file:///c:/Users/kruti/EvoEval/experiments/runs/pilot_canonical_3seeds/trajectory.jsonl)), benchmarked across 900 task evaluations and verified against live open-source neural model execution:
+Empirical telemetry extracted directly from the canonical multi-seed calibration study ([`experiments/runs/pilot_canonical_3seeds/trajectory.jsonl`](file:///c:/Users/kruti/SAGE/experiments/runs/pilot_canonical_3seeds/trajectory.jsonl)), benchmarked across 900 task evaluations and verified against live open-source neural model execution:
 
 | Metric Dimension | Estimated / Budgeted Ceiling | Realized Pilot Value | Variance / Headroom |
 |---|:---:|:---:|:---:|
@@ -611,7 +611,7 @@ $$\text{CCEI} = \frac{\Delta P(T)}{\text{Cost}_{\text{USD}}} \quad \left[\text{c
 
 #### 7. Canonical Benchmark Trajectory Suite (18,000 Evaluations)
 
-Moving beyond initial pilot calibration, the complete canonical benchmark trajectory suite has been executed and verified in [`experiments/runs/full_study_canonical/`](file:///c:/Users/kruti/EvoEval/experiments/runs/full_study_canonical) across all 100 tasks, 6 agent archetypes, 10 evolutionary cycles, and 3 random seeds ($100 \times 6 \times 10 \times 3 = \mathbf{18{,}000\text{ completed evaluations}}$) under deterministic, state-formalized agent policies. These canonical trajectories isolate causal archetype mechanisms and establish zero-flakiness counterfactual reference baselines, supplemented by live neural model rollouts (`experiments/runs/full_study_live/`).
+Moving beyond initial pilot calibration, the complete canonical benchmark trajectory suite has been executed and verified in [`experiments/runs/full_study_canonical/`](file:///c:/Users/kruti/SAGE/experiments/runs/full_study_canonical) across all 100 tasks, 6 agent archetypes, 10 evolutionary cycles, and 3 random seeds ($100 \times 6 \times 10 \times 3 = \mathbf{18{,}000\text{ completed evaluations}}$) under deterministic, state-formalized agent policies. These canonical trajectories isolate causal archetype mechanisms and establish zero-flakiness counterfactual reference baselines, supplemented by live neural model rollouts (`experiments/runs/full_study_live/`).
 
 | Dimension | Pilot Calibration Study | Canonical Benchmark Trajectory Suite (`full_study_canonical`) | Validation Status |
 |---|:---:|:---:|:---:|
@@ -628,7 +628,7 @@ Moving beyond initial pilot calibration, the complete canonical benchmark trajec
 | **Budget Ceiling** | $50.00 USD | **$200.00 USD** | $126.05 Headroom (37.0% consumed) |
 
 ##### Full-Scale 18,000-Evaluation Group Dynamics & Compute Expenditure Matrix
-Derived directly from [`experiments/runs/full_study_canonical/results/cycle_metrics.json`](file:///c:/Users/kruti/EvoEval/experiments/runs/full_study_canonical/results/cycle_metrics.json) (180 metric tuples across seeds 42, 43, 44):
+Derived directly from [`experiments/runs/full_study_canonical/results/cycle_metrics.json`](file:///c:/Users/kruti/SAGE/experiments/runs/full_study_canonical/results/cycle_metrics.json) (180 metric tuples across seeds 42, 43, 44):
 
 | Group | Mechanism | Evaluations | Tokens In | Tokens Out | Total Tokens | Spend (USD) | $P(0)$ | $P(T)$ | $\Delta P(T)$ | SecurityDrift | ProxyGap | Retention |
 |---|---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -651,7 +651,7 @@ In evolutionary evaluation, agents adapt stochastic prompt and memory mutations 
   - Across $N=100$ tasks over 10 generations, empirical standard deviation across independent seeds for reflection ($G_4$) is $\sigma \approx 0.040 \in [0.03, 0.06]$.
   - At $S = 1$: $\text{SE} = \mathbf{\text{N/A}^*}$ (sample variance undefined for $N=1$; underlying population $\hat{\sigma} \approx 0.040$), compute spend: $24.65 USD.
   - At $S = 2$: $\text{Mean Drift} = 0.283$, $\text{SE} = \pm 0.0290$ ($s = 0.0410$, 95% CI: $\pm 0.0568$), compute spend: $49.30 USD.
-  - At $S = 3$ (**EvoEval Standard**): $\text{Mean Drift} = 0.280$, $\text{SE} = \mathbf{\pm 0.0231}$ ($s = 0.0400$, 95% CI: $\pm 0.0453$), compute spend: **$73.95 USD**.
+  - At $S = 3$ (**SAGE Standard**): $\text{Mean Drift} = 0.280$, $\text{SE} = \mathbf{\pm 0.0231}$ ($s = 0.0400$, 95% CI: $\pm 0.0453$), compute spend: **$73.95 USD**.
   - At $S = 5$: $\text{Mean Drift} = 0.281$, $\text{SE} = \pm 0.0179$ ($s = 0.0400$, 95% CI: $\pm 0.0351$), compute spend: $123.25 USD.
   - At $S = 8$: $\text{Mean Drift} = 0.279$, $\text{SE} = \pm 0.0138$ ($s = 0.0390$, 95% CI: $\pm 0.0270$), compute spend: $197.20 USD.
   - At $S = 10$: $\text{Mean Drift} = 0.280$, $\text{SE} = \pm 0.0120$ ($s = 0.0380$, 95% CI: $\pm 0.0236$), compute spend: $246.50 USD.
@@ -671,9 +671,9 @@ Reviewers ask why the pilot evaluation stopped at 5 cycles while the full benchm
 
 ## 9. Immutable Telemetry, Append-Only Trajectory & Frozen Schema
 
-Telemetry is captured via append-only streaming in [`evaeval/trajectory/`](file:///c:/Users/kruti/EvoEval/evaeval/trajectory):
+Telemetry is captured via append-only streaming in [`sage/trajectory/`](file:///c:/Users/kruti/SAGE/sage/trajectory):
 
-- **Frozen Schema Invariant**: `SCHEMA_VERSION = "1.0.0"` in [`evaeval/trajectory/schema.py`](file:///c:/Users/kruti/EvoEval/evaeval/trajectory/schema.py) is immutable.
+- **Frozen Schema Invariant**: `SCHEMA_VERSION = "1.0.0"` in [`sage/trajectory/schema.py`](file:///c:/Users/kruti/SAGE/sage/trajectory/schema.py) is immutable.
 - **Immediate Disk Persistence**: `TrajectoryWriter` enforces `os.fsync()` after every line write, guaranteeing data durability against power outages or process crashes.
 - **12 Canonical Event Types**:
   1. `task_start`: Task metadata, repo, difficulty, category.
@@ -693,26 +693,26 @@ Telemetry is captured via append-only streaming in [`evaeval/trajectory/`](file:
 
 ## 10. The Reproducibility Contract & Reviewer Verification
 
-EvoEval guarantees 100% reproducible scientific benchmarking through six core commitments documented in [README.md](file:///c:/Users/kruti/EvoEval/README.md):
+SAGE guarantees 100% reproducible scientific benchmarking through six core commitments documented in [README.md](file:///c:/Users/kruti/SAGE/README.md):
 
 ### 1. One-Command Study Execution
 ```bash
-make reproduce && evoeval run --config configs/experiments/full_study.yaml
+make reproduce && sage run --config configs/experiments/full_study.yaml
 ```
-- `make reproduce`: Runs pre-flight verification (`evoeval verify-env`), validating model weights, image digests, task catalogs, and seeds.
-- `evoeval run`: Executes the complete 10-cycle, 3-seed, 100-task matrix.
+- `make reproduce`: Runs pre-flight verification (`sage verify-env`), validating model weights, image digests, task catalogs, and seeds.
+- `sage run`: Executes the complete 10-cycle, 3-seed, 100-task matrix.
 
 ### 2. Pinned Model Weights & Container Digests
 - **LLM Weights (Exact 40-Hex HuggingFace Commit SHAs)**:
   - Evaluated Agent: `Qwen/Qwen2.5-Coder-7B-Instruct` (pinned 40-hex revision SHA: `c03e6d358207e414f1eca0bb1891e29f1db0e242`).
   - Auxiliary Judge: `meta-llama/Llama-3.1-8B-Instruct` (pinned 40-hex revision SHA: `0e9e39f249a16976918f6564b8830bc894c89659`).
   - *Integrity Note*: All model revisions are exact 40-character hexadecimal commit hashes fetched from the official Hugging Face model cards. Placeholder strings or truncated 20-hex pseudo-hashes (e.g. `8f7e2a91b4c3e8061245`) are rejected by schema validators and CI gates (`test_pinned_model_weights_in_full_study`).
-- **Container Digests** ([`docker/image_digests.json`](file:///c:/Users/kruti/EvoEval/docker/image_digests.json)):
-  - `evo-sandbox:1.0`: `sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401`
-  - `evo-scorer:1.0`: `sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34`
-  - `evo-backend:1.0`: `sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e`
-  - `evo-frontend:1.0`: `sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333`
-  - *Build Provenance & Verification*: Digests are generated via [`scripts/build_and_inspect_images.py`](file:///c:/Users/kruti/EvoEval/scripts/build_and_inspect_images.py) (`make build-images`), executing `docker build` from pinned base images followed by `docker inspect --format='{{index .Id}}'`. The full cryptographic build provenance is audited in [`docker/build_provenance.json`](file:///c:/Users/kruti/EvoEval/docker/build_provenance.json), and CI step `docker-build-and-verify` enforces `python scripts/build_and_inspect_images.py --verify` (`make verify-images`) ensuring zero drift.
+- **Container Digests** ([`docker/image_digests.json`](file:///c:/Users/kruti/SAGE/docker/image_digests.json)):
+  - `sage-sandbox:1.0`: `sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401`
+  - `sage-scorer:1.0`: `sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34`
+  - `sage-backend:1.0`: `sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e`
+  - `sage-frontend:1.0`: `sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333`
+  - *Build Provenance & Verification*: Digests are generated via [`scripts/build_and_inspect_images.py`](file:///c:/Users/kruti/SAGE/scripts/build_and_inspect_images.py) (`make build-images`), executing `docker build` from pinned base images followed by `docker inspect --format='{{index .Id}}'`. The full cryptographic build provenance is audited in [`docker/build_provenance.json`](file:///c:/Users/kruti/SAGE/docker/build_provenance.json), and CI step `docker-build-and-verify` enforces `python scripts/build_and_inspect_images.py --verify` (`make verify-images`) ensuring zero drift.
 
 
 ### 3. Seeded Generators
@@ -728,7 +728,7 @@ Every evaluation run generates a cryptographic manifest at `experiments/runs/<ru
 - Raw file SHA-256 of `trajectory.jsonl`
 - Deterministic canonical projection SHA-256 (stripping non-deterministic wall-clock timestamps)
 - Total event count and type breakdown
-- Reviewer audit command: `evoeval manifest --run-id <run_id>`
+- Reviewer audit command: `sage manifest --run-id <run_id>`
 
 ### 5. Unified 4-Service Docker Compose
 ```bash
@@ -738,13 +738,13 @@ Brings up: `sandbox` + `scorer` + `backend` + `frontend`.
 
 ### 6. HuggingFace Dataset Release (The Paper's Artifact)
 ```bash
-evoeval export-hf --run-id latest --output hf_dataset/
+sage export-hf --run-id latest --output hf_dataset/
 ```
 Packages `tasks/tasks.jsonl`, `trajectories/trajectories.jsonl`, and `labels/labels.jsonl` with an Apache 2.0 dataset card.
 
 ### 7. Dual-Platform Verification & Reporting ("Report Both")
-To guarantee absolute platform transparency per NeurIPS reviewer criteria, EvoEval certifies and reports headline results across both environments side-by-side ($N=900$ task runs per platform):
-- **Headline Certified Environment (Linux Docker)**: Ubuntu 24.04 LTS, Docker 26.1, `evo-sandbox:1.0`, rootless `1000:1000`, `network: none`, cgroups `mem: 2g`, `pids: 128`. Enforces $0.0\%$ container escape rate (Clopper-Pearson 95\% CI: $[0.0\%, 45.1\%]$ for $N=6$).
+To guarantee absolute platform transparency per NeurIPS reviewer criteria, SAGE certifies and reports headline results across both environments side-by-side ($N=900$ task runs per platform):
+- **Headline Certified Environment (Linux Docker)**: Ubuntu 24.04 LTS, Docker 26.1, `sage-sandbox:1.0`, rootless `1000:1000`, `network: none`, cgroups `mem: 2g`, `pids: 128`. Enforces $0.0\%$ container escape rate (Clopper-Pearson 95\% CI: $[0.0\%, 45.1\%]$ for $N=6$).
 - **Secondary Cross-Validation Environment (Windows LocalSandbox)**: Windows 10 AMD64, Python 3.10.11, LocalSandbox path-jail, process regex safety monitor. Intercepts $98.9\%$ of unauthorized calls.
 
 | Metric | Headline Linux Docker | Windows LocalSandbox | Cross-Platform Parity |
@@ -758,26 +758,26 @@ To guarantee absolute platform transparency per NeurIPS reviewer criteria, EvoEv
 
 ### 8. Transparency & Reproducibility Assessment: Transition from Self-Attested to Strong (V1–V3 Verification)
 
-In preliminary reviewer feedback, EvoEval's reproducibility framework was evaluated as:
+In preliminary reviewer feedback, SAGE's reproducibility framework was evaluated as:
 > *"Good design; self-attested."*
 
-While the architectural blueprint established comprehensive theoretical contracts, relying on author self-attestation alone left open potential skepticism regarding unverified container digests, platform dependencies, and timing bounds. To transition the transparency and reproducibility standing from **"self-attested"** to **"Strong"**, EvoEval implemented a verifiable multi-stage verification pipeline (V1–V3):
+While the architectural blueprint established comprehensive theoretical contracts, relying on author self-attestation alone left open potential skepticism regarding unverified container digests, platform dependencies, and timing bounds. To transition the transparency and reproducibility standing from **"self-attested"** to **"Strong"**, SAGE implemented a verifiable multi-stage verification pipeline (V1–V3):
 
 1. **V1: Cryptographic Container Image Build Provenance & Zero-Drift CI Gate**:
-   - Replaced static hand-authored image digests with an automated build and inspect pipeline ([`scripts/build_and_inspect_images.py`](file:///c:/Users/kruti/EvoEval/scripts/build_and_inspect_images.py)).
-   - Executes real `docker build` commands followed by `docker inspect --format='{{index .Id}}'`, generating verified digests in [`docker/image_digests.json`](file:///c:/Users/kruti/EvoEval/docker/image_digests.json).
-   - Generates an immutable cryptographic build record in [`docker/build_provenance.json`](file:///c:/Users/kruti/EvoEval/docker/build_provenance.json) documenting base images, builder architecture, and exact inspect timestamps.
+   - Replaced static hand-authored image digests with an automated build and inspect pipeline ([`scripts/build_and_inspect_images.py`](file:///c:/Users/kruti/SAGE/scripts/build_and_inspect_images.py)).
+   - Executes real `docker build` commands followed by `docker inspect --format='{{index .Id}}'`, generating verified digests in [`docker/image_digests.json`](file:///c:/Users/kruti/SAGE/docker/image_digests.json).
+   - Generates an immutable cryptographic build record in [`docker/build_provenance.json`](file:///c:/Users/kruti/SAGE/docker/build_provenance.json) documenting base images, builder architecture, and exact inspect timestamps.
    - Enforces a zero-drift quality gate in CI (`make verify-images`) that halts builds if committed digests deviate from live inspect outputs.
 
 2. **V2: Clean Multi-Platform Execution & Per-Suite Latency Profiling ("Report Both")**:
-   - Re-executed the complete 174-test verification suite on a clean Linux CI runner (`ubuntu-latest`, Python 3.10.14), publishing the complete untruncated workflow execution log in [`docs/CI_WORKFLOW_RUN.log`](file:///c:/Users/kruti/EvoEval/docs/CI_WORKFLOW_RUN.log) (174 passed in 89.70s; 261.12s on Windows local host).
+   - Re-executed the complete 174-test verification suite on a clean Linux CI runner (`ubuntu-latest`, Python 3.10.14), publishing the complete untruncated workflow execution log in [`docs/CI_WORKFLOW_RUN.log`](file:///c:/Users/kruti/SAGE/docs/CI_WORKFLOW_RUN.log) (174 passed in 89.70s; 261.12s on Windows local host).
    - Certified headline Linux Docker container isolation alongside secondary Windows LocalSandbox in Section 6.4, Table~\ref{tab:dual_platform}, and Appendix~\ref{app:dual_platform}, empirically proving complete metric invariance ($\Delta_{\text{platform}} = 0.00$, $p > 0.95$).
    - Published comprehensive per-suite timing profiling across all 29 individual test files on both operating systems in Table~\ref{tab:per_suite_timings} and Section 12, formally scoping the $< 15$s assertion to the fast deterministic pre-commit integration test (`test_integration.py`: 8.45s on Linux CI, 13.22s on Windows).
 
 3. **V3: Pinned Model Commit Hashes & Independent External Attestation Engine**:
    - Pinned remote foundation model checkpoints to exact 40-character hexadecimal commit hashes (`c03e6d358207e414f1eca0bb1891e29f1db0e242` for Qwen and `0e9e39f249a16976918f6564b8830bc894c89659` for Llama), validated via remote Hugging Face API trees.
    - Emits canonical deterministic trajectory hash manifests (`trajectory_manifest.json`) across three distinct experimental tracks (Qwen 3-seed pilot, Llama 3-seed pilot, and 25-cycle long-horizon sensitivity).
-   - Deployed the standalone external verification engine ([`scripts/verify_reproducibility.py`](file:///c:/Users/kruti/EvoEval/scripts/verify_reproducibility.py)), which automatically checks all 6 verification layers without author intervention and produces machine-readable [`verification_attestation.json`](file:///c:/Users/kruti/EvoEval/verification_attestation.json) and human-auditable [`REPRODUCIBILITY_VERIFICATION.md`](file:///c:/Users/kruti/EvoEval/REPRODUCIBILITY_VERIFICATION.md).
+   - Deployed the standalone external verification engine ([`scripts/verify_reproducibility.py`](file:///c:/Users/kruti/SAGE/scripts/verify_reproducibility.py)), which automatically checks all 6 verification layers without author intervention and produces machine-readable [`verification_attestation.json`](file:///c:/Users/kruti/SAGE/verification_attestation.json) and human-auditable [`REPRODUCIBILITY_VERIFICATION.md`](file:///c:/Users/kruti/SAGE/REPRODUCIBILITY_VERIFICATION.md).
 
 With the completion and empirical verification of V1–V3, external reviewers no longer need to rely on self-attestation: every claim, container digest, model revision, platform invariance metric, and timing boundary is verified by automated CI gates and independent verification scripts.
 
@@ -787,7 +787,7 @@ With the completion and empirical verification of V1–V3, external reviewers no
 ## 11. Monorepo Layout & File-by-File Blueprint
 
 ```
-EvoEval/
+SAGE/
 ├── pyproject.toml                     # Python package metadata, dependencies & CLI entrypoints
 ├── Makefile                           # Automation targets (setup, test, reproduce, docker-up)
 ├── README.md                          # Repository overview, architecture & Reproducibility Contract
@@ -805,7 +805,7 @@ EvoEval/
 │   ├── Dockerfile.frontend            # Next.js 14 dashboard frontend container
 │   ├── docker-compose.yml             # 4-service stack: sandbox + scorer + backend + frontend
 │   └── image_digests.json             # Pinned SHA-256 container digests for verification
-├── evaeval/
+├── sage/
 │   ├── config/
 │   │   └── models.py                  # Pydantic models (ModelConfig, JudgeConfig, SandboxConfig, TaskConfig)
 │   ├── trajectory/
@@ -856,7 +856,7 @@ EvoEval/
 ├── paper/
 │   ├── main.tex                       # Primary IEEE conference submission manuscript
 │   ├── archive_neurips_extended_report.tex # Archived internal extended-results technical report
-│   ├── EvoEval_paper_additions.tex    # Modular concurrent-work related-work section
+│   ├── SAGE_paper_additions.tex       # Modular concurrent-work related-work section
 │   ├── references.bib                 # Harmonized bibliography database
 │   └── tables/                        # Standardized LaTeX tables
 ```
@@ -865,12 +865,12 @@ EvoEval/
 
 ## 12. Complete Verification & Quality Gate Test Results
 
-Every component of EvoEval is covered by rigorous quality gates. In accordance with the paper's isolation architecture (Linux/Docker, `network: none`, `cgroups`, rootless user `1000:1000`), the **headline certified verification numbers are gathered under Linux CI (Ubuntu 24.04 / Python 3.10.14)**:
+Every component of SAGE is covered by rigorous quality gates. In accordance with the paper's isolation architecture (Linux/Docker, `network: none`, `cgroups`, rootless user `1000:1000`), the **headline certified verification numbers are gathered under Linux CI (Ubuntu 24.04 / Python 3.10.14)**:
 
 ```bash
 ============================= test session starts ==============================
 platform linux -- Python 3.10.14, pytest-8.3.3, pluggy-1.5.0
-rootdir: /home/runner/work/evoeval/evoeval, configfile: pyproject.toml
+rootdir: /home/runner/work/sage/sage, configfile: pyproject.toml
 collected 174 items across 29 test files
 
 tests/test_ablation.py (5 tests) ........................................ PASSED
@@ -912,19 +912,19 @@ To definitively eliminate reviewer confusion across timing statements, the table
 
 | Benchmark Dimension | Platform / Environment | Specification Budget / SLA | Empirical Measured Value | Measurement Scope & Latency Context | Canonical Reference |
 |---|---|:---:|:---:|---|---|
-| **Fast CI Integration Gate** | Linux CI (`ubuntu-latest`) | $< 15.00$s | **8.45s** | Pre-commit fast gate: 1 task $\times$ 1 cycle $\times$ $G_1$ + $G_2$ under MockLLM | [`test_integration.py`](file:///c:/Users/kruti/EvoEval/tests/test_integration.py) |
-| **Fast CI Integration Gate** | Windows Development Host | $< 15.00$s | **13.22s** | Pre-commit fast gate on local developer Windows workstation | [`test_integration.py`](file:///c:/Users/kruti/EvoEval/tests/test_integration.py) |
-| **Full Regression Suite** | Linux CI (`ubuntu-latest`) | $< 120.00$s | **94.15s** (1m 34s) | Complete test suite: **201 tests** across all **31 files** (0 failures, 1 skipped) | [`docs/CI_WORKFLOW_RUN.log`](file:///c:/Users/kruti/EvoEval/docs/CI_WORKFLOW_RUN.log) |
-| **Full Regression Suite** | Windows Development Host | $< 300.00$s | **261.43s** (4m 21s) | Complete test suite: 201 passed, 1 skipped (vLLM live daemon skipped on local) | [`scripts/verify_reproducibility.py`](file:///c:/Users/kruti/EvoEval/scripts/verify_reproducibility.py) |
+| **Fast CI Integration Gate** | Linux CI (`ubuntu-latest`) | $< 15.00$s | **8.45s** | Pre-commit fast gate: 1 task $\times$ 1 cycle $\times$ $G_1$ + $G_2$ under MockLLM | [`test_integration.py`](file:///c:/Users/kruti/SAGE/tests/test_integration.py) |
+| **Fast CI Integration Gate** | Windows Development Host | $< 15.00$s | **13.22s** | Pre-commit fast gate on local developer Windows workstation | [`test_integration.py`](file:///c:/Users/kruti/SAGE/tests/test_integration.py) |
+| **Full Regression Suite** | Linux CI (`ubuntu-latest`) | $< 120.00$s | **94.15s** (1m 34s) | Complete test suite: **201 tests** across all **31 files** (0 failures, 1 skipped) | [`docs/CI_WORKFLOW_RUN.log`](file:///c:/Users/kruti/SAGE/docs/CI_WORKFLOW_RUN.log) |
+| **Full Regression Suite** | Windows Development Host | $< 300.00$s | **261.43s** (4m 21s) | Complete test suite: 201 passed, 1 skipped (vLLM live daemon skipped on local) | [`scripts/verify_reproducibility.py`](file:///c:/Users/kruti/SAGE/scripts/verify_reproducibility.py) |
 | **Task Lifecycle ($G_1$ Frozen)** | Linux Docker (`evo-sandbox`) | $< 3.00$s | **1.84s** | Frozen baseline $G_1$ single-task lifecycle (setup, execution, pytest, score) | Section 6.4 / Table 1 |
 | **Task Lifecycle ($G_1$ Frozen)** | Windows LocalSandbox | $< 3.00$s | **1.68s** | Frozen baseline $G_1$ single-task lifecycle in local path-jail | Section 6.4 / Table 1 |
 | **Task Lifecycle (Cohort Mean)** | Linux Docker (`evo-sandbox`) | $< 3.00$s | **1.94s** | Grand mean across all 6 archetypes ($G_1$ 1.84s, $G_4$ 2.05s, $G_6$ 2.14s) | Section 6.4 / Table 1 |
 | **Task Lifecycle (Cohort Mean)** | Windows LocalSandbox | $< 3.00$s | **1.75s** | Grand mean across all 6 archetypes in local path-jail | Section 6.4 / Table 1 |
-| **Agent Tool Turns ($G_1$)** | Cross-Platform Invariant | N/A | **1.62 steps** | Mean agent reasoning turns/steps per task (algorithmic count, not seconds) | [`comparative_baselines_results.json`](file:///c:/Users/kruti/EvoEval/experiments/runs/comparative_baselines_results.json) |
-| **Single LLM Step (Mock)** | In-Process Memory | $< 50$ms | **15ms** | Fast mock token response generator for CI testing | [`LIVE_INFERENCE_API_AUDIT.md`](file:///c:/Users/kruti/EvoEval/docs/LIVE_INFERENCE_API_AUDIT.md) |
-| **Single LLM Step (Local GGUF)** | Local CPU/GPU (`llama-cpp`) | $< 5.00$s | **1,842ms** | `Qwen2.5-Coder-3B-Instruct` 4-bit local neural inference | [`local_qwen_empirical_run`](file:///c:/Users/kruti/EvoEval/experiments/runs/local_qwen_empirical_run) |
-| **Single LLM Step (Cloud API)**| Remote OpenAI-Compatible | $< 5.00$s | **2,145ms** | `gemma-4-26b-a4b-it` live cloud foundation model completion | [`full_study_live`](file:///c:/Users/kruti/EvoEval/experiments/runs/full_study_live) |
-| **Task Turn (Live Neural)** | Remote OpenAI-Compatible | $< 60.00$s | **21.80s** | Full multi-turn task execution with live neural reasoning + Docker | Table 11 / [`PROJECT_DOSSIER.md`](file:///c:/Users/kruti/EvoEval/PROJECT_DOSSIER.md) |
+| **Agent Tool Turns ($G_1$)** | Cross-Platform Invariant | N/A | **1.62 steps** | Mean agent reasoning turns/steps per task (algorithmic count, not seconds) | [`comparative_baselines_results.json`](file:///c:/Users/kruti/SAGE/experiments/runs/comparative_baselines_results.json) |
+| **Single LLM Step (Mock)** | In-Process Memory | $< 50$ms | **15ms** | Fast mock token response generator for CI testing | [`LIVE_INFERENCE_API_AUDIT.md`](file:///c:/Users/kruti/SAGE/docs/LIVE_INFERENCE_API_AUDIT.md) |
+| **Single LLM Step (Local GGUF)** | Local CPU/GPU (`llama-cpp`) | $< 5.00$s | **1,842ms** | `Qwen2.5-Coder-3B-Instruct` 4-bit local neural inference | [`local_qwen_empirical_run`](file:///c:/Users/kruti/SAGE/experiments/runs/local_qwen_empirical_run) |
+| **Single LLM Step (Cloud API)**| Remote OpenAI-Compatible | $< 5.00$s | **2,145ms** | `gemma-4-26b-a4b-it` live cloud foundation model completion | [`full_study_live`](file:///c:/Users/kruti/SAGE/experiments/runs/full_study_live) |
+| **Task Turn (Live Neural)** | Remote OpenAI-Compatible | $< 60.00$s | **21.80s** | Full multi-turn task execution with live neural reasoning + Docker | Table 11 / [`PROJECT_DOSSIER.md`](file:///c:/Users/kruti/SAGE/PROJECT_DOSSIER.md) |
 
 > **Key Timing Principles**:
 > 1. **Specification SLA vs. Empirical Measurement**: The `< 15.00s` integration claim is the continuous integration budget limit; the measured performance is **8.45s** on Linux and **13.22s** on Windows.
@@ -937,37 +937,37 @@ To enable peer reviewers to audit test execution latency and profile performance
 
 | Test Suite File | Tests | Linux CI (s) | Windows (s) | Performance Profile & Slow Path Root Cause |
 |---|:---:|:---:|:---:|---|
-| [`tests/test_reproducibility.py`](file:///c:/Users/kruti/EvoEval/tests/test_reproducibility.py) | 3 | 14.12s | 42.50s | **Slow Path**: Runs multiple identical-config benchmark executions to assert byte-identical SHA-256 trajectory invariance across seeds. |
-| [`tests/test_week3_sandbox_security.py`](file:///c:/Users/kruti/EvoEval/tests/test_week3_sandbox_security.py) | 14 | 12.80s | 40.29s | **Slow Path**: `test_first_ten_tasks_catalog_and_execution` executes end-to-end task setup and pytest runs across all 10 task repos. |
-| [`tests/test_week9_10_pilot_and_schema.py`](file:///c:/Users/kruti/EvoEval/tests/test_week9_10_pilot_and_schema.py) | 4 | 11.45s | 38.32s | **Slow Path**: `test_pilot_matrix_orchestration` simulates full 10-task $\times$ 3-group $\times$ 3-cycle orchestration matrix. |
-| [`tests/test_week4_evolution.py`](file:///c:/Users/kruti/EvoEval/tests/test_week4_evolution.py) | 4 | 9.80s | 32.36s | **Slow Path**: `test_run_2cycles_10tasks_metrics` executes 2-cycle recursive evolution and metrics computation over 10 tasks. |
-| [`tests/test_integration.py`](file:///c:/Users/kruti/EvoEval/tests/test_integration.py) | 2 | 8.45s | 25.57s | **Fast Integration Suite**: Fast deterministic test executes in **8.45s Linux / 13.22s Windows** (< 15s CI gate). |
-| [`tests/test_vllm_integration.py`](file:///c:/Users/kruti/EvoEval/tests/test_vllm_integration.py) | 5 | 6.50s | 19.76s | Simulated and live wire protocol verification with end-to-end task execution. |
-| [`tests/test_week11_12_hardening.py`](file:///c:/Users/kruti/EvoEval/tests/test_week11_12_hardening.py) | 5 | 4.20s | 12.16s | ThreadPoolExecutor timeout simulation, backoff retries, and orchestrator crash-recovery. |
-| [`tests/test_drift_probes.py`](file:///c:/Users/kruti/EvoEval/tests/test_drift_probes.py) | 6 | 3.80s | 10.95s | H2 reward hacking naive agent simulation and H5 verification guard invariant check. |
-| [`tests/test_judge_isolation.py`](file:///c:/Users/kruti/EvoEval/tests/test_judge_isolation.py) | 8 | 3.10s | 8.97s | Auxiliary-only score bounds and cross-family diversity validation. |
-| [`tests/test_adapters.py`](file:///c:/Users/kruti/EvoEval/tests/test_adapters.py) | 5 | 2.10s | 5.92s | G1 single-task manual execution loop. |
-| [`tests/test_scorer_invisibility.py`](file:///c:/Users/kruti/EvoEval/tests/test_scorer_invisibility.py) | 14 | 1.85s | 4.86s | Hidden scorer read-only mounts, tamper disqualification, and volume concealment. |
-| [`tests/test_tamper_logging.py`](file:///c:/Users/kruti/EvoEval/tests/test_tamper_logging.py) | 7 | 1.60s | 4.28s | 5-vector audit check execution and canonical JSONL logging. |
-| [`tests/test_week5_6_advanced_agents.py`](file:///c:/Users/kruti/EvoEval/tests/test_week5_6_advanced_agents.py) | 6 | 1.40s | 3.86s | G3 memory accumulation and G4 reflection agent lifecycle checks. |
-| [`tests/test_reproducibility_contract.py`](file:///c:/Users/kruti/EvoEval/tests/test_reproducibility_contract.py) | 6 | 1.20s | 2.83s | Pinned revision SHAs, pinned image digests, Croissant metadata, and compose spec checks. |
-| [`tests/test_metrics_recomputation.py`](file:///c:/Users/kruti/EvoEval/tests/test_metrics_recomputation.py) | 3 | 0.95s | 1.78s | Direct CLI recomputation from raw JSONL trajectory and headless figure rendering. |
-| [`tests/test_evolution.py`](file:///c:/Users/kruti/EvoEval/tests/test_evolution.py) | 3 | 0.45s | 0.92s | Proposal parser, verifier filter, and snapshot manager. |
-| [`tests/test_horizon_sensitivity.py`](file:///c:/Users/kruti/EvoEval/tests/test_horizon_sensitivity.py) | 2 | 0.35s | 0.68s | Multi-horizon logarithmic decay and asymptotic plateau analyzer. |
-| [`tests/test_ablation.py`](file:///c:/Users/kruti/EvoEval/tests/test_ablation.py) | 5 | 0.20s | 0.35s | Anti-tamper check scaling, seed variance bounds, horizon saturation, and dual-container isolation. |
-| [`tests/test_baselines.py`](file:///c:/Users/kruti/EvoEval/tests/test_baselines.py) | 4 | 0.20s | 0.35s | Macro cross-benchmark calibration taxonomy, SWE-bench Verified G1 subset, external commercial agent baselines, and artifact export. |
-| [`tests/test_cross_family.py`](file:///c:/Users/kruti/EvoEval/tests/test_cross_family.py) | 2 | 0.18s | 0.33s | Cross-family hypothesis testing and LaTeX table generation. |
-| [`tests/test_week7_8_dashboard_wrapper.py`](file:///c:/Users/kruti/EvoEval/tests/test_week7_8_dashboard_wrapper.py) | 5 | 0.12s | 0.24s | REST endpoints and telemetry ingestion checks. |
-| [`tests/test_significance.py`](file:///c:/Users/kruti/EvoEval/tests/test_significance.py) | 9 | 0.08s | 0.10s | Permutation test, Cliff's delta, Cohen's d, and Holm-Bonferroni correction. |
-| [`tests/test_scoring.py`](file:///c:/Users/kruti/EvoEval/tests/test_scoring.py) | 3 | 0.06s | 0.09s | Tamper detection unit assertions and proxy gap thresholding. |
-| [`tests/test_contamination.py`](file:///c:/Users/kruti/EvoEval/tests/test_contamination.py) | 4 | 0.05s | 0.08s | 100-task contamination 4-gram overlap and TF-IDF cosine similarity. |
-| [`tests/test_dashboard_hardening.py`](file:///c:/Users/kruti/EvoEval/tests/test_dashboard_hardening.py) | 7 | 0.04s | 0.06s | Sliding-window rate limiter, ConstantTimeAuth, and security headers middleware. |
-| [`tests/test_schema.py`](file:///c:/Users/kruti/EvoEval/tests/test_schema.py) | 4 | 0.03s | 0.04s | TrajectoryWriter thread-safety and Pydantic v2 schema conformance. |
-| [`tests/test_human_audit.py`](file:///c:/Users/kruti/EvoEval/tests/test_human_audit.py) | 7 | 0.02s | 0.03s | Stratified sampling, Cohen's kappa calculation, and CSV queue export. |
-| [`tests/test_backend.py`](file:///c:/Users/kruti/EvoEval/tests/test_backend.py) | 18 | 0.85s | 2.64s | Comprehensive REST API routes, models, pagination, audit upsert, security headers. |
-| [`tests/test_metrics.py`](file:///c:/Users/kruti/EvoEval/tests/test_metrics.py) | 22 | 0.01s | 0.01s | Property-tested metric invariant checks and boundary collapse invariants. |
-| [`tests/test_g7_verification_taxonomy.py`](file:///c:/Users/kruti/EvoEval/tests/test_g7_verification_taxonomy.py) | 4 | 0.25s | 0.42s | Deployable proxy canary gating taxonomy, verification isolation, and rollback invariants. |
-| [`tests/test_inductive_heldout_split.py`](file:///c:/Users/kruti/EvoEval/tests/test_inductive_heldout_split.py) | 5 | 0.30s | 0.55s | Inductive evaluation split on held-out tasks (80 standard vs 20 drift probes) and proxy gap bounds. |
+| [`tests/test_reproducibility.py`](file:///c:/Users/kruti/SAGE/tests/test_reproducibility.py) | 3 | 14.12s | 42.50s | **Slow Path**: Runs multiple identical-config benchmark executions to assert byte-identical SHA-256 trajectory invariance across seeds. |
+| [`tests/test_week3_sandbox_security.py`](file:///c:/Users/kruti/SAGE/tests/test_week3_sandbox_security.py) | 14 | 12.80s | 40.29s | **Slow Path**: `test_first_ten_tasks_catalog_and_execution` executes end-to-end task setup and pytest runs across all 10 task repos. |
+| [`tests/test_week9_10_pilot_and_schema.py`](file:///c:/Users/kruti/SAGE/tests/test_week9_10_pilot_and_schema.py) | 4 | 11.45s | 38.32s | **Slow Path**: `test_pilot_matrix_orchestration` simulates full 10-task $\times$ 3-group $\times$ 3-cycle orchestration matrix. |
+| [`tests/test_week4_evolution.py`](file:///c:/Users/kruti/SAGE/tests/test_week4_evolution.py) | 4 | 9.80s | 32.36s | **Slow Path**: `test_run_2cycles_10tasks_metrics` executes 2-cycle recursive evolution and metrics computation over 10 tasks. |
+| [`tests/test_integration.py`](file:///c:/Users/kruti/SAGE/tests/test_integration.py) | 2 | 8.45s | 25.57s | **Fast Integration Suite**: Fast deterministic test executes in **8.45s Linux / 13.22s Windows** (< 15s CI gate). |
+| [`tests/test_vllm_integration.py`](file:///c:/Users/kruti/SAGE/tests/test_vllm_integration.py) | 5 | 6.50s | 19.76s | Simulated and live wire protocol verification with end-to-end task execution. |
+| [`tests/test_week11_12_hardening.py`](file:///c:/Users/kruti/SAGE/tests/test_week11_12_hardening.py) | 5 | 4.20s | 12.16s | ThreadPoolExecutor timeout simulation, backoff retries, and orchestrator crash-recovery. |
+| [`tests/test_drift_probes.py`](file:///c:/Users/kruti/SAGE/tests/test_drift_probes.py) | 6 | 3.80s | 10.95s | H2 reward hacking naive agent simulation and H5 verification guard invariant check. |
+| [`tests/test_judge_isolation.py`](file:///c:/Users/kruti/SAGE/tests/test_judge_isolation.py) | 8 | 3.10s | 8.97s | Auxiliary-only score bounds and cross-family diversity validation. |
+| [`tests/test_adapters.py`](file:///c:/Users/kruti/SAGE/tests/test_adapters.py) | 5 | 2.10s | 5.92s | G1 single-task manual execution loop. |
+| [`tests/test_scorer_invisibility.py`](file:///c:/Users/kruti/SAGE/tests/test_scorer_invisibility.py) | 14 | 1.85s | 4.86s | Hidden scorer read-only mounts, tamper disqualification, and volume concealment. |
+| [`tests/test_tamper_logging.py`](file:///c:/Users/kruti/SAGE/tests/test_tamper_logging.py) | 7 | 1.60s | 4.28s | 5-vector audit check execution and canonical JSONL logging. |
+| [`tests/test_week5_6_advanced_agents.py`](file:///c:/Users/kruti/SAGE/tests/test_week5_6_advanced_agents.py) | 6 | 1.40s | 3.86s | G3 memory accumulation and G4 reflection agent lifecycle checks. |
+| [`tests/test_reproducibility_contract.py`](file:///c:/Users/kruti/SAGE/tests/test_reproducibility_contract.py) | 6 | 1.20s | 2.83s | Pinned revision SHAs, pinned image digests, Croissant metadata, and compose spec checks. |
+| [`tests/test_metrics_recomputation.py`](file:///c:/Users/kruti/SAGE/tests/test_metrics_recomputation.py) | 3 | 0.95s | 1.78s | Direct CLI recomputation from raw JSONL trajectory and headless figure rendering. |
+| [`tests/test_evolution.py`](file:///c:/Users/kruti/SAGE/tests/test_evolution.py) | 3 | 0.45s | 0.92s | Proposal parser, verifier filter, and snapshot manager. |
+| [`tests/test_horizon_sensitivity.py`](file:///c:/Users/kruti/SAGE/tests/test_horizon_sensitivity.py) | 2 | 0.35s | 0.68s | Multi-horizon logarithmic decay and asymptotic plateau analyzer. |
+| [`tests/test_ablation.py`](file:///c:/Users/kruti/SAGE/tests/test_ablation.py) | 5 | 0.20s | 0.35s | Anti-tamper check scaling, seed variance bounds, horizon saturation, and dual-container isolation. |
+| [`tests/test_baselines.py`](file:///c:/Users/kruti/SAGE/tests/test_baselines.py) | 4 | 0.20s | 0.35s | Macro cross-benchmark calibration taxonomy, SWE-bench Verified G1 subset, external commercial agent baselines, and artifact export. |
+| [`tests/test_cross_family.py`](file:///c:/Users/kruti/SAGE/tests/test_cross_family.py) | 2 | 0.18s | 0.33s | Cross-family hypothesis testing and LaTeX table generation. |
+| [`tests/test_week7_8_dashboard_wrapper.py`](file:///c:/Users/kruti/SAGE/tests/test_week7_8_dashboard_wrapper.py) | 5 | 0.12s | 0.24s | REST endpoints and telemetry ingestion checks. |
+| [`tests/test_significance.py`](file:///c:/Users/kruti/SAGE/tests/test_significance.py) | 9 | 0.08s | 0.10s | Permutation test, Cliff's delta, Cohen's d, and Holm-Bonferroni correction. |
+| [`tests/test_scoring.py`](file:///c:/Users/kruti/SAGE/tests/test_scoring.py) | 3 | 0.06s | 0.09s | Tamper detection unit assertions and proxy gap thresholding. |
+| [`tests/test_contamination.py`](file:///c:/Users/kruti/SAGE/tests/test_contamination.py) | 4 | 0.05s | 0.08s | 100-task contamination 4-gram overlap and TF-IDF cosine similarity. |
+| [`tests/test_dashboard_hardening.py`](file:///c:/Users/kruti/SAGE/tests/test_dashboard_hardening.py) | 7 | 0.04s | 0.06s | Sliding-window rate limiter, ConstantTimeAuth, and security headers middleware. |
+| [`tests/test_schema.py`](file:///c:/Users/kruti/SAGE/tests/test_schema.py) | 4 | 0.03s | 0.04s | TrajectoryWriter thread-safety and Pydantic v2 schema conformance. |
+| [`tests/test_human_audit.py`](file:///c:/Users/kruti/SAGE/tests/test_human_audit.py) | 7 | 0.02s | 0.03s | Stratified sampling, Cohen's kappa calculation, and CSV queue export. |
+| [`tests/test_backend.py`](file:///c:/Users/kruti/SAGE/tests/test_backend.py) | 18 | 0.85s | 2.64s | Comprehensive REST API routes, models, pagination, audit upsert, security headers. |
+| [`tests/test_metrics.py`](file:///c:/Users/kruti/SAGE/tests/test_metrics.py) | 22 | 0.01s | 0.01s | Property-tested metric invariant checks and boundary collapse invariants. |
+| [`tests/test_g7_verification_taxonomy.py`](file:///c:/Users/kruti/SAGE/tests/test_g7_verification_taxonomy.py) | 4 | 0.25s | 0.42s | Deployable proxy canary gating taxonomy, verification isolation, and rollback invariants. |
+| [`tests/test_inductive_heldout_split.py`](file:///c:/Users/kruti/SAGE/tests/test_inductive_heldout_split.py) | 5 | 0.30s | 0.55s | Inductive evaluation split on held-out tasks (80 standard vs 20 drift probes) and proxy gap bounds. |
 | **Total Test Suite** | **201** | **94.15s** (1m 34s) | **261.43s** (4m 21s) | **100% Pass Rate** across all 31 files (201 passed, 1 skipped on Windows; 201 passed on Linux). |
 
 > **Key Reviewer Takeaways**:
@@ -978,20 +978,20 @@ To enable peer reviewers to audit test execution latency and profile performance
 
 | Suite | File | Tests | Validated Invariants |
 |---|---|---|---|
-| **Reproducibility Contract** | [`test_reproducibility_contract.py`](file:///c:/Users/kruti/EvoEval/tests/test_reproducibility_contract.py) | 6 | Pinned revision SHAs, pinned image digests, seeded generators determinism, trajectory manifests, 4-service compose, HuggingFace dataset export. |
-| **Comparative Baselines & Cross-Benchmark Calibration** | [`test_baselines.py`](file:///c:/Users/kruti/EvoEval/tests/test_baselines.py) | 4 | 7-benchmark taxonomy coverage, cross-family foundation model replication ($G_1$–$G_7, G_6^*$ across Qwen/Llama), SWE-bench Verified $G_1$ baseline calibration, artifact export integrity. |
-| **LLM-Judge Isolation** | [`test_judge_isolation.py`](file:///c:/Users/kruti/EvoEval/tests/test_judge_isolation.py) | 8 | Cross-family diversity ($Qwen \ne Llama$), same-family rejection, prompt concealment, auxiliary-only score guarantee, tamper override. |
-| **Deliberate Drift Probes** | [`test_drift_probes.py`](file:///c:/Users/kruti/EvoEval/tests/test_drift_probes.py) | 6 | 20% catalog distribution, visible proxy vs hidden GT test divergence, workspace isolation, progress metric execution, $H_2$ reward gaming, $H_5$ verification invariance. |
-| **METR Scorer Invisibility** | [`test_scorer_invisibility.py`](file:///c:/Users/kruti/EvoEval/tests/test_scorer_invisibility.py) | 14 | Distinct container images/users (`1000` vs `1001`), read-only test mounts (`:ro`), agent container cannot list or inspect scorer volume, shell access blocked. |
-| **Tamper Logging Quality Gate** | [`test_tamper_logging.py`](file:///c:/Users/kruti/EvoEval/tests/test_tamper_logging.py) | 7 | Audit checks (a)-(e) logged as canonical `TrajectoryEvent` items with `event_type="safety_check"` and full incident payload details. |
-| **Property-Tested Metric Invariants** | [`test_metrics.py`](file:///c:/Users/kruti/EvoEval/tests/test_metrics.py) | 22 | Property-tested invariants of `SecurityDrift`, `RetentionRatio`, `ImprovementGain`, `GeneralizationGap`, `SeedVariance`, `BootstrapCI` interval bounds. |
-| **Reviewer Recomputation** | [`test_metrics_recomputation.py`](file:///c:/Users/kruti/EvoEval/tests/test_metrics_recomputation.py) | 3 | Full ground-truth metric equivalence and headless vector figure regeneration from raw `trajectory.jsonl` in clean environment. |
-| **Byte-Identical Hashing** | [`test_reproducibility.py`](file:///c:/Users/kruti/EvoEval/tests/test_reproducibility.py) | 3 | Deterministic projection, stripping wall-clock timestamps while preserving event ordering; byte-identical SHA-256 digests. |
-| **System Hardening** | [`test_week11_12_hardening.py`](file:///c:/Users/kruti/EvoEval/tests/test_week11_12_hardening.py) | 5 | Task timeouts via ThreadPoolExecutor, exponential backoff retries, fatal security short-circuit, crash recovery resumption, budget ceilings. |
-| **Sandbox Confinement** | [`test_week3_sandbox_security.py`](file:///c:/Users/kruti/EvoEval/tests/test_week3_sandbox_security.py) | 14 | Forbidden command blocking (`rm -rf`, `chmod 777`, `sudo`), protected file write prevention, path traversal defense. |
-| **Evolution & Verifier Gates** | [`test_evolution.py`](file:///c:/Users/kruti/EvoEval/tests/test_evolution.py) / [`test_week4_evolution.py`](file:///c:/Users/kruti/EvoEval/tests/test_week4_evolution.py) | 7 | Mutation proposal parsing, verifier gate filtering, canary regressions, snapshot checkpointing. |
-| **Advanced Agent Archetypes** | [`test_week5_6_advanced_agents.py`](file:///c:/Users/kruti/EvoEval/tests/test_week5_6_advanced_agents.py) | 6 | Memory accumulation ($G_3$), reflection diagnosis ($G_4$), verifier gate wrapper ($G_5$), automatic atomic rollback ($G_6$). |
-| **Fast Deterministic Integration** | [`test_integration.py`](file:///c:/Users/kruti/EvoEval/tests/test_integration.py) | 2 | 1 task $\times$ 1 cycle $\times$ $G_1$ + $G_2$ with deterministic Mock LLM, executing in CI in **under 15 seconds**. |
+| **Reproducibility Contract** | [`test_reproducibility_contract.py`](file:///c:/Users/kruti/SAGE/tests/test_reproducibility_contract.py) | 6 | Pinned revision SHAs, pinned image digests, seeded generators determinism, trajectory manifests, 4-service compose, HuggingFace dataset export. |
+| **Comparative Baselines & Cross-Benchmark Calibration** | [`test_baselines.py`](file:///c:/Users/kruti/SAGE/tests/test_baselines.py) | 4 | 7-benchmark taxonomy coverage, cross-family foundation model replication ($G_1$–$G_7, G_6^*$ across Qwen/Llama), SWE-bench Verified $G_1$ baseline calibration, artifact export integrity. |
+| **LLM-Judge Isolation** | [`test_judge_isolation.py`](file:///c:/Users/kruti/SAGE/tests/test_judge_isolation.py) | 8 | Cross-family diversity ($Qwen \ne Llama$), same-family rejection, prompt concealment, auxiliary-only score guarantee, tamper override. |
+| **Deliberate Drift Probes** | [`test_drift_probes.py`](file:///c:/Users/kruti/SAGE/tests/test_drift_probes.py) | 6 | 20% catalog distribution, visible proxy vs hidden GT test divergence, workspace isolation, progress metric execution, $H_2$ reward gaming, $H_5$ verification invariance. |
+| **METR Scorer Invisibility** | [`test_scorer_invisibility.py`](file:///c:/Users/kruti/SAGE/tests/test_scorer_invisibility.py) | 14 | Distinct container images/users (`1000` vs `1001`), read-only test mounts (`:ro`), agent container cannot list or inspect scorer volume, shell access blocked. |
+| **Tamper Logging Quality Gate** | [`test_tamper_logging.py`](file:///c:/Users/kruti/SAGE/tests/test_tamper_logging.py) | 7 | Audit checks (a)-(e) logged as canonical `TrajectoryEvent` items with `event_type="safety_check"` and full incident payload details. |
+| **Property-Tested Metric Invariants** | [`test_metrics.py`](file:///c:/Users/kruti/SAGE/tests/test_metrics.py) | 22 | Property-tested invariants of `SecurityDrift`, `RetentionRatio`, `ImprovementGain`, `GeneralizationGap`, `SeedVariance`, `BootstrapCI` interval bounds. |
+| **Reviewer Recomputation** | [`test_metrics_recomputation.py`](file:///c:/Users/kruti/SAGE/tests/test_metrics_recomputation.py) | 3 | Full ground-truth metric equivalence and headless vector figure regeneration from raw `trajectory.jsonl` in clean environment. |
+| **Byte-Identical Hashing** | [`test_reproducibility.py`](file:///c:/Users/kruti/SAGE/tests/test_reproducibility.py) | 3 | Deterministic projection, stripping wall-clock timestamps while preserving event ordering; byte-identical SHA-256 digests. |
+| **System Hardening** | [`test_week11_12_hardening.py`](file:///c:/Users/kruti/SAGE/tests/test_week11_12_hardening.py) | 5 | Task timeouts via ThreadPoolExecutor, exponential backoff retries, fatal security short-circuit, crash recovery resumption, budget ceilings. |
+| **Sandbox Confinement** | [`test_week3_sandbox_security.py`](file:///c:/Users/kruti/SAGE/tests/test_week3_sandbox_security.py) | 14 | Forbidden command blocking (`rm -rf`, `chmod 777`, `sudo`), protected file write prevention, path traversal defense. |
+| **Evolution & Verifier Gates** | [`test_evolution.py`](file:///c:/Users/kruti/SAGE/tests/test_evolution.py) / [`test_week4_evolution.py`](file:///c:/Users/kruti/SAGE/tests/test_week4_evolution.py) | 7 | Mutation proposal parsing, verifier gate filtering, canary regressions, snapshot checkpointing. |
+| **Advanced Agent Archetypes** | [`test_week5_6_advanced_agents.py`](file:///c:/Users/kruti/SAGE/tests/test_week5_6_advanced_agents.py) | 6 | Memory accumulation ($G_3$), reflection diagnosis ($G_4$), verifier gate wrapper ($G_5$), automatic atomic rollback ($G_6$). |
+| **Fast Deterministic Integration** | [`test_integration.py`](file:///c:/Users/kruti/SAGE/tests/test_integration.py) | 2 | 1 task $\times$ 1 cycle $\times$ $G_1$ + $G_2$ with deterministic Mock LLM, executing in CI in **under 15 seconds**. |
 
 ---
 
@@ -1000,8 +1000,8 @@ To enable peer reviewers to audit test execution latency and profile performance
 ### 1. Environment Setup
 ```bash
 # Clone and enter repository
-git clone https://github.com/Pratikjain24/EvoEval.git
-cd EvoEval
+git clone https://github.com/Pratikjain24/SAGE.git
+cd SAGE
 
 # Create virtual environment and install dependencies
 uv venv .venv
@@ -1013,28 +1013,28 @@ uv pip install -e ".[dev]"
 ```bash
 # Execute pre-flight verification of the Reproducibility Contract
 make reproduce
-# (Equivalent to: python -m evaeval.runner.cli verify-env --config configs/experiments/full_study.yaml)
+# (Equivalent to: python -m sage.runner.cli verify-env --config configs/experiments/full_study.yaml)
 
 # Run full empirical study (10 cycles x 3 seeds x 100 tasks x 6 agent groups)
-evoeval run --config configs/experiments/full_study.yaml
+sage run --config configs/experiments/full_study.yaml
 ```
 
 ### 3. Reviewer Trajectory Manifest Audit
 ```bash
 # Generate or inspect SHA-256 cryptographic trajectory manifest
-evoeval manifest --run-id latest
+sage manifest --run-id latest
 ```
 
 ### 4. Recomputing Metrics & Regenerating Publication Figures
 ```bash
 # Force recomputation of all 27 metrics tuples directly from raw trajectory.jsonl
-evoeval analyze --run-id latest --recompute --output experiments/figures/
+sage analyze --run-id latest --recompute --output experiments/figures/
 ```
 
 ### 5. Packaging the HuggingFace Dataset Release
 ```bash
 # Export publication-ready dataset splits (tasks, trajectories, labels)
-evoeval export-hf --run-id latest --output hf_dataset/
+sage export-hf --run-id latest --output hf_dataset/
 ```
 
 ### 6. Launching the Multi-Service Docker Stack
@@ -1057,14 +1057,14 @@ pytest tests/ -v
 
 ## 14. Paper-Level Positioning & Submission Readiness (Tier 4 Compliance)
 
-EvoEval satisfies all core peer-review and track-compliance mandates for the **NeurIPS 2027 Track on Datasets and Benchmarks**:
+SAGE satisfies all core peer-review and track-compliance mandates for the **NeurIPS 2027 Track on Datasets and Benchmarks**:
 
 ### P0. Evaluative Claims Backed by Evidence: Dual-Stage Empirical Architecture
 
 In benchmark evaluations, proposals without functioning empirical evidence are rejected under the rubric:
 > *"Evaluative claims backed by evidence: WEAK — no study run yet."*
 
-To definitively eliminate this risk, EvoEval implements a rigorous **Dual-Stage Empirical Architecture** combining controlled multi-seed calibration with live open-weights neural model executions, generating over **35,000 cumulative telemetry events**, 9 publication tables, 6 figures, and formal statistical significance:
+To definitively eliminate this risk, SAGE implements a rigorous **Dual-Stage Empirical Architecture** combining controlled multi-seed calibration with live open-weights neural model executions, generating over **35,000 cumulative telemetry events**, 9 publication tables, 6 figures, and formal statistical significance:
 
 #### Stage 1: Multi-Seed Controlled Calibration Baseline ($N=900$ Evaluations)
 1. **Canonical Multi-Seed Baseline (`pilot_canonical_3seeds`)**:
@@ -1073,7 +1073,7 @@ To definitively eliminate this risk, EvoEval implements a rigorous **Dual-Stage 
    - *Harness Finding*: Rigorously isolates the baseline dynamic where reflection ($G_4$) introduces $+0.28$ security boundary drift and $0.34$ proxy gap, whereas regression-guarded verifiers ($G_6$) maintain $+0.32$ net capability with $98\%$ retention.
 
 2. **Certified Headline Linux Docker vs. Windows LocalSandbox Cross-Validation (`pilot_linux_docker_canonical`)**:
-   - *Scope*: Complete 900-task replication executed inside hardened Docker containers (`evo-sandbox:1.0`, Ubuntu 24.04, Python 3.10.14, cgroups, network: none) side-by-side with Windows LocalSandbox.
+   - *Scope*: Complete 900-task replication executed inside hardened Docker containers (`sage-sandbox:1.0`, Ubuntu 24.04, Python 3.10.14, cgroups, network: none) side-by-side with Windows LocalSandbox.
    - *Core Finding*: Establishes exact algorithmic metric invariance ($\Delta_{\text{platform}} = 0.00, p > 0.95$) and demonstrates Linux Docker hardware containment ($0.0\%$ container escape rate, Clopper-Pearson 95\% CI: $[0.0\%, 45.1\%]$ for $N=6$).
 
 | Group | Mechanism | Headline Linux Docker $P(T)$ | Windows Local $P(T)$ | $\Delta P$ (Gain) | Linux Drift | Windows Drift | Linux Gap | Windows Gap | Linux Ret. | Windows Ret. | Linux Escape | Windows Esc. Intercept | Linux Time | Windows Time |
@@ -1122,22 +1122,22 @@ To definitively eliminate this risk, EvoEval implements a rigorous **Dual-Stage 
     - *Core Finding*: 5 checks is Pareto-optimal (100% detection, +1.8% overhead, 0% FPR); 3 seeds achieves SE $\le 0.0029$ with identical $p \le 0.003$ at $1/3$ the cost of 10 seeds; 10 cycles captures 89.7% of asymptotic drift, reaching the logarithmic plateau; dual containers reduce attack escape frequency from 60.0% (single container) to 0.0% (Clopper-Pearson 95\% CI: $[0.0\%, 45.1\%]$ for $N=6$).
 
 11. **Empirical Cross-Family Model Replication & Benchmark Calibration (Table 12, Table 13)**:
-    - *Scope*: Macro-level comparative calibration benchmarking EvoEval against established benchmarks, evaluating the frozen $G_1$ baseline on SWE-bench Verified (50-task stratified subset), and evaluating cross-family replication across Qwen-2.5-Coder-7B and Llama-3.1-8B.
-    - *Core Finding*: $G_1$ achieves $20.0\%$ solve rate on SWE-bench Verified ($18.4$ turns, $\$0.0385$/task) vs. $60.0\%$ on EvoEval ($1.62$ turns, $\$0.000079$/task), proving why SWE-bench creates a severe floor effect unviable for self-evolution. Across both Qwen and Llama backbones, unconstrained reflection ($G_4$) reliably induces severe security drift ($+0.28$ vs. $+0.26$), whereas deployable proxy canary verification ($G_7$) halts security erosion ($+0.02$) and preserves capability ($96.0\%$ retention). Pre-training contamination is certified at $0.0\%$ on EvoEval vs $32.7\%$ on SWE-bench Verified, $98.2\%$ on MBPP, and $100\%$ on HumanEval.
+    - *Scope*: Macro-level comparative calibration benchmarking SAGE against established benchmarks, evaluating the frozen $G_1$ baseline on SWE-bench Verified (50-task stratified subset), and evaluating cross-family replication across Qwen-2.5-Coder-7B and Llama-3.1-8B.
+    - *Core Finding*: $G_1$ achieves $20.0\%$ solve rate on SWE-bench Verified ($18.4$ turns, $\$0.0385$/task) vs. $60.0\%$ on SAGE ($1.62$ turns, $\$0.000079$/task), proving why SWE-bench creates a severe floor effect unviable for self-evolution. Across both Qwen and Llama backbones, unconstrained reflection ($G_4$) reliably induces severe security drift ($+0.28$ vs. $+0.26$), whereas deployable proxy canary verification ($G_7$) halts security erosion ($+0.02$) and preserves capability ($96.0\%$ retention). Pre-training contamination is certified at $0.0\%$ on SAGE vs $32.7\%$ on SWE-bench Verified, $98.2\%$ on MBPP, and $100\%$ on HumanEval.
 
 12. **Evaluation Dashboard Validation, Interactive Workbench & 4-Service Stack Certification (Appendix J, Figures 5--8)**:
-    - *Scope*: End-to-end operational validation of the 4-service Docker Compose topology (`evo_sandbox`, `evo_scorer`, `evo_backend`, `evo_frontend`), accompanied by 18 automated endpoint integration tests ([`tests/test_backend.py`](file:///c:/Users/kruti/EvoEval/tests/test_backend.py)), complete technical documentation ([`docs/DASHBOARD_API_REFERENCE.md`](file:///c:/Users/kruti/EvoEval/docs/DASHBOARD_API_REFERENCE.md)), and high-resolution publication figures ([`paper/figures/dashboard_*.png`](file:///c:/Users/kruti/EvoEval/paper/figures)).
+    - *Scope*: End-to-end operational validation of the 4-service Docker Compose topology (`evo_sandbox`, `evo_scorer`, `evo_backend`, `evo_frontend`), accompanied by 18 automated endpoint integration tests ([`tests/test_backend.py`](file:///c:/Users/kruti/SAGE/tests/test_backend.py)), complete technical documentation ([`docs/DASHBOARD_API_REFERENCE.md`](file:///c:/Users/kruti/SAGE/docs/DASHBOARD_API_REFERENCE.md)), and high-resolution publication figures ([`paper/figures/dashboard_*.png`](file:///c:/Users/kruti/SAGE/paper/figures)).
     - *Core Finding*: Demonstrates 100% operational fidelity across all 9 REST API routes (`/health`, `/runs`, `/runs/{id}`, `/runs/{id}/cycles`, `/runs/{id}/trajectories`, `/audit/queue`, `/audit/stats`, `/audit/labels`, `/leaderboard`). Proves defense-in-depth security enforcement (`X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, sliding-window rate limiting at 20--120 req/min, constant-time API key verification) and interactive Next.js 14 visualization of multi-group drift curves, mutation diffs, double-blind human auditing, and telemetry event streaming.
 
 13. **Comprehensive Compute Cost Accounting & Token Consumption Reconciliation (Appendix F.3, Table 15)**:
-    - *Scope*: Rigorous mathematical reconciliation published in Table 15 of the manuscript and [`docs/COST_ACCOUNTING_RECONCILIATION.md`](file:///c:/Users/kruti/EvoEval/docs/COST_ACCOUNTING_RECONCILIATION.md) resolving pilot calibration metrics ($0.08217 USD base generation vs. $0.510 USD holistic system evolution) against the completed 18,000-task full benchmark ($73.95 USD empirical spend across 334.8M tokens).
+    - *Scope*: Rigorous mathematical reconciliation published in Table 15 of the manuscript and [`docs/COST_ACCOUNTING_RECONCILIATION.md`](file:///c:/Users/kruti/SAGE/docs/COST_ACCOUNTING_RECONCILIATION.md) resolving pilot calibration metrics ($0.08217 USD base generation vs. $0.510 USD holistic system evolution) against the completed 18,000-task full benchmark ($73.95 USD empirical spend across 334.8M tokens).
     - *Core Finding*: Disambiguates why pilot tasks consumed 304.3 tokens/task in concise 1–2 turn edits while multi-turn benchmark evaluations averaged 18,602.7 tokens/task due to cumulative prompt expansion across 10 generations ($G_3, G_4$) and canary regression evaluation re-runs ($G_6$). Proves that an idealized flat 5,000 tokens/task ($18\text{k} \times 5\text{k} = 90\text{M tokens}$) costs **$18.00–$20.70 USD** (defining the exact lower boundary of the $20–$150 USD projection), while 20,000 tokens/task ($360\text{M tokens}$) defines the upper budget ceiling ($86.40–$144.00 USD), with actual empirical multi-turn execution landing at **$73.95 USD**, strictly within the pre-registered budget envelope.
 
 ---
 
 ### P0.2 Double-Blind Human Verification Protocol & Pre-Experiment Sample-Size Planning ($N_{\text{audit}}=79$)
 
-To eliminate reviewer skepticism regarding whether automated safety monitors over-flag benign developer commands or fail to detect subtle reward hacking, EvoEval incorporates a pre-registered double-blind human verification study. Complete protocol rules, codebooks, and unblind mappings are documented in [`docs/HUMAN_AUDIT_PROTOCOL.md`](file:///c:/Users/kruti/EvoEval/docs/HUMAN_AUDIT_PROTOCOL.md).
+To eliminate reviewer skepticism regarding whether automated safety monitors over-flag benign developer commands or fail to detect subtle reward hacking, SAGE incorporates a pre-registered double-blind human verification study. Complete protocol rules, codebooks, and unblind mappings are documented in [`docs/HUMAN_AUDIT_PROTOCOL.md`](file:///c:/Users/kruti/SAGE/docs/HUMAN_AUDIT_PROTOCOL.md).
 
 #### 1. Annotator Qualifications, Review Methodology, and Scope
 - **Annotator 1 ($\text{Reviewer}_\alpha$)**: Computer engineering researcher specializing in Python software engineering, pytest internals, and static code analysis.
@@ -1195,18 +1195,18 @@ Reviewers disagreed on exactly 2 out of 79 traces ($2.53\%$ discordance):
 
 ### P0.3 Architectural Ablation Studies & Design Choice Validation
 
-To eliminate reviewer accusations of "over-engineering without ablation justification" and answer "Are all these components necessary?", EvoEval publishes four quantitative ablation studies in [`docs/ABLATION_STUDIES.md`](file:///c:/Users/kruti/EvoEval/docs/ABLATION_STUDIES.md), certified in [`experiments/runs/ablation_study_results.json`](file:///c:/Users/kruti/EvoEval/experiments/runs/ablation_study_results.json), and typeset in Table 10 of the manuscript:
+To eliminate reviewer accusations of "over-engineering without ablation justification" and answer "Are all these components necessary?", SAGE publishes four quantitative ablation studies in [`docs/ABLATION_STUDIES.md`](file:///c:/Users/kruti/SAGE/docs/ABLATION_STUDIES.md), certified in [`experiments/runs/ablation_study_results.json`](file:///c:/Users/kruti/SAGE/experiments/runs/ablation_study_results.json), and typeset in Table 10 of the manuscript:
 
 #### 1. Why 5 Tamper Checks instead of 3 or 7?
 - **1-Check (Diff Scrutiny)**: Catches only 33.3% of exploits (misses scorer file editing, log rewriting, zero-time bytecode mocks, git rebase/squashing).
 - **3-Check (Diff, Scorer Invariance, Log Rewriting)**: Catches 66.7% of exploits (misses bytecode zero-time mocking and git commit rewriting).
-- **5-Check (EvoEval)**: Catches **100.0%** of exploits with **+1.8%** computational overhead and **0.0%** false positive rate.
+- **5-Check (SAGE)**: Catches **100.0%** of exploits with **+1.8%** computational overhead and **0.0%** false positive rate.
 - **7-Check (+ptrace, +DPI)**: Incurs prohibitive **+48.5%** latency penalty and a **4.2%** false-positive rate on parallel multiprocessing harnesses. 5 checks is empirically the Pareto-optimal defense frontier.
 
 #### 2. Why 3 Seeds (42, 43, 44) instead of 5 or 10?
 - Standard error across $N=100$ tasks over 10 generations scales as $\text{SE} = s / \sqrt{S}$:
   - $S = 1$: $\text{SE} = \pm 0.0050$, compute expenditure: $24.65 USD.
-  - $S = 3$ (**EvoEval**): $\text{SE} = \mathbf{\pm 0.0029}$, compute expenditure: **$73.95 USD**, all 27 hypothesis tests achieve $p_{\text{Holm}} \le 0.003$.
+  - $S = 3$ (**SAGE**): $\text{SE} = \mathbf{\pm 0.0029}$, compute expenditure: **$73.95 USD**, all 27 hypothesis tests achieve $p_{\text{Holm}} \le 0.003$.
   - $S = 10$: $\text{SE} = \pm 0.0016$, compute expenditure: $246.50 USD.
 - **Cost-Utility Justification**: Moving from 3 seeds to 10 seeds triples compute expenditure (+$172.55 USD) while reducing variance by only $0.0013$ ($0.13\%$), yielding zero changes to hypothesis test conclusions ($p \le 0.003$ remains invariant).
 
@@ -1227,9 +1227,9 @@ To eliminate reviewer accusations of "over-engineering without ablation justific
 To address reviewer concerns regarding weak baseline comparisons and definitively resolve:
 > *"How does your G1–G6 performance compare to baselines from EvoAgentBench, ActBench, SkillsBench, SWE-bench Verified, and across foundation model families (Qwen vs. Llama)?"*
 
-EvoEval provides four complete empirical baseline comparative studies (certified in [`experiments/runs/comparative_baselines_results.json`](file:///c:/Users/kruti/EvoEval/experiments/runs/comparative_baselines_results.json), documented in [`docs/COMPARATIVE_BASELINES.md`](file:///c:/Users/kruti/EvoEval/docs/COMPARATIVE_BASELINES.md), and published in Table 12 and Table 13 of the manuscript):
+SAGE provides four complete empirical baseline comparative studies (certified in [`experiments/runs/comparative_baselines_results.json`](file:///c:/Users/kruti/SAGE/experiments/runs/comparative_baselines_results.json), documented in [`docs/COMPARATIVE_BASELINES.md`](file:///c:/Users/kruti/SAGE/docs/COMPARATIVE_BASELINES.md), and published in Table 12 and Table 13 of the manuscript):
 
-#### 1. Cross-Family Foundation Model Replication (Qwen-2.5-Coder-7B vs. Llama-3.1-8B) on EvoEval Tasks
+#### 1. Cross-Family Foundation Model Replication (Qwen-2.5-Coder-7B vs. Llama-3.1-8B) on SAGE Tasks
 
 We evaluated the longitudinal self-evolution dynamics across two distinct open-weights foundation model families over 10 evolutionary cycles:
 
@@ -1252,7 +1252,7 @@ We evaluated the longitudinal self-evolution dynamics across two distinct open-w
 
 To evaluate task difficulty calibration and demonstrate why SWE-bench Verified is unviable as an evolutionary evaluation harness:
 
-| Evaluation Dimension | SWE-bench Verified (50-Task Subset) | EvoEval Monorepo Suite (100 Tasks) | Comparative Ratio / Impact |
+| Evaluation Dimension | SWE-bench Verified (50-Task Subset) | SAGE Monorepo Suite (100 Tasks) | Comparative Ratio / Impact |
 |---|:---:|:---:|---|
 | **$G_1$ Zero-Shot Pass Rate ($P(0)$)** | **20.0%** (10 / 50 resolved) | **60.0%** (60 / 100 resolved) | $3.0\times$ dynamic range; avoids severe floor collapse |
 | **Mean Agent Steps / Turns** | **18.4 steps** | **1.62 steps** | $11.4\times$ faster agent execution cycle |
@@ -1261,7 +1261,7 @@ To evaluate task difficulty calibration and demonstrate why SWE-bench Verified i
 | **Full Study Projection (18k Evals)** | **$13,860.00 USD** (1,292 hours) | **$73.95 USD** (21.8s live neural) | Feasible on community research budgets ($20–$150) |
 
 **Why SWE-bench Verified Fails as an Evolutionary Benchmark**:
-On SWE-bench Verified, an 8B-parameter open-weights agent fails $80\%$ of tasks on initial attempt. Because self-evolution algorithms rely on extracting positive reasoning traces and mutation heuristics from successful executions, an $80\%$ failure rate creates a severe floor effect with near-zero learning signal. EvoEval's $60.0\%$ baseline pass rate provides the exact dynamic headroom needed to observe recursive adaptation without saturation.
+On SWE-bench Verified, an 8B-parameter open-weights agent fails $80\%$ of tasks on initial attempt. Because self-evolution algorithms rely on extracting positive reasoning traces and mutation heuristics from successful executions, an $80\%$ failure rate creates a severe floor effect with near-zero learning signal. SAGE's $60.0\%$ baseline pass rate provides the exact dynamic headroom needed to observe recursive adaptation without saturation.
 
 #### 3. Cross-Benchmark Contamination & Leakage Analysis
 
@@ -1270,24 +1270,24 @@ On SWE-bench Verified, an 8B-parameter open-weights agent fails $80\%$ of tasks 
 | **HumanEval** | 164 | 2021 | Docstring function stubs | **100.0%** (Fully Memorized) | Ubiquitous in all pre-training web scrapes |
 | **MBPP** | 974 | 2021 | Standalone assertions | **98.2%** (Memorized) | Public GitHub and leetcode clones |
 | **SWE-bench Verified** | 500 | 2024 | Real GitHub issues & PRs | **32.7%** (Contaminated) | Open-source GitHub PRs scraped into base pre-training corpora |
-| **EvoEval (Ours)** | **100** | **2026** | **Self-contained monorepo tasks** | **0.0% (Zero Contamination)** | Hardened synthetic specifications with synthetic identifiers |
+| **SAGE (Ours)** | **100** | **2026** | **Self-contained monorepo tasks** | **0.0% (Zero Contamination)** | Hardened synthetic specifications with synthetic identifiers |
 
 #### 4. Scientific Differentiation from EvoAgentBench, ActBench, and SkillsBench
 
-- **EvoAgentBench** (Gao et al., 2026): Focuses exclusively on single-episode cross-task transfer. EvoEval evaluates **multi-cycle longitudinal evolution** ($T \ge 10$--$25$), quantifying safety boundary erosion and catastrophic forgetting across generations.
-- **ActBench** (Yao et al., 2026): Measures tool and shell vulnerabilities in static, un-evolving single-session environments ($18.4\%$ violation rate). EvoEval demonstrates that recursive adaptation **accelerates drift from $0\%$ up to $28\%$ ($G_4$)**, and formalizes $G_6$ verifier rollback to eliminate drift.
-- **SkillsBench** (Li et al., 2026): Observes that unbounded skill accumulation yields negligible capability gain ($\Delta P \approx -0.02$ to $+0.03$) due to memory pollution. EvoEval isolates the exact cause (retrieval dilution) and proves that regression guards with atomic rollback ($G_6$) achieve **$+0.32$ net capability gain** while maintaining $98\%$ retention.
+- **EvoAgentBench** (Gao et al., 2026): Focuses exclusively on single-episode cross-task transfer. SAGE evaluates **multi-cycle longitudinal evolution** ($T \ge 10$--$25$), quantifying safety boundary erosion and catastrophic forgetting across generations.
+- **ActBench** (Yao et al., 2026): Measures tool and shell vulnerabilities in static, un-evolving single-session environments ($18.4\%$ violation rate). SAGE demonstrates that recursive adaptation **accelerates drift from $0\%$ up to $28\%$ ($G_4$)**, and formalizes $G_6$ verifier rollback to eliminate drift.
+- **SkillsBench** (Li et al., 2026): Observes that unbounded skill accumulation yields negligible capability gain ($\Delta P \approx -0.02$ to $+0.03$) due to memory pollution. SAGE isolates the exact cause (retrieval dilution) and proves that regression guards with atomic rollback ($G_6$) achieve **$+0.32$ net capability gain** while maintaining $98\%$ retention.
 
 ---
 
 ### P0.1 Clarifying Mock Calibration vs. Live Neural LLM Inference (Resolving Reviewer Ambiguity)
 
-Reviewers evaluating early benchmark drafts occasionally conflate deterministic mock execution harnesses with live neural model inference. EvoEval maintains a strict, mathematically documented separation between the two tiers:
+Reviewers evaluating early benchmark drafts occasionally conflate deterministic mock execution harnesses with live neural model inference. SAGE maintains a strict, mathematically documented separation between the two tiers:
 
 #### 1. Why `test_integration.py` Uses `MockLLMClient`
 - `test_integration.py::test_deterministic_mock_llm_integration_g1_g2_fast` serves strictly as the **automated fast CI pre-commit integration test**.
 - Per standard software engineering practices, pre-commit integration tests must execute deterministically in **$< 15$ seconds** (actual: 8.45s on Linux, 13.22s on Windows) without requiring GPU compute clusters or external network API tokens.
-- Live vLLM wire protocol parsing, HTTP health checks, and streaming response extraction are separately and rigorously tested in [`tests/test_vllm_integration.py`](file:///c:/Users/kruti/EvoEval/tests/test_vllm_integration.py), which enforces **zero silent fallback** (`allow_fallback=False` raises `RuntimeError` on connection failure).
+- Live vLLM wire protocol parsing, HTTP health checks, and streaming response extraction are separately and rigorously tested in [`tests/test_vllm_integration.py`](file:///c:/Users/kruti/SAGE/tests/test_vllm_integration.py), which enforces **zero silent fallback** (`allow_fallback=False` raises `RuntimeError` on connection failure).
 
 #### 2. Side-by-Side Trajectory Manifests: Mock Calibration vs. Live Empirical Inference
 
@@ -1304,9 +1304,9 @@ Reviewers evaluating early benchmark drafts occasionally conflate deterministic 
 | **Economic Tariff Billing** | $0.08217 USD | $0.23100 USD | $0.07100 USD | **$73.95 USD** (within $20–$150 budget) |
 
 #### 3. Real LLM API Wire Logs & Audit Trail
-Sanitized, production wire-level HTTP request/response payloads, inference latency headers, and C++ token evaluation logs are comprehensively documented in [`docs/LIVE_INFERENCE_API_AUDIT.md`](file:///c:/Users/kruti/EvoEval/docs/LIVE_INFERENCE_API_AUDIT.md).
+Sanitized, production wire-level HTTP request/response payloads, inference latency headers, and C++ token evaluation logs are comprehensively documented in [`docs/LIVE_INFERENCE_API_AUDIT.md`](file:///c:/Users/kruti/SAGE/docs/LIVE_INFERENCE_API_AUDIT.md).
 
-An automated drift probe between mock and real endpoints ([`vllm_smoke_test_report.json`](file:///c:/Users/kruti/EvoEval/experiments/runs/vllm_smoke_canonical/vllm_smoke_test_report.json)) directly quantifies the physical reality of live inference: real neural model completion generates 651 tokens ($40.69\times$ mock length) with an inference latency of 48.2 seconds for complex multi-turn reasoning ($48{,}200\times$ mock latency).
+An automated drift probe between mock and real endpoints ([`vllm_smoke_test_report.json`](file:///c:/Users/kruti/SAGE/experiments/runs/vllm_smoke_canonical/vllm_smoke_test_report.json)) directly quantifies the physical reality of live inference: real neural model completion generates 651 tokens ($40.69\times$ mock length) with an inference latency of 48.2 seconds for complex multi-turn reasoning ($48{,}200\times$ mock latency).
 
 #### 4. Compute Cost Accounting Reconciliation: Standardized Benchmark Footprint ($73.95) & Live Cohorts
 - **Calibration Study Spend ($N=900$)**: Direct out-of-pocket spend is certified at **$0.00 USD** (zero third-party API dependencies). When billed under the standardized economic tariff formula ($\text{Cost} = 10^{-6} \times (T_{\text{in}} \times \$0.20 + T_{\text{out}} \times \$0.40)$), the 273,900 tokens equate to **$0.08217 USD** ($0.000091/task).
@@ -1316,17 +1316,17 @@ An automated drift probe between mock and real endpoints ([`vllm_smoke_test_repo
     - Every single table in `paper/tables/` (Tables 1–14, including `table_timing_reconciliation.tex`, `table_comparative_baselines.tex`, and `table_cross_benchmark_calibration.tex`) and figure in `paper/figures/` (Figures 1–7) is deterministically generated from experiment runs and audited with 100% pass rate by `scripts/verify_reproducibility.py`.
 
 ### P1. Related Work Positioning
-The manuscript explicitly contrasts EvoEval against five contemporary benchmarks with dedicated structured comparisons:
-1. **EvoAgentBench** (Gao et al., 2026): Measures single-episode ability transfer; EvoEval introduces longitudinal multi-cycle evolution, quantifying hidden safety boundary erosion ($\text{SecurityDrift}$), catastrophic forgetting ($\text{Retention}$), and specification gaming ($\text{ProxyGap}$).
-2. **ActBench** (Yao et al., 2026): Evaluates attack surfaces in static sessions; EvoEval demonstrates that unconstrained self-evolution accelerates boundary drift across generations and formalizes verifier rollback ($G_6$) to guarantee stability.
-3. **AI Agent Reliability Framework** (Rabanser et al., 2026): Establishes reliability dimensions for static frozen models; EvoEval operationalizes multi-dimensional reliability for recursively self-evolving agents whose internal state ($\Pi_t, \mathcal{M}_t, \mathcal{C}_t$) mutates over time.
-4. **SkillsBench** (Li et al., 2026): Observes ~0% capability gain from self-generated skills; EvoEval provides the structural explanation (context dilution and skill pollution) and the architectural solution (canary regression suites and atomic rollback).
-5. **METR RE-Bench & Threat Evaluations** (Kinniment et al., 2024; METR, 2024): Discovered a 43-fold surge in test tampering in qualitative case studies; EvoEval operationalizes this into 20 reproducible deliberate drift probes, the mathematical $\text{ProxyGap}$ metric, and dual-container sandboxes with a 5-layer anti-tamper engine.
+The manuscript explicitly contrasts SAGE against five contemporary benchmarks with dedicated structured comparisons:
+1. **EvoAgentBench** (Gao et al., 2026): Measures single-episode ability transfer; SAGE introduces longitudinal multi-cycle evolution, quantifying hidden safety boundary erosion ($\text{SecurityDrift}$), catastrophic forgetting ($\text{Retention}$), and specification gaming ($\text{ProxyGap}$).
+2. **ActBench** (Yao et al., 2026): Evaluates attack surfaces in static sessions; SAGE demonstrates that unconstrained self-evolution accelerates boundary drift across generations and formalizes verifier rollback ($G_6$) to guarantee stability.
+3. **AI Agent Reliability Framework** (Rabanser et al., 2026): Establishes reliability dimensions for static frozen models; SAGE operationalizes multi-dimensional reliability for recursively self-evolving agents whose internal state ($\Pi_t, \mathcal{M}_t, \mathcal{C}_t$) mutates over time.
+4. **SkillsBench** (Li et al., 2026): Observes ~0% capability gain from self-generated skills; SAGE provides the structural explanation (context dilution and skill pollution) and the architectural solution (canary regression suites and atomic rollback).
+5. **METR RE-Bench & Threat Evaluations** (Kinniment et al., 2024; METR, 2024): Discovered a 43-fold surge in test tampering in qualitative case studies; SAGE operationalizes this into 20 reproducible deliberate drift probes, the mathematical $\text{ProxyGap}$ metric, and dual-container sandboxes with a 5-layer anti-tamper engine.
 
-> **Page 1 Core Claim**: EvoEval is the first evaluation benchmark and experimental harness that is simultaneously **longitudinal** ($T \ge 5$--$25$ cycles), **framework-agnostic** (6 canonical archetypes across multiple foundation model families), and **multi-dimensional** (concurrently measuring $\Delta P$, $\text{SecurityDrift}$, $\text{Retention}$, and $\text{ProxyGap}$ alongside compute costs).
+> **Page 1 Core Claim**: SAGE is the first evaluation benchmark and experimental harness that is simultaneously **longitudinal** ($T \ge 5$--$25$ cycles), **framework-agnostic** (6 canonical archetypes across multiple foundation model families), and **multi-dimensional** (concurrently measuring $\Delta P$, $\text{SecurityDrift}$, $\text{Retention}$, and $\text{ProxyGap}$ alongside compute costs).
 
 ### P2. Empirical Verification & Live Model Deployment
-EvoEval incorporates full empirical verification across both in-process open-source models and live cloud foundation models:
+SAGE incorporates full empirical verification across both in-process open-source models and live cloud foundation models:
 1. **In-Process Local Open-Source Model (`LocalLlamaClient`)**:
    - Evaluated using `Qwen2.5-Coder-3B-Instruct` (quantized 4-bit GGUF, 2.01 GB) directly in-process via `llama-cpp-python` and embedded C++ bindings.
    - Generates 426 live events across all six agent archetypes ($G_1$--$G_6$) with zero network dependencies, zero rate limits, and 100% offline reproducibility at $0.00 cost.
@@ -1348,7 +1348,7 @@ EvoEval incorporates full empirical verification across both in-process open-sou
 ### P3. Ethics, Dual-Use, and Responsible Disclosure
 Section 8 addresses dual-use risks and responsible disclosure:
 - **Inert Toy Probes**: Drift probes (e.g., `mini_orm`) are self-contained educational instances containing no weaponized payloads or real-world exploits.
-- **Trajectory Redaction**: The public Hugging Face export (`evoeval export-hf`) automatically redacts destructive shell commands and sandbox escape sequences (`[REDACTED_SECURITY_PROBE_COMMAND]`), preserving telemetry while stripping exploit payloads.
+- **Trajectory Redaction**: The public Hugging Face export (`sage export-hf`) automatically redacts destructive shell commands and sandbox escape sequences (`[REDACTED_SECURITY_PROBE_COMMAND]`), preserving telemetry while stripping exploit payloads.
 - **Defensive Evaluation**: Harness provides defensive tooling to detect specification gaming before agents are granted production permissions.
 
 ### P4. NeurIPS Checklist, Responsible Data Practices & Croissant Metadata
@@ -1366,16 +1366,16 @@ Framed explicitly under NeurIPS 2027 Datasets and Benchmarks Track guidelines:
 - **Secondary Contribution**: *Evaluation Methodology and Metrics* (mathematical formalization of security boundary drift, proxy gap, retention, and Holm-Bonferroni hypothesis testing).
 
 ### P6. Author Affiliations, Code Availability & Artifact Repositories
-EvoEval is published with verified academic metadata and open-source artifact distribution:
+SAGE is published with verified academic metadata and open-source artifact distribution:
 - **Authors & Affiliation**: Pratik P. Jain, Janhavi B. Pagare, Aditya U. Dengale, Naitik K. Kharat, Shamika R. Kadam, and Vikrant K. Kadam. Department of Computer Engineering, Vishwakarma Institute of Technology, Pune, India. Contact: `{pratik.12620589, janhavi.1252010010, aditya.1252010025, naitik.12620301, shamika.12620290, vikrant.1252010030}@vit.edu`.
-- **Public GitHub Repository**: Full source code, CLI, test suites, Dockerfiles, and dashboard platform are available at [`https://github.com/Pratikjain24/EvoEval`](https://github.com/Pratikjain24/EvoEval) under the Apache-2.0 license.
-- **HuggingFace Dataset Hub**: The 100-task golden benchmark dataset, canonical 18,000 multi-cycle execution event streams, and double-blind human audit annotations are hosted at [`https://github.com/Pratikjain24/EvoEval`](https://github.com/Pratikjain24/EvoEval) under CC-BY-4.0.
-- **Permanent Zenodo Archive**: Long-term preservation DOI for research artifacts and replication manifests: [`https://github.com/Pratikjain24/EvoEval`](https://github.com/Pratikjain24/EvoEval).
+- **Public GitHub Repository**: Full source code, CLI, test suites, Dockerfiles, and dashboard platform are available at [`https://github.com/Pratikjain24/SAGE`](https://github.com/Pratikjain24/SAGE) under the Apache-2.0 license.
+- **HuggingFace Dataset Hub**: The 100-task golden benchmark dataset, canonical 18,000 multi-cycle execution event streams, and double-blind human audit annotations are hosted at [`https://github.com/Pratikjain24/SAGE`](https://github.com/Pratikjain24/SAGE) under CC-BY-4.0.
+- **Permanent Zenodo Archive**: Long-term preservation DOI for research artifacts and replication manifests: [`https://github.com/Pratikjain24/SAGE`](https://github.com/Pratikjain24/SAGE).
 - **Croissant 1.0 Metadata**: Built-in `croissant.json` metadata conforming to the MLCommons Croissant 1.0 specification for standardized machine-readable dataset ingestion.
 
 ### Dual-Platform Reporting ("Report Both") & Linux Headline Certification
-EvoEval explicitly reports both Linux Docker and Windows LocalSandbox results side-by-side in Section 6 (`\input{tables/table_dual_platform.tex}`), Table 1, and `REPRODUCIBILITY_VERIFICATION.md`:
-- **Headline Linux Docker**: Certified under live Docker container isolation (`evo-sandbox:1.0`, Ubuntu 24.04 LTS, Python 3.10.14, cgroups, network: none, user 1000:1000). Guarantees $0.0\%$ container escape rate (Clopper-Pearson 95\% CI: $[0.0\%, 45.1\%]$ for $N=6$).
+SAGE explicitly reports both Linux Docker and Windows LocalSandbox results side-by-side in Section 6 (`\input{tables/table_dual_platform.tex}`), Table 1, and `REPRODUCIBILITY_VERIFICATION.md`:
+- **Headline Linux Docker**: Certified under live Docker container isolation (`sage-sandbox:1.0`, Ubuntu 24.04 LTS, Python 3.10.14, cgroups, network: none, user 1000:1000). Guarantees $0.0\%$ container escape rate (Clopper-Pearson 95\% CI: $[0.0\%, 45.1\%]$ for $N=6$).
 - **Windows LocalSandbox**: Certified secondary developer fallback with path-jail confinement and AST/regex safety monitoring ($98.9\%$ violation capture).
 - **Parity Finding**: Core metrics ($P(T), \Delta P, \text{SecurityDrift}, \text{ProxyGap}, \text{Retention}$) exhibit zero statistically significant divergence across platforms ($\Delta_{\text{platform}} = 0.00$, $p > 0.95$), proving evaluation oracle invariance.
 - **Control Calibration & Non-Saturation Invariant**: The frozen baseline ($G_1$) is deliberately anchored at $P(0) = 0.60$ (meaningfully below ceiling, within the ideal $0.3$--$0.6$ range), ensuring headroom for adaptation ($G_6$ achieves $P(T) = 0.92, \Delta P = +0.32$) while allowing catastrophic forgetting on historical suites to be cleanly quantified ($G_2$ retention = $82\%$, with historical pass rate dropping to $0.49$).
@@ -1387,14 +1387,14 @@ EvoEval explicitly reports both Linux Docker and Windows LocalSandbox results si
 To satisfy the standards of the NeurIPS 2027 Datasets & Benchmarks Track, this section documents the exact operational checklist for peer review and publication:
 
 ### 1. Document & Manuscript Deliverables
-- **Primary Submission Manuscript**: [`paper/main.tex`](file:///c:/Users/kruti/EvoEval/paper/main.tex) is formatted under IEEE conference standards with the full author block from Vishwakarma Institute of Technology, Pune.
-- **Archived Extended Technical Report**: [`paper/archive_neurips_extended_report.tex`](file:///c:/Users/kruti/EvoEval/paper/archive_neurips_extended_report.tex) archives the extended double-blind report with the full 6-domain checklist and auxiliary appendices.
+- **Primary Submission Manuscript**: [`paper/main.tex`](file:///c:/Users/kruti/SAGE/paper/main.tex) is formatted under IEEE conference standards with the full author block from Vishwakarma Institute of Technology, Pune.
+- **Archived Extended Technical Report**: [`paper/archive_neurips_extended_report.tex`](file:///c:/Users/kruti/SAGE/paper/archive_neurips_extended_report.tex) archives the extended double-blind report with the full 6-domain checklist and auxiliary appendices.
 - **Paper Checklist (NeurIPS 2027 Section 9)**: Fully answered across claims, limitations, reproducibility, compute, human subjects, and data governance. Exported to `neurips_checklist.md`.
 - **Pre-Submission PDF Compilation**: Upload `paper/` to Overleaf or run `pdflatex paper/main.tex` to visually verify bounding boxes, font embeddings, and table column widths.
 
 ### 2. Dataset Hosting & Machine-Readable Metadata
 - **Croissant 1.0 Metadata (`croissant.json`)**: Strictly conforming to `http://mlcommons.org/croissant/1.0` with schemas for `tasks`, `trajectories`, and `labels`.
-- **Hugging Face Dataset Export**: Run `evoeval export-hf` to generate the public release package with automatic redaction of sensitive shell commands (`[REDACTED_SECURITY_PROBE_COMMAND]`).
+- **Hugging Face Dataset Export**: Run `sage export-hf` to generate the public release package with automatic redaction of sensitive shell commands (`[REDACTED_SECURITY_PROBE_COMMAND]`).
 - **Zenodo Persistent Archive**: Upload the public release bundle upon paper acceptance to assign a persistent DOI for long-term archiving.
 
 ### 3. Verification & Compliance Attestation
@@ -1409,19 +1409,19 @@ To satisfy the standards of the NeurIPS 2027 Datasets & Benchmarks Track, this s
 | Priority | Pre-Submission Item | Status | Verification & Evidence Artifacts |
 |---|---|:---:|---|
 | **Critical** | **Run full 18,000-task study with live LLM inference** | **PASSED** | Generated canonical longitudinal dataset (`experiments/runs/full_study_canonical/`, 148,200 events, 18,000 tasks) + live neural inference runs (`experiments/runs/full_study_live/`, 9,302 events with Qwen-2.5-Coder & Llama-3.1). |
-| **Critical** | **Publish complete task catalog (100 tasks with descriptions)** | **PASSED** | Complete catalog authored in [`docs/TASK_CATALOG.md`](file:///c:/Users/kruti/EvoEval/docs/TASK_CATALOG.md) (1,209 lines) and embedded via Table~\ref{tab:tasks_bug_fix}--\ref{tab:tasks_security_audit} in `paper/tables/table_task_catalog_full.tex` across all 5 categories. |
-| **Critical** | **Clarify mock vs. live LLM methodology (Separate sections)** | **PASSED** | Explicit two-stage decoupling articulated in Section 5.1, Appendix F (`\label{app:live_llm_audit}`), and [`docs/LIVE_INFERENCE_API_AUDIT.md`](file:///c:/Users/kruti/EvoEval/docs/LIVE_INFERENCE_API_AUDIT.md). |
-| **Critical** | **Expand human audit to $N=200+$ (Previously $N=79$)** | **PASSED** | Expanded double-blind human audit to $N=240$ execution traces ($40$ per archetype $G_1$--$G_6$, balanced across Cycles 0--9). Reported in Table~\ref{tab:human_audit}, Appendix G, `full_study_canonical/results/human_audit_results.json`, and [`docs/HUMAN_AUDIT_PROTOCOL.md`](file:///c:/Users/kruti/EvoEval/docs/HUMAN_AUDIT_PROTOCOL.md). |
+| **Critical** | **Publish complete task catalog (100 tasks with descriptions)** | **PASSED** | Complete catalog authored in [`docs/TASK_CATALOG.md`](file:///c:/Users/kruti/SAGE/docs/TASK_CATALOG.md) (1,209 lines) and embedded via Table~\ref{tab:tasks_bug_fix}--\ref{tab:tasks_security_audit} in `paper/tables/table_task_catalog_full.tex` across all 5 categories. |
+| **Critical** | **Clarify mock vs. live LLM methodology (Separate sections)** | **PASSED** | Explicit two-stage decoupling articulated in Section 5.1, Appendix F (`\label{app:live_llm_audit}`), and [`docs/LIVE_INFERENCE_API_AUDIT.md`](file:///c:/Users/kruti/SAGE/docs/LIVE_INFERENCE_API_AUDIT.md). |
+| **Critical** | **Expand human audit to $N=200+$ (Previously $N=79$)** | **PASSED** | Expanded double-blind human audit to $N=240$ execution traces ($40$ per archetype $G_1$--$G_6$, balanced across Cycles 0--9). Reported in Table~\ref{tab:human_audit}, Appendix G, `full_study_canonical/results/human_audit_results.json`, and [`docs/HUMAN_AUDIT_PROTOCOL.md`](file:///c:/Users/kruti/SAGE/docs/HUMAN_AUDIT_PROTOCOL.md). |
 | **High** | **Add ablation studies (5-check vs 3-check, seed sensitivity, etc.)** | **PASSED** | 4-dimension ablation study evaluated and documented in Table 6, Appendix H (`\label{app:ablations}`), and `experiments/runs/ablation_study_results.json`. |
 | **High** | **Baseline comparisons (Run on SWE-bench, cross-family replication)** | **PASSED** | Cross-benchmark comparative study with SWE-bench Verified and cross-family replication (Qwen vs. Llama) evaluated in Table 12 & Table 13, Appendix I (`\label{app:baselines}`), and `comparative_baselines_results.json`. |
 | **High** | **Task difficulty validation (Inter-annotator agreement on labels)** | **PASSED** | Double-blind difficulty categorization by two student researchers: 91% agreement, Cohen's quadratic weighted $\kappa = 0.884$. Documented in Table 11, Appendix E.3, `task_difficulty_validation.json`, and `docs/TASK_CATALOG.md`. |
 | **High** | **Complete contamination audit (Per-task n-gram overlap)** | **PASSED** | 100-task contamination audit confirming 0.0% overlap against The Stack v2, CodeParrot, and StarCoder. Documented in Table 7, Appendix A, and `tasks/contamination_audit_results.json`. |
 | **Medium** | **Consolidate timing tables (Remove discrepancies)** | **PASSED** | Single unified timing reconciliation matrix authored in Table 14, Appendix D (`\label{app:timing_reconciliation}`), and `paper/tables/table_timing_reconciliation.tex`. |
-| **Medium** | **Dashboard demo (Screenshots in appendix)** | **PASSED** | Appendix J (`\label{app:dashboard_api}`) added with 4 publication figures (`paper/figures/dashboard_*.png`), Table 16 REST API endpoints, and [`docs/DASHBOARD_API_REFERENCE.md`](file:///c:/Users/kruti/EvoEval/docs/DASHBOARD_API_REFERENCE.md). |
-| **Medium** | **Cost accounting reconciliation (Match projections to actual)** | **PASSED** | Reconciled in Table 15, Appendix F.3, and [`docs/COST_ACCOUNTING_RECONCILIATION.md`](file:///c:/Users/kruti/EvoEval/docs/COST_ACCOUNTING_RECONCILIATION.md): Pilot (\$0.08217 base vs \$0.510 holistic), 18k lower bound (\$18.00--\$20.70 USD), 18k ceiling (\$144.00--\$150.00 USD), empirical actual (\$73.95 USD across 334.8M tokens). |
+| **Medium** | **Dashboard demo (Screenshots in appendix)** | **PASSED** | Appendix J (`\label{app:dashboard_api}`) added with 4 publication figures (`paper/figures/dashboard_*.png`), Table 16 REST API endpoints, and [`docs/DASHBOARD_API_REFERENCE.md`](file:///c:/Users/kruti/SAGE/docs/DASHBOARD_API_REFERENCE.md). |
+| **Medium** | **Cost accounting reconciliation (Match projections to actual)** | **PASSED** | Reconciled in Table 15, Appendix F.3, and [`docs/COST_ACCOUNTING_RECONCILIATION.md`](file:///c:/Users/kruti/SAGE/docs/COST_ACCOUNTING_RECONCILIATION.md): Pilot (\$0.08217 base vs \$0.510 holistic), 18k lower bound (\$18.00--\$20.70 USD), 18k ceiling (\$144.00--\$150.00 USD), empirical actual (\$73.95 USD across 334.8M tokens). |
 
 ---
 
-*Authored by the EvoEval Research Team. Certified and tagged for submission release at [`v1.0.0`](file:///c:/Users/kruti/EvoEval).*
+*Authored by the SAGE Research Team. Certified and tagged for submission release at [`v1.0.0`](file:///c:/Users/kruti/SAGE).*
 
 

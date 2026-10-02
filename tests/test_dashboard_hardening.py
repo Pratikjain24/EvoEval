@@ -7,22 +7,22 @@ import pytest
 import yaml
 from fastapi.testclient import TestClient
 
-from evaeval.dashboard_backend.auth import (
+from sage.dashboard_backend.auth import (
     DEFAULT_DEV_KEY,
     get_configured_api_key,
     is_auth_required_for_read,
     verify_token,
 )
-from evaeval.dashboard_backend.main import app
-from evaeval.dashboard_backend.rate_limiter import SlidingWindowRateLimiter, get_global_rate_limiter
+from sage.dashboard_backend.main import app
+from sage.dashboard_backend.rate_limiter import SlidingWindowRateLimiter, get_global_rate_limiter
 
 
 @pytest.fixture(autouse=True)
 def reset_env_and_rate_limits():
     """Ensure clean environment and rate limiter state before each test."""
     orig_auth = os.environ.get("DASHBOARD_REQUIRE_AUTH")
-    orig_key = os.environ.get("EVOEVAL_API_KEY")
-    orig_disable = os.environ.get("EVOEVAL_DISABLE_RATE_LIMIT")
+    orig_key = os.environ.get("SAGE_API_KEY")
+    orig_disable = os.environ.get("SAGE_DISABLE_RATE_LIMIT")
     orig_override = os.environ.get("RATE_LIMIT_OVERRIDE")
 
     # Clear rate limiter history
@@ -36,14 +36,14 @@ def reset_env_and_rate_limits():
         os.environ.pop("DASHBOARD_REQUIRE_AUTH", None)
 
     if orig_key is not None:
-        os.environ["EVOEVAL_API_KEY"] = orig_key
+        os.environ["SAGE_API_KEY"] = orig_key
     else:
-        os.environ.pop("EVOEVAL_API_KEY", None)
+        os.environ.pop("SAGE_API_KEY", None)
 
     if orig_disable is not None:
-        os.environ["EVOEVAL_DISABLE_RATE_LIMIT"] = orig_disable
+        os.environ["SAGE_DISABLE_RATE_LIMIT"] = orig_disable
     else:
-        os.environ.pop("EVOEVAL_DISABLE_RATE_LIMIT", None)
+        os.environ.pop("SAGE_DISABLE_RATE_LIMIT", None)
 
     if orig_override is not None:
         os.environ["RATE_LIMIT_OVERRIDE"] = orig_override
@@ -56,7 +56,7 @@ def reset_env_and_rate_limits():
 def test_public_leaderboard_read_access_default():
     """By default, public leaderboard and health endpoints allow unauthenticated read."""
     os.environ["DASHBOARD_REQUIRE_AUTH"] = "false"
-    os.environ["EVOEVAL_DISABLE_RATE_LIMIT"] = "true"
+    os.environ["SAGE_DISABLE_RATE_LIMIT"] = "true"
     client = TestClient(app)
 
     # Health check
@@ -74,8 +74,8 @@ def test_public_leaderboard_read_access_default():
 def test_protected_dashboard_read_requires_auth():
     """When DASHBOARD_REQUIRE_AUTH=true, read access requires valid authentication."""
     os.environ["DASHBOARD_REQUIRE_AUTH"] = "true"
-    os.environ["EVOEVAL_API_KEY"] = "super-secret-test-token-12345"
-    os.environ["EVOEVAL_DISABLE_RATE_LIMIT"] = "true"
+    os.environ["SAGE_API_KEY"] = "super-secret-test-token-12345"
+    os.environ["SAGE_DISABLE_RATE_LIMIT"] = "true"
     client = TestClient(app)
 
     # Missing credentials -> 401
@@ -99,8 +99,8 @@ def test_protected_dashboard_read_requires_auth():
 def test_write_endpoints_always_require_auth():
     """Mutating write endpoints (POST /audit/labels) always require valid API key."""
     os.environ["DASHBOARD_REQUIRE_AUTH"] = "false"  # Even if public reads allowed
-    os.environ["EVOEVAL_API_KEY"] = "audit-admin-token-777"
-    os.environ["EVOEVAL_DISABLE_RATE_LIMIT"] = "true"
+    os.environ["SAGE_API_KEY"] = "audit-admin-token-777"
+    os.environ["SAGE_DISABLE_RATE_LIMIT"] = "true"
     client = TestClient(app)
 
     payload = {
@@ -149,7 +149,7 @@ def test_sliding_window_rate_limiter():
 
 def test_rate_limiter_http_429_integration():
     """Verify FastAPI endpoint returns HTTP 429 when client exceeds limit."""
-    os.environ["EVOEVAL_DISABLE_RATE_LIMIT"] = "false"
+    os.environ["SAGE_DISABLE_RATE_LIMIT"] = "false"
     os.environ["RATE_LIMIT_OVERRIDE"] = "2"
     limiter = get_global_rate_limiter()
     limiter.reset()
@@ -175,7 +175,7 @@ def test_rate_limiter_http_429_integration():
 
 def test_security_headers_middleware():
     """Verify all responses include defense-in-depth security headers."""
-    os.environ["EVOEVAL_DISABLE_RATE_LIMIT"] = "true"
+    os.environ["SAGE_DISABLE_RATE_LIMIT"] = "true"
     client = TestClient(app)
 
     res = client.get("/health")
@@ -232,4 +232,4 @@ def test_docker_compose_hardening_specification():
 
     # 3. Dedicated internal bridge network
     assert "networks" in compose
-    assert "evo-net" in compose["networks"]
+    assert "sage-net" in compose["networks"] or "evo-net" in compose["networks"]

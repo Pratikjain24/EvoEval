@@ -14,7 +14,7 @@ assignees: Pratikjain24
 
 ## 📐 Proposed Design
 <!-- How might this be implemented? Which module would it live in? -->
-- **Module**: [e.g. `evaeval/adapters/`, `tasks/`, `evaeval/scoring/`]
+- **Module**: [e.g. `sage/adapters/`, `tasks/`, `sage/scoring/`]
 - **Sketch**:
 ```python
 # Optional pseudo-code

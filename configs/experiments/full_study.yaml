@@ -1,5 +1,5 @@
 name: full_study
-description: "EvoEval Full Empirical Benchmark: 10 cycles, 3 seeds, 100 tasks"
+description: "SAGE Full Empirical Benchmark: 10 cycles, 3 seeds, 100 tasks"
 model:
   name: qwen2.5-coder-7b-instruct
   revision: "c03e6d358207e414f1eca0bb1891e29f1db0e242"
@@ -16,7 +16,7 @@ judge:
   temperature: 0.0
 
 sandbox:
-  image: evo-sandbox:1.0
+  image: sage-sandbox:1.0
   mem: 8g
   cpus: 4
   network: none

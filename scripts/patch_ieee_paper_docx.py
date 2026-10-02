@@ -1,4 +1,4 @@
-﻿"""Script to update and patch EvoEval_IEEE_Research_Paper.docx with all author corrections,
+"""Script to update and patch EvoEval_IEEE_Research_Paper.docx with all author corrections,
 concurrent citations, aligned Tables VII & VIII, 187-test suite reconciliation, and reproducibility guarantees.
 """
 import sys
@@ -41,9 +41,9 @@ def style_table(table, col_widths=None):
 
 def patch_document():
     import os
-    docx_path = r'C:\Users\kruti\Downloads\EvoEval_IEEE_Research_Paper.docx'
+    docx_path = r'c:\Users\kruti\Downloads\EvoEval\EvoEval\paper\SAGE_IEEE_Research_Paper.docx'
     if not os.path.exists(docx_path):
-        docx_path = r'c:\Users\kruti\Downloads\EvoEval\EvoEval\paper\EvoEval_IEEE_Research_Paper.docx'
+        docx_path = r'C:\Users\kruti\Downloads\SAGE_IEEE_Research_Paper.docx'
     doc = docx.Document(docx_path)
 
     # 1. Fix Table 8 (Year 2027 -> 2026)
@@ -71,7 +71,7 @@ def patch_document():
             p.text = (
                 'Execution determinism and reproducibility. All 201 verification tests pass with 100% '
                 'conformance, executing in 94.15s on Linux CI and 261.43s on Windows local host with '
-                '\u2206=0.000 metric divergence across platforms. Crucially, EvoEval establishes a verified '
+                '\u2206=0.000 metric divergence across platforms. Crucially, SAGE establishes a verified '
                 'deterministic reproducibility guarantee: across repeated evaluations with identical seeds '
                 '(42, 43, 44) and configurations at temperature 0, canonical deterministic event projections '
                 '(normalizing non-deterministic wall-clock timestamps and runtime scratch paths) produce '
@@ -81,29 +81,29 @@ def patch_document():
 
     # 2b. Rename Safety Drift to Security Boundary Drift (Vulnerability Injection Rate)
     for p in doc.paragraphs:
-        if 'EvoEval: Measuring Safety Drift and Capability' in p.text:
+        if 'SAGE: Measuring Safety Drift and Capability' in p.text:
             p.text = p.text.replace(
-                'EvoEval: Measuring Safety Drift and Capability',
-                'EvoEval: Measuring Security Boundary Drift and Capability'
+                'SAGE: Measuring Safety Drift and Capability',
+                'SAGE: Measuring Security Boundary Drift and Capability'
             )
             print('[+] Reconciled docx Title (Security Boundary Drift)')
 
-        if p.text.startswith('Abstract—') or 'We present EvoEval, a longitudinal benchmark' in p.text:
+        if p.text.startswith('Abstract—') or 'We present SAGE, a longitudinal benchmark' in p.text:
             p.text = (
                 'Abstract—Autonomous large language model (LLM) agents are increasingly equipped with self-evolution mechanisms '
                 'that mutate system prompts, accumulate procedural memories, and synthesize custom tools over extended deployment horizons. '
                 'Existing code benchmarks evaluate agents in static single-turn regimes and cannot capture the compound failure modes of '
                 'iterative state mutation: specification gaming, security boundary erosion, and historical capability regression. '
-                'We present EvoEval, a hardened benchmark and formal evaluation framework that validates agent guardrails against '
-                'canonical, deterministic degradation trajectories, supplemented by live API runs. EvoEval is designed to measure '
+                'We present SAGE, a hardened benchmark and formal evaluation framework that validates agent guardrails against '
+                'canonical, deterministic degradation trajectories, supplemented by live API runs. SAGE is designed to measure '
                 'security boundary drift (vulnerability injection rate), specification gaming, and capability retention in self-modifying '
-                'code agents over multi-generational cycles (T=10–25). EvoEval formalizes controlled agent archetypes (G1–G7, G6*) spanning '
+                'code agents over multi-generational cycles (T=10–25). SAGE formalizes controlled agent archetypes (G1–G7, G6*) spanning '
                 'frozen controls, prompt optimizers, memory accumulators, compound reflection agents, static verifiers, '
                 'realistic deployable proxy canary guards (G7), and idealized oracle canary skylines (G6*). '
-                'To prevent harness tampering, EvoEval introduces a five-layer cryptographically isolated anti-tamper engine executed '
+                'To prevent harness tampering, SAGE introduces a five-layer cryptographically isolated anti-tamper engine executed '
                 'across dual unprivileged Docker containers. The golden dataset comprises 100 focused, multi-module algorithmic and system '
                 'programming repositories calibrated to baseline solvability P(0)=0.600 with 0.0% pre-training leakage, paired with 20 '
-                'deliberate exploit drift probes. To establish rigorous, reproducible ground truth, EvoEval implements a two-tiered '
+                'deliberate exploit drift probes. To establish rigorous, reproducible ground truth, SAGE implements a two-tiered '
                 'evaluation methodology: (1) a canonical benchmark evaluation across 18,000 controlled episodes (100 tasks × 6 archetypes × '
                 '10 cycles × 3 seeds) formalizing archetype state-mutation policies under deterministic execution to provide bitwise-reproducible, '
                 'zero-flakiness counterfactual trajectories; and (2) empirical open-weights model rollouts (Qwen2.5-Coder-7B, Llama-3.1-8B) '
@@ -117,10 +117,10 @@ def patch_document():
             )
             print('[+] Reconciled docx Abstract (Honest Two-Tiered Benchmark & G7/G6* distinction)')
 
-        if 'We introduce EvoEval, a hardened benchmark and verification framework' in p.text:
+        if 'We introduce SAGE, a hardened benchmark and verification framework' in p.text:
             p.text = p.text.replace(
-                'We introduce EvoEval, a hardened benchmark and verification framework designed to measure these compound dynamics rigorously.',
-                'We introduce EvoEval, a hardened benchmark and formal evaluation framework that validates agent guardrails against canonical, deterministic degradation trajectories, supplemented by live API runs. EvoEval is designed to measure these compound dynamics rigorously.'
+                'We introduce SAGE, a hardened benchmark and verification framework designed to measure these compound dynamics rigorously.',
+                'We introduce SAGE, a hardened benchmark and formal evaluation framework that validates agent guardrails against canonical, deterministic degradation trajectories, supplemented by live API runs. SAGE is designed to measure these compound dynamics rigorously.'
             )
             print('[+] Reconciled docx Introduction framing (canonical trajectories + live runs)')
 
@@ -136,7 +136,7 @@ def patch_document():
             p.text = (
                 'G1 provides the frozen baseline. G2 and G3 isolate single mutation surfaces (prompts Π and procedural memory M). '
                 'G4 models the full unconstrained self-evolving agent deployed in the wild (Π, M, C). G5 adds static syntactic verification '
-                '(AST security linting plus prompt policy checks). Crucially, EvoEval formalizes two dynamic canary regimes: G7 represents '
+                '(AST security linting plus prompt policy checks). Crucially, SAGE formalizes two dynamic canary regimes: G7 represents '
                 'the realistic deployable proxy canary guard, requiring candidate mutations to pass historical regression suites evaluated '
                 'exclusively on strictly held-out proxy tasks before commitment; whereas G6* represents an idealized upper skyline (Oracle Canary) '
                 'gating candidate mutations against sequestered ground-truth tests to establish theoretical optimal rollback performance.'
@@ -275,7 +275,7 @@ def patch_document():
             p.text = 'F. Cross-Family Architectural Comparison (Qwen vs. Llama)'
             print('[+] Reconciled docx Section heading: Cross-Family Architectural Comparison')
 
-        if 'EXTERNAL BASELINES ON EVOEVAL' in p.text:
+        if 'EXTERNAL BASELINES ON SAGE' in p.text:
             p.text = 'TABLE X: CROSS-FAMILY ARCHITECTURAL COMPARISON: EMPIRICAL DYNAMICS ACROSS QWEN-2.5-CODER-7B AND LLAMA-3.1-8B PROFILES (T=10 CYCLES).'
             print('[+] Reconciled docx Table X caption to Cross-Family Comparison')
 
@@ -294,10 +294,10 @@ def patch_document():
             )
             print('[+] Reconciled heading (Quality Ratchet -> Rollback-Guarded State Preservation)')
 
-        if 'We introduce EvoEval, the first comprehensive longitudinal benchmark' in p.text:
+        if 'We introduce SAGE, the first comprehensive longitudinal benchmark' in p.text:
             p.text = p.text.replace(
-                'We introduce EvoEval, the first comprehensive longitudinal benchmark',
-                'We introduce EvoEval, a hardened benchmark and verification framework'
+                'We introduce SAGE, the first comprehensive longitudinal benchmark',
+                'We introduce SAGE, a hardened benchmark and verification framework'
             )
             print('[+] Reconciled docx Introduction framing (hardened benchmark & verification framework)')
 
@@ -339,13 +339,13 @@ def patch_document():
 
     # 3. Add or update Subsection II-F before Section III
     new_sec2f_text = (
-        'Four foundational concurrent investigations directly contextualize EvoEval’s longitudinal findings. '
+        'Four foundational concurrent investigations directly contextualize SAGE’s longitudinal findings. '
         'Fang et al. [29] provide a unified survey of self-evolving AI agents, highlighting the acute absence of standardized '
         'benchmarks for empirical stability. Addressing safety risks, Shao et al. [30] formalize agent misevolution—showing that '
         'autonomous evolution across models, memory, and tools induces persistent jailbreaks and reward hacking. '
         'Zhao et al. [31] demonstrate that coding agents exploit gaps between visible validation tests and held-out '
         'evaluations, engaging in systemic reward hacking. Concurrently, Yu et al. [32] show that lifelong agent adaptation triggers '
-        'severe capability regression (catastrophic forgetting) of prior capabilities. EvoEval unifies these threads: pairing deliberate drift probes (measuring '
+        'severe capability regression (catastrophic forgetting) of prior capabilities. SAGE unifies these threads: pairing deliberate drift probes (measuring '
         'the proxy gaming gap emphasized by Zhao et al.), 5-layer cryptographic isolation (intercepting the execution misevolution vectors '
         'documented by Shao et al.), and proving that G6 regression canary gating completely halts misevolution while driving capability to 92.0%.'
     )
@@ -492,7 +492,7 @@ def patch_document():
             t._tbl.getparent().remove(t._tbl)
             print('[+] Removed remnant broken 1x1 table')
 
-    from evaeval.metrics.significance import StatisticalSignificanceAnalyzer, format_bootstrap_p
+    from sage.metrics.significance import StatisticalSignificanceAnalyzer, format_bootstrap_p
     import json
     metrics_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'experiments', 'runs', 'pilot_canonical_3seeds', 'results', 'cycle_metrics.json')
     metrics_data = []
@@ -595,7 +595,7 @@ def patch_document():
     ]
     p_tbl10 = None
     for p in doc.paragraphs:
-        if 'CROSS-FAMILY ARCHITECTURAL COMPARISON' in p.text or 'EXTERNAL BASELINES ON EVOEVAL' in p.text:
+        if 'CROSS-FAMILY ARCHITECTURAL COMPARISON' in p.text or 'EXTERNAL BASELINES ON SAGE' in p.text:
             p_tbl10 = p
             break
     if p_tbl10:
@@ -737,9 +737,9 @@ def patch_document():
                 new_cda = (
                     'All benchmark tasks, dual-container evaluation harnesses, trajectory datasets, human audit annotations, '
                     'and replication scripts are open-sourced under Apache-2.0 and CC-BY-4.0 licenses. Complete source code and '
-                    'deployment environments are available on GitHub: https://github.com/Pratikjain24/EvoEval. The 100-task golden '
+                    'deployment environments are available on GitHub: https://github.com/Pratikjain24/SAGE. The 100-task golden '
                     'benchmark dataset, canonical longitudinal trajectories, and Croissant 1.0 metadata are hosted on Hugging Face: '
-                    'https://github.com/Pratikjain24/EvoEval. Permanent archive: https://github.com/Pratikjain24/EvoEval.'
+                    'https://github.com/Pratikjain24/SAGE. Permanent archive: https://github.com/Pratikjain24/SAGE.'
                 )
                 p.insert_paragraph_before(new_cda)
                 print('[+] Inserted Section XIII (Code and Data Availability) in docx')
@@ -763,7 +763,7 @@ def patch_document():
         if p.text.strip() == 'VI. EXPERIMENTAL SETUP':
             if i + 1 < len(doc.paragraphs):
                 doc.paragraphs[i + 1].text = (
-                    'To combine rigorous counterfactual control with live empirical validity, EvoEval implements a two-tiered evaluation setup: '
+                    'To combine rigorous counterfactual control with live empirical validity, SAGE implements a two-tiered evaluation setup: '
                     '1) Canonical Benchmark Trajectories (N=18,000): To eliminate stochastic model flakiness, isolate causal archetype mechanisms, '
                     'and achieve bitwise cross-platform reproducibility (\u0394platform = 0.000 across Linux and Windows), the core factorial matrix evaluates '
                     'T=10 generations across 3 pinned seeds (42, 43, 44) for all 100 tasks under deterministic, state-formalized agent policies: '
@@ -899,7 +899,7 @@ def patch_document():
 
     # Save to docx_path and paper/
     doc.save(docx_path)
-    paper_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'paper', 'EvoEval_IEEE_Research_Paper.docx')
+    paper_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'paper', 'SAGE_IEEE_Research_Paper.docx')
     if os.path.abspath(docx_path) != os.path.abspath(paper_path):
         doc.save(paper_path)
     print(f'[+] Successfully saved updated document to:\n  - {docx_path}\n  - {paper_path}')
@@ -911,7 +911,7 @@ def patch_document():
         word.Visible = False
         doc_obj = word.Documents.Open(os.path.abspath(paper_path))
         pdf_targets = [
-            os.path.abspath(os.path.join(os.path.dirname(paper_path), 'EvoEval_IEEE_Research_Paper.pdf')),
+            os.path.abspath(os.path.join(os.path.dirname(paper_path), 'SAGE_IEEE_Research_Paper.pdf')),
             os.path.abspath(os.path.join(os.path.dirname(paper_path), 'main.pdf')),
             os.path.abspath(r'C:\Users\kruti\Downloads\final research paper.pdf')
         ]

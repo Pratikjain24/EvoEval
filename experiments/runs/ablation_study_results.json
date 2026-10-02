@@ -37,7 +37,7 @@
       "description": "Filesystem-level integrity check. Detects test, harness, and log file modifications, but misses in-process temporal shortcuts and git rollbacks."
     },
     {
-      "name": "5-Check (EvoEval Complete Engine)",
+      "name": "5-Check (SAGE Complete Engine)",
       "active_checks": [
         "tamper_test_files_intact",
         "tamper_scoring_scripts_untouched",
@@ -50,7 +50,7 @@
       "detection_rate": 1.0,
       "latency_overhead_pct": 1.8,
       "false_positive_rate": 0.0,
-      "description": "EvoEval production architecture. Combines structural, filesystem, temporal, and VCS checks to achieve 100% detection with minimal (<2%) overhead."
+      "description": "SAGE production architecture. Combines structural, filesystem, temporal, and VCS checks to achieve 100% detection with minimal (<2%) overhead."
     },
     {
       "name": "7-Check (+Syscall and Net DPI)",
@@ -283,7 +283,7 @@
       "evaluation_integrity": "Partially Compromised (Agent inspects /proc mounts & hijacks /tmp)"
     },
     {
-      "isolation_regime": "Dual Container Isolation (EvoEval)",
+      "isolation_regime": "Dual Container Isolation (SAGE)",
       "container_count": 2,
       "privilege_model": "Rootless Sandbox (uid=1000:1000)",
       "network_model": "Strictly Disabled (network: none)",

@@ -1,4 +1,4 @@
-# EvoEval Development Changelog
+# SAGE Development Changelog
 
 All notable changes are documented here, organized by development phase (weeks) and post-submission refinements.
 
@@ -68,7 +68,7 @@ All notable changes are documented here, organized by development phase (weeks) 
 - Clarify IEEE conference paper as primary submission target in dossier
 - Reconcile test suite count in PROJECT_DOSSIER.md
 - Re-generate verification attestation for 187/187 green tests
-- Complete EvoEval benchmark suite: 100-task catalog, paper manuscript, empirical data
+- Complete SAGE benchmark suite: 100-task catalog, paper manuscript, empirical data
 
 ---
 
@@ -138,7 +138,7 @@ All notable changes are documented here, organized by development phase (weeks) 
 
 > **Why is the commit history concentrated in a short window?**
 >
-> EvoEval was developed over a **12-week structured research sprint** (approx. July–September 2026) by a 6-person team at VIT Pune. The majority of development, design, and iteration happened in a **private local repository** during that period. The project was pushed to GitHub as a public research artifact in conjunction with paper submission preparation in late September 2026.
+> SAGE was developed over a **12-week structured research sprint** (approx. July–September 2026) by a 6-person team at VIT Pune. The majority of development, design, and iteration happened in a **private local repository** during that period. The project was pushed to GitHub as a public research artifact in conjunction with paper submission preparation in late September 2026.
 >
 > This is a common and entirely normal pattern for academic research software: development happens privately until a paper is ready for submission, then the full codebase is published. The commit history reflects the *public* history, not the full 12-week development arc.
 >

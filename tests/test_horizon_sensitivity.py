@@ -6,8 +6,8 @@ from pathlib import Path
 import pytest
 import yaml
 
-from evaeval.config.models import ExperimentConfig
-from evaeval.runner.horizon_sensitivity import MultiHorizonAnalyzer
+from sage.config.models import ExperimentConfig
+from sage.runner.horizon_sensitivity import MultiHorizonAnalyzer
 
 
 def test_multi_horizon_config_validity(tmp_path: Path):

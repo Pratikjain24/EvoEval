@@ -10,8 +10,8 @@ Verifies:
 from __future__ import annotations
 import pytest
 from pathlib import Path
-from evaeval.config.models import TaskConfig, TasksSplitConfig
-from evaeval.environment.task_loader import TaskLoader, InductiveTaskSplit
+from sage.config.models import TaskConfig, TasksSplitConfig
+from sage.environment.task_loader import TaskLoader, InductiveTaskSplit
 
 
 @pytest.fixture

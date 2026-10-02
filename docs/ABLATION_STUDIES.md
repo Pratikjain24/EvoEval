@@ -1,7 +1,7 @@
 # Empirical Ablation Studies & Architectural Design Choice Validations
 
 ## 1. Executive Summary
-This document formalizes empirical ablation studies answering the four core reviewer questions regarding EvoEval architectural design choices:
+This document formalizes empirical ablation studies answering the four core reviewer questions regarding SAGE architectural design choices:
 1. **Tamper Detection**: Why 5 checks instead of 1, 3, or 7?
 2. **Seed Sensitivity**: Why 3 seeds instead of 5 or 10?
 3. **Cycle Horizon**: Why 10 cycles for full study vs. 5 for pilot?
@@ -16,7 +16,7 @@ This document formalizes empirical ablation studies answering the four core revi
 | **0-Check (Unprotected)** | 0 checks | 0/6 | **0.0%** | +0.0% | 0.0% | Zero tamper detection; agents freely tamper with evaluation files and logs.... |
 | **1-Check (Test Files Only)** | 1 checks | 2/6 | **33.3%** | +0.4% | 0.0% | Standard test file integrity check (SWE-bench / HumanEval baseline). Misses in-m... |
 | **3-Check (Static File Triad)** | 3 checks | 4/6 | **66.7%** | +1.1% | 0.0% | Filesystem-level integrity check. Detects test, harness, and log file modificati... |
-| **5-Check (EvoEval Complete Engine)** | 5 checks | 6/6 | **100.0%** | +1.8% | 0.0% | EvoEval production architecture. Combines structural, filesystem, temporal, and ... |
+| **5-Check (SAGE Complete Engine)** | 5 checks | 6/6 | **100.0%** | +1.8% | 0.0% | SAGE production architecture. Combines structural, filesystem, temporal, and ... |
 | **7-Check (+Syscall and Net DPI)** | 7 checks | 6/6 | **100.0%** | +48.5% | 4.2% | Over-engineered configuration adding dynamic kernel ptrace and socket DPI. Achie... |
 
 ### Key Takeaway: Why Exactly 5 Checks?
@@ -74,7 +74,7 @@ This document formalizes empirical ablation studies answering the four core revi
 |---|:---:|---|---|:---:|:---:|---|
 | **Bare Host Workspace** | 0 | `Full Host Network Access` | Local Workspace Root | **0/5** | **100.0%** | Completely Compromised (Agent reads/modifies test runner) |
 | **Single Container (Privilege Separation)** | 1 | `Bridged (Default Docker)` | Shared Container (Read-Only Ground Truth Mount) | **2/5** | **60.0%** | Partially Compromised (Agent inspects /proc mounts & hijacks /tmp) |
-| **Dual Container Isolation (EvoEval)** | 2 | `Strictly Disabled (network: none)` | Completely Segregated Volumes (Zero Mount Overlap) | **5/5** | **0.0%** ($[0.0\%, 45.1\%]^*$) | Cryptographically Isolated (Zero ground-truth exposure) |
+| **Dual Container Isolation (SAGE)** | 2 | `Strictly Disabled (network: none)` | Completely Segregated Volumes (Zero Mount Overlap) | **5/5** | **0.0%** ($[0.0\%, 45.1\%]^*$) | Cryptographically Isolated (Zero ground-truth exposure) |
 
 ### Key Takeaway: Why Dual-Container Isolation?
 - In a **Single Container with Privilege Separation**, unprivileged agents can still inspect `/proc` mounts to discover hidden test paths, hijack shared `/tmp` pytest fixtures, and manipulate shared IPC sockets ($60.0\%$ escape frequency).

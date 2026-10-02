@@ -45,7 +45,7 @@ jobs:
 
     - name: Pre-Flight Environment & Remote Pinned Model Verification
       run: |
-        python -m evaeval.runner.cli verify-env --config configs/experiments/smoke_real_llm.yaml
+        python -m sage.runner.cli verify-env --config configs/experiments/smoke_real_llm.yaml
 
     - name: Run vLLM Protocol & Drift Probes (Integration Test Suite)
       run: |
@@ -92,7 +92,7 @@ jobs:
 
     - name: Run Benchmark CLI Smoke Run
       run: |
-        evoeval run --config configs/experiments/smoke_real_llm.yaml --run-id nightly_vllm_smoke
+        sage run --config configs/experiments/smoke_real_llm.yaml --run-id nightly_vllm_smoke
 
     - name: Upload Smoke Test Artifacts & Drift Report
       uses: actions/upload-artifact@v4

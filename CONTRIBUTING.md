@@ -1,6 +1,6 @@
-# Contributing to EvoEval
+# Contributing to SAGE
 
-Thank you for your interest in contributing to **EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents**!
+Thank you for your interest in contributing to **SAGE: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents**!
 
 This benchmark framework is built by researchers at Vishwakarma Institute of Technology, Pune. We welcome contributions from the community, especially:
 
@@ -18,8 +18,8 @@ This benchmark framework is built by researchers at Vishwakarma Institute of Tec
 1. **Fork** the repository
 2. **Clone** your fork locally:
    ```bash
-   git clone https://github.com/<your-username>/EvoEval.git
-   cd EvoEval
+   git clone https://github.com/<your-username>/SAGE.git
+   cd SAGE
    ```
 3. **Set up the environment**:
    ```bash
@@ -64,7 +64,7 @@ See [`docs/task_authoring_guide.md`](docs/task_authoring_guide.md) for full deta
 
 ## 🏗️ Adding a New Agent Archetype
 
-Agent adapters live in `evaeval/adapters/`. Each adapter must:
+Agent adapters live in `sage/adapters/`. Each adapter must:
 - Inherit from `BaseAgentAdapter`
 - Implement `mutate()`, `rollback()`, and `get_state()` methods
 - Pass all tests in `tests/test_adapters.py`
@@ -73,8 +73,8 @@ Agent adapters live in `evaeval/adapters/`. Each adapter must:
 
 ## 📜 Code Style
 
-- Use **Black** for formatting: `black evaeval/ tests/`
-- Use **isort** for imports: `isort evaeval/ tests/`
+- Use **Black** for formatting: `black sage/ tests/`
+- Use **isort** for imports: `isort sage/ tests/`
 - Follow **PEP 8** conventions
 - Add type annotations to all new functions
 
@@ -82,7 +82,7 @@ Agent adapters live in `evaeval/adapters/`. Each adapter must:
 
 ## 📬 Questions?
 
-Open a [GitHub Discussion](https://github.com/Pratikjain24/EvoEval/discussions) or file an [Issue](https://github.com/Pratikjain24/EvoEval/issues).
+Open a [GitHub Discussion](https://github.com/Pratikjain24/SAGE/discussions) or file an [Issue](https://github.com/Pratikjain24/SAGE/issues).
 
 ---
 

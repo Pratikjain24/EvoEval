@@ -3,10 +3,10 @@
 import tempfile
 from pathlib import Path
 import pytest
-from evaeval.adapters.prompt_agent import PromptAgentAdapter
-from evaeval.evolution.controller import EvolutionController
-from evaeval.evolution.snapshots import SnapshotManager
-from evaeval.evolution.verifier import EvolutionVerifier
+from sage.adapters.prompt_agent import PromptAgentAdapter
+from sage.evolution.controller import EvolutionController
+from sage.evolution.snapshots import SnapshotManager
+from sage.evolution.verifier import EvolutionVerifier
 
 
 def test_evolution_verifier_static_rules():

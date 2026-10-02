@@ -1,6 +1,6 @@
 ---
 name: 🐛 Bug Report
-about: Report a bug or unexpected behavior in EvoEval
+about: Report a bug or unexpected behavior in SAGE
 title: '[BUG] '
 labels: bug
 assignees: Pratikjain24
@@ -23,7 +23,7 @@ assignees: Pratikjain24
 ## 🖥️ Environment
 - OS: [e.g. Ubuntu 22.04, Windows 11]
 - Python version: [e.g. 3.10.12]
-- EvoEval version / commit SHA: [e.g. `81af5b5`]
+- SAGE version / commit SHA: [e.g. `81af5b5`]
 - Docker version (if applicable): [e.g. 24.0.5]
 
 ## 📎 Additional Context

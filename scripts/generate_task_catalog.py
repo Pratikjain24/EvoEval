@@ -46,11 +46,11 @@ def generate_task_catalog():
     # 1. Generate docs/TASK_CATALOG.md
     # =========================================================================
     md_lines = [
-        "# EvoEval Comprehensive Task Catalog (100 Benchmark Tasks)",
+        "# SAGE Comprehensive Task Catalog (100 Benchmark Tasks)",
         "",
         "## Executive Summary & Architectural Overview",
         "",
-        "The **EvoEval Benchmark Suite** comprises exactly **100 focused, multi-module algorithmic and system programming tasks (averaging 16.5 mutable LOC with strict structural and behavioral assertions)** ($\mathcal{T} = \{t_1, \dots, t_{100}\}$), distributed equally across five orthogonal operational categories ($N=20$ per category). Each task is hosted in a hermetically isolated multi-module repository environment, featuring complete test harnesses, strict environment isolation, static verification guards, and sequestered ground-truth specifications.",
+        "The **SAGE Benchmark Suite** comprises exactly **100 focused, multi-module algorithmic and system programming tasks (averaging 16.5 mutable LOC with strict structural and behavioral assertions)** ($\mathcal{T} = \{t_1, \dots, t_{100}\}$), distributed equally across five orthogonal operational categories ($N=20$ per category). Each task is hosted in a hermetically isolated multi-module repository environment, featuring complete test harnesses, strict environment isolation, static verification guards, and sequestered ground-truth specifications.",
         "",
         "### Key Benchmark Properties",
         "- **Total Tasks**: 100",

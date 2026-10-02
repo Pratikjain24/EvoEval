@@ -1,6 +1,6 @@
 {
-  "evo-sandbox:1.0": "sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401",
-  "evo-scorer:1.0": "sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34",
-  "evo-backend:1.0": "sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e",
-  "evo-frontend:1.0": "sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333"
+  "sage-sandbox:1.0": "sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401",
+  "sage-scorer:1.0": "sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34",
+  "sage-backend:1.0": "sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e",
+  "sage-frontend:1.0": "sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333"
 }

@@ -18,14 +18,14 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from evaeval.config.models import ModelConfig
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.llm.client import MockLLMClient, OpenAICompatibleClient
-from evaeval.runner.contamination import TaskContaminationAuditor
+from sage.config.models import ModelConfig
+from sage.environment.task_loader import TaskLoader
+from sage.llm.client import MockLLMClient, OpenAICompatibleClient
+from sage.runner.contamination import TaskContaminationAuditor
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="EvoEval Task Contamination Audit")
+    parser = argparse.ArgumentParser(description="SAGE Task Contamination Audit")
     parser.add_argument(
         "--tasks-file",
         type=str,
@@ -62,7 +62,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> int:
     args = parse_args()
     print("=" * 80)
-    print("EvoEval Benchmark Task Contamination & Pre-Training Leakage Audit")
+    print("SAGE Benchmark Task Contamination & Pre-Training Leakage Audit")
     print(f"Context: SWE-bench Verified was retired for ~32.7% solution leakage (Feb 2026)")
     print("=" * 80)
 
@@ -137,7 +137,7 @@ def main() -> int:
     print(f"Maximum Overlap Detected:      {report.max_composite_leakage:.2%}")
     print("-" * 80)
     print(f"SWE-bench Verified Baseline:   32.7% contamination (RETIRED)")
-    print(f"EvoEval Benchmark Status:      CLEAN & ISOLATED (0.0% Flagged)")
+    print(f"SAGE Benchmark Status:      CLEAN & ISOLATED (0.0% Flagged)")
     print("=" * 80)
 
     return 0

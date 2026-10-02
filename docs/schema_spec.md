@@ -1,7 +1,7 @@
-# EvoEval Trajectory Event Schema Specification
+# SAGE Trajectory Event Schema Specification
 
 > **IMMUTABILITY NOTICE (LOCKED SPECIFICATION)**
-> This specification defines the canonical, append-only event stream for EvoEval. Everything downstream—the runner, scoring harness, metric calculations, DuckDB ingestion, FastAPI backend, and Next.js frontend—strictly depends on this schema. **This contract is frozen and must never be modified mid-study.**
+> This specification defines the canonical, append-only event stream for SAGE. Everything downstream—the runner, scoring harness, metric calculations, DuckDB ingestion, FastAPI backend, and Next.js frontend—strictly depends on this schema. **This contract is frozen and must never be modified mid-study.**
 
 ---
 
@@ -240,7 +240,7 @@ Emitted when a checkpoint tag is registered on disk, recording state digests.
 ## 5. Implementation Source Code
 
 The Python code contracts matching this specification are located at:
-- **Schema**: [`evaeval/trajectory/schema.py`](file:///c:/Users/kruti/EvoEval/evaeval/trajectory/schema.py)
-- **Writer**: [`evaeval/trajectory/writer.py`](file:///c:/Users/kruti/EvoEval/evaeval/trajectory/writer.py)
-- **Reader**: [`evaeval/trajectory/reader.py`](file:///c:/Users/kruti/EvoEval/evaeval/trajectory/reader.py)
-- **Unit Tests**: [`tests/test_schema.py`](file:///c:/Users/kruti/EvoEval/tests/test_schema.py)
+- **Schema**: [`sage/trajectory/schema.py`](file:///c:/Users/kruti/SAGE/sage/trajectory/schema.py)
+- **Writer**: [`sage/trajectory/writer.py`](file:///c:/Users/kruti/SAGE/sage/trajectory/writer.py)
+- **Reader**: [`sage/trajectory/reader.py`](file:///c:/Users/kruti/SAGE/sage/trajectory/reader.py)
+- **Unit Tests**: [`tests/test_schema.py`](file:///c:/Users/kruti/SAGE/tests/test_schema.py)

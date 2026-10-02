@@ -16,12 +16,12 @@ import subprocess
 from pathlib import Path
 import pytest
 
-from evaeval.config.models import TaskConfig
-from evaeval.scoring.hidden_scorer import HiddenScorer
-from evaeval.scoring.tamper_detect import TamperDetector
-from evaeval.trajectory.reader import TrajectoryReader
-from evaeval.trajectory.schema import TrajectoryEvent
-from evaeval.trajectory.writer import TrajectoryWriter
+from sage.config.models import TaskConfig
+from sage.scoring.hidden_scorer import HiddenScorer
+from sage.scoring.tamper_detect import TamperDetector
+from sage.trajectory.reader import TrajectoryReader
+from sage.trajectory.schema import TrajectoryEvent
+from sage.trajectory.writer import TrajectoryWriter
 
 
 def _handle_remove_readonly(func, path, exc_info):

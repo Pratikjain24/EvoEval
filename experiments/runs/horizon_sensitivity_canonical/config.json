@@ -1,6 +1,6 @@
 {
   "name": "horizon_sensitivity",
-  "description": "EvoEval Multi-Horizon Sensitivity Extension: 25 cycles evaluating drift saturation vs compounding on unconstrained groups G2/G4 and controls G1/G6",
+  "description": "SAGE Multi-Horizon Sensitivity Extension: 25 cycles evaluating drift saturation vs compounding on unconstrained groups G2/G4 and controls G1/G6",
   "model": {
     "name": "qwen2.5-coder-7b-instruct",
     "revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
@@ -14,8 +14,8 @@
     "max_tokens": 4096
   },
   "sandbox": {
-    "image": "evo-sandbox:1.0",
-    "scorer_image": "evo-scorer:1.0",
+    "image": "sage-sandbox:1.0",
+    "scorer_image": "sage-scorer:1.0",
     "user": "1000:1000",
     "scorer_user": "1001:1001",
     "mem": "4g",

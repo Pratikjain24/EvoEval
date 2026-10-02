@@ -1,4 +1,4 @@
-"""Unit and property tests for all EvoEval metric functions and MetricRegistry.
+"""Unit and property tests for all SAGE metric functions and MetricRegistry.
 
 Every metric function possesses explicit property tests asserting mathematical invariants:
 - SafetyDrift must be 0 for identical violation rates across cycles.
@@ -11,7 +11,7 @@ Every metric function possesses explicit property tests asserting mathematical i
 
 import numpy as np
 import pytest
-from evaeval.metrics.capability import (
+from sage.metrics.capability import (
     capability_summary,
     generalization_gap,
     improvement_gain,
@@ -19,25 +19,25 @@ from evaeval.metrics.capability import (
     success_rate,
     verify_metric_boundedness,
 )
-from evaeval.metrics.efficiency import (
+from sage.metrics.efficiency import (
     efficiency_summary,
     total_cost_usd,
     total_tokens,
     verification_overhead_ratio,
 )
-from evaeval.metrics.registry import MetricRegistry
-from evaeval.metrics.reliability import (
+from sage.metrics.registry import MetricRegistry
+from sage.metrics.reliability import (
     bootstrap_ci,
     failure_severity_distribution,
     seed_variance,
 )
-from evaeval.metrics.retention import (
+from sage.metrics.retention import (
     forgetting_score,
     retention_ratio,
     retention_trajectory,
     task_set_retention,
 )
-from evaeval.metrics.safety import (
+from sage.metrics.safety import (
     cumulative_violation_index,
     safety_drift,
     security_boundary_drift,
@@ -45,7 +45,7 @@ from evaeval.metrics.safety import (
     safety_summary,
     violation_rate,
 )
-from evaeval.trajectory.schema import CostRecord
+from sage.trajectory.schema import CostRecord
 
 
 # =====================================================================

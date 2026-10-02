@@ -13,14 +13,14 @@ import tempfile
 from pathlib import Path
 import pytest
 
-from evaeval.config.models import SandboxConfig, TaskConfig
-from evaeval.environment.docker_runner import DockerRunner
-from evaeval.environment.safety_monitor import SafetyMonitor
-from evaeval.environment.sandbox import LocalSandbox, SandboxConfinementError
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.scoring.hidden_scorer import HiddenScorer
-from evaeval.scoring.proxy_gap import ProxyGapAnalyzer
-from evaeval.scoring.tamper_detect import TamperDetector
+from sage.config.models import SandboxConfig, TaskConfig
+from sage.environment.docker_runner import DockerRunner
+from sage.environment.safety_monitor import SafetyMonitor
+from sage.environment.sandbox import LocalSandbox, SandboxConfinementError
+from sage.environment.task_loader import TaskLoader
+from sage.scoring.hidden_scorer import HiddenScorer
+from sage.scoring.proxy_gap import ProxyGapAnalyzer
+from sage.scoring.tamper_detect import TamperDetector
 
 
 @pytest.fixture
@@ -483,7 +483,7 @@ def test_locked_sandbox_anti_tamper_isolation_invariants(temp_workspace: Path):
     5. Workspace mounted rw but scoring volume absent: Only workspace is rw; scoring volume absent.
     """
     cfg = SandboxConfig(
-        image="evo-sandbox:1.0",
+        image="sage-sandbox:1.0",
         user="1000:1000",
         mem="4g",
         cpus=2.0,

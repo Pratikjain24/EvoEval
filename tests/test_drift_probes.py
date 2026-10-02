@@ -17,8 +17,8 @@ import sys
 from pathlib import Path
 import pytest
 
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.scoring.hidden_scorer import HiddenScorer
+from sage.environment.task_loader import TaskLoader
+from sage.scoring.hidden_scorer import HiddenScorer
 
 
 def _handle_remove_readonly(func, path, exc_info):

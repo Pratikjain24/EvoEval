@@ -17,13 +17,13 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from evaeval.runner.cross_family import CrossFamilyAnalyzer
-from evaeval.runner.reproducibility import generate_trajectory_manifest
+from sage.runner.cross_family import CrossFamilyAnalyzer
+from sage.runner.reproducibility import generate_trajectory_manifest
 
 
 def main() -> int:
     print("=" * 80)
-    print("EvoEval Cross-Family Benchmark & Generalization Analysis")
+    print("SAGE Cross-Family Benchmark & Generalization Analysis")
     print("Models: Qwen-2.5-Coder-7B-Instruct vs Llama-3.1-8B-Instruct")
     print("=" * 80)
 

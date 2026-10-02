@@ -1,7 +1,7 @@
-"""Quality Gate: EvoEval Reproducibility Contract.
+"""Quality Gate: SAGE Reproducibility Contract.
 
 Tests the 6 contract commitments specified in the repo README:
-1. One command: `make reproduce && evoeval run --config configs/experiments/full_study.yaml`
+1. One command: `make reproduce && sage run --config configs/experiments/full_study.yaml`
 2. Pinned model weights (exact revision SHA) + pinned Docker image digests
 3. All randomness routed through seeded generators recorded per run
 4. Trajectory hash manifest (SHA-256 per run) for reviewer verification
@@ -19,15 +19,15 @@ from pathlib import Path
 import pytest
 import yaml
 
-from evaeval.config.models import ExperimentConfig
-from evaeval.runner.reproducibility import (
+from sage.config.models import ExperimentConfig
+from sage.runner.reproducibility import (
     export_huggingface_dataset,
     generate_trajectory_manifest,
     load_pinned_docker_digests,
     set_global_seed,
 )
-from evaeval.trajectory.schema import CostRecord, TaskStartPayload, TrajectoryEvent
-from evaeval.trajectory.writer import TrajectoryWriter
+from sage.trajectory.schema import CostRecord, TaskStartPayload, TrajectoryEvent
+from sage.trajectory.writer import TrajectoryWriter
 
 
 def _handle_remove_readonly(func, path, exc_info):
@@ -74,15 +74,15 @@ def test_pinned_model_weights_in_full_study():
 
 def test_pinned_docker_image_digests():
     """Verify docker/image_digests.json contains SHA-256 digests for all 4 containers."""
-    from evaeval.runner.reproducibility import verify_docker_specifications
+    from sage.runner.reproducibility import verify_docker_specifications
 
     digests = load_pinned_docker_digests()
 
     required_images = [
-        "evo-sandbox:1.0",
-        "evo-scorer:1.0",
-        "evo-backend:1.0",
-        "evo-frontend:1.0",
+        "sage-sandbox:1.0",
+        "sage-scorer:1.0",
+        "sage-backend:1.0",
+        "sage-frontend:1.0",
     ]
     for img in required_images:
         assert img in digests, f"Missing pinned digest for {img}"
@@ -182,9 +182,9 @@ def test_trajectory_manifest_generation(temp_run_dir: Path):
 
 
 def test_cli_manifest_command():
-    """Verify that `evoeval manifest --run-id <id>` CLI command executes without error."""
+    """Verify that `sage manifest --run-id <id>` CLI command executes without error."""
     from typer.testing import CliRunner
-    from evaeval.runner.cli import app
+    from sage.runner.cli import app
 
     runner = CliRunner()
     result = runner.invoke(app, ["manifest", "--run-id", "pilot_study_canonical"])
@@ -272,7 +272,7 @@ def test_export_huggingface_dataset(temp_run_dir: Path, tmp_path: Path):
 
     with open(hf_out / "dataset_info.json", "r", encoding="utf-8") as f:
         info = json.load(f)
-    assert info["dataset_name"] == "evoeval-benchmark"
+    assert info["dataset_name"] == "sage-benchmark"
     assert info["splits"] == ["tasks", "trajectories", "labels"]
 
     # Verify Croissant MLCommons 1.0 metadata & Responsible Data Practices

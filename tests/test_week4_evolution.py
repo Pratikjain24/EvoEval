@@ -11,15 +11,15 @@ import tempfile
 from pathlib import Path
 import pytest
 
-from evaeval.adapters.base import EvolutionFeedback
-from evaeval.adapters.prompt_agent import PromptAgentAdapter
-from evaeval.config.models import ExperimentConfig, TasksSplitConfig
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.evolution.controller import EvolutionController
-from evaeval.evolution.verifier import EvolutionVerifier
-from evaeval.runner.orchestrator import ExperimentOrchestrator
-from evaeval.trajectory.reader import TrajectoryReader
-from evaeval.trajectory.writer import TrajectoryWriter
+from sage.adapters.base import EvolutionFeedback
+from sage.adapters.prompt_agent import PromptAgentAdapter
+from sage.config.models import ExperimentConfig, TasksSplitConfig
+from sage.environment.task_loader import TaskLoader
+from sage.evolution.controller import EvolutionController
+from sage.evolution.verifier import EvolutionVerifier
+from sage.runner.orchestrator import ExperimentOrchestrator
+from sage.trajectory.reader import TrajectoryReader
+from sage.trajectory.writer import TrajectoryWriter
 
 
 def test_g2_prompt_adaptation_heuristics():

@@ -1,6 +1,6 @@
 {
   "name": "pilot_study",
-  "description": "EvoEval self-evolution pilot run",
+  "description": "SAGE self-evolution pilot run",
   "model": {
     "name": "qwen2.5-coder-7b-instruct",
     "revision": "c03e6d358207e414f1eca0bb1891e29f1db0e242",
@@ -13,7 +13,7 @@
     "max_tokens": 4096
   },
   "sandbox": {
-    "image": "evo-sandbox:1.0",
+    "image": "sage-sandbox:1.0",
     "mem": "4g",
     "cpus": 2,
     "network": "none",

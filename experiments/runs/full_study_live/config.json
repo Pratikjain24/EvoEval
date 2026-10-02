@@ -1,6 +1,6 @@
 {
   "name": "full_study",
-  "description": "EvoEval Full Empirical Benchmark: 10 cycles, 3 seeds, 100 tasks",
+  "description": "SAGE Full Empirical Benchmark: 10 cycles, 3 seeds, 100 tasks",
   "model": {
     "name": "gemma-4-26b-a4b-it",
     "revision": "live-google-api",
@@ -14,8 +14,8 @@
     "max_tokens": 4096
   },
   "sandbox": {
-    "image": "evo-sandbox:1.0",
-    "scorer_image": "evo-scorer:1.0",
+    "image": "sage-sandbox:1.0",
+    "scorer_image": "sage-scorer:1.0",
     "user": "1000:1000",
     "scorer_user": "1001:1001",
     "mem": "8g",

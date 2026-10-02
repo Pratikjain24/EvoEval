@@ -1,6 +1,6 @@
-# EvoEval Dashboard & Public Leaderboard Hardening Specification
+# SAGE Dashboard & Public Leaderboard Hardening Specification
 
-This specification details the production security architecture, access control, rate limiting, and container hardening implemented for the public release of the EvoEval Leaderboard and Dashboard service.
+This specification details the production security architecture, access control, rate limiting, and container hardening implemented for the public release of the SAGE Leaderboard and Dashboard service.
 
 ---
 
@@ -17,7 +17,7 @@ When publishing autonomous agent benchmark leaderboards and evaluation dashboard
 
 ## 2. Authentication & Access Control Architecture
 
-The dashboard service implements tiered access control through [`evaeval/dashboard_backend/auth.py`](../evaeval/dashboard_backend/auth.py):
+The dashboard service implements tiered access control through [`sage/dashboard_backend/auth.py`](../sage/dashboard_backend/auth.py):
 
 ### A. Public Read vs. Protected Read Access
 - **Default Mode (`DASHBOARD_REQUIRE_AUTH=false`)**:
@@ -28,7 +28,7 @@ The dashboard service implements tiered access control through [`evaeval/dashboa
 
 ### B. Mandatory Mutation Authentication
 - **Mutating Endpoints (`POST /audit/labels`)**:
-  - In hardened/production environments (`EVOEVAL_API_KEY` configured), write operations **strictly enforce authentication**.
+  - In hardened/production environments (`SAGE_API_KEY` configured), write operations **strictly enforce authentication**.
   - Requests must present the valid administrative API key via header or bearer token.
   - Constant-time verification (`hmac.compare_digest`) mitigates side-channel timing analysis attacks.
 
@@ -36,7 +36,7 @@ The dashboard service implements tiered access control through [`evaeval/dashboa
 
 ## 3. Sliding-Window Rate Limiting
 
-The API is protected by a thread-safe sliding-window rate limiter ([`evaeval/dashboard_backend/rate_limiter.py`](../evaeval/dashboard_backend/rate_limiter.py)):
+The API is protected by a thread-safe sliding-window rate limiter ([`sage/dashboard_backend/rate_limiter.py`](../sage/dashboard_backend/rate_limiter.py)):
 
 | Endpoint Group | Default Rate Limit | Burst Behavior | Exceeded Action |
 |---|---|---|---|
@@ -110,10 +110,10 @@ The backend middleware enforces modern security headers on all responses:
 
 | Environment Variable | Default Value | Description |
 |---|---|---|
-| `EVOEVAL_API_KEY` | `evoeval-dev-key-change-in-production` | Secret token required for administrative mutations and protected reads. |
+| `SAGE_API_KEY` | `sage-dev-key-change-in-production` | Secret token required for administrative mutations and protected reads. |
 | `DASHBOARD_REQUIRE_AUTH` | `false` | When `true`, enforces authentication on all read and leaderboard endpoints. |
 | `DASHBOARD_REQUIRE_WRITE_AUTH` | `false` | When `true`, explicitly enforces auth on write endpoints. |
 | `RATE_LIMIT_READ_PER_MINUTE` | `120` | Maximum requests per minute per IP for public reads. |
 | `RATE_LIMIT_OVERRIDE` | None | Temporary rate limit override for testing/CI. |
-| `EVOEVAL_DISABLE_RATE_LIMIT` | `false` | When `true`, bypasses rate limiting (for integration tests only). |
+| `SAGE_DISABLE_RATE_LIMIT` | `false` | When `true`, bypasses rate limiting (for integration tests only). |
 | `ALLOWED_ORIGINS` | `http://localhost:3000,http://127.0.0.1:3000` | Whitelisted CORS origins for Next.js frontend communication. |

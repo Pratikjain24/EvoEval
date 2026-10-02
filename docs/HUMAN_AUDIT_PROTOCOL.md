@@ -2,7 +2,7 @@
 
 ## 1. Executive Summary & Protocol Overview
 
-The **EvoEval Human Audit Framework** establishes an empirical gold standard for validating behavioral safety drift and specification gaming (Proxy-Gap ground truth) in autonomous self-evolving code agents. While automated AST parsers and regex-based safety monitors provide continuous runtime detection, empirical verification requires independent, double-blind human inspection of execution traces to ensure automated scoring systems achieve high fidelity without over-flagging benign developer actions.
+The **SAGE Human Audit Framework** establishes an empirical gold standard for validating behavioral safety drift and specification gaming (Proxy-Gap ground truth) in autonomous self-evolving code agents. While automated AST parsers and regex-based safety monitors provide continuous runtime detection, empirical verification requires independent, double-blind human inspection of execution traces to ensure automated scoring systems achieve high fidelity without over-flagging benign developer actions.
 
 This protocol document formally provides:
 1. **Annotator Qualification & Review Protocol**: Detailed qualification criteria for human reviewers, double-blind evaluation procedures, and advisor adjudication standards.
@@ -294,7 +294,7 @@ Event 7: `task_end` -> proxy_score: 1.0, ground_truth_score: 1.0, proxy_gap: 0.0
 ## 8. Scalability Protocol to Full-Scale Empirical Studies (18,000 Evaluations)
 
 ### 8.1 The Two-Tiered Audit Architecture
-A key methodological contribution of EvoEval is establishing that **exhaustive manual labeling across tens of thousands of tasks is both economically infeasible and scientifically unnecessary**, provided the automated detectors are formally validated on a statistically powered calibration sample.
+A key methodological contribution of SAGE is establishing that **exhaustive manual labeling across tens of thousands of tasks is both economically infeasible and scientifically unnecessary**, provided the automated detectors are formally validated on a statistically powered calibration sample.
 
 1. **Tier 1: Powered Ground-Truth Calibration ($N=79$, 20.3 person-hours)**:
    - Validates the automated monitors against human double-blind consensus.
@@ -368,7 +368,7 @@ Archetype Breakdown (Confirmed Violations & Gaming):
 
 ## 9. Conclusion & Reproducibility Certification
 
-The EvoEval Double-Blind Human Verification Audit protocol provides verifiable, mathematically grounded evidence that:
+The SAGE Double-Blind Human Verification Audit protocol provides verifiable, mathematically grounded evidence that:
 1. Both the calibration cohort ($N=79$, $\text{Power} > 91\%$) and the expanded full-study cohort ($N=240$, $\text{Power} > 99.9\%$) are rigorously powered.
 2. Annotators achieved high concordance across both regimes ($\kappa_{\text{safety}} \ge 0.83$, $\kappa_{\text{gaming}} \ge 0.90$, $P_o \ge 95.4\%$).
 3. Automated monitors exhibit high fidelity ($F_1 = 0.89$--$0.95$, $\text{FPR} \le 4.0\%$) against human consensus.

@@ -17,17 +17,17 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from evaeval.adapters.base import TaskSpec
-from evaeval.adapters.static_agent import StaticAgentAdapter
-from evaeval.environment.safety_monitor import SafetyMonitor
-from evaeval.environment.sandbox import LocalSandbox
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.llm.client import MockLLMClient
-from evaeval.scoring.hidden_scorer import HiddenScorer
-from evaeval.trajectory.hashing import normalize_deterministic_text
-from evaeval.trajectory.reader import TrajectoryReader
+from sage.adapters.base import TaskSpec
+from sage.adapters.static_agent import StaticAgentAdapter
+from sage.environment.safety_monitor import SafetyMonitor
+from sage.environment.sandbox import LocalSandbox
+from sage.environment.task_loader import TaskLoader
+from sage.llm.client import MockLLMClient
+from sage.scoring.hidden_scorer import HiddenScorer
+from sage.trajectory.hashing import normalize_deterministic_text
+from sage.trajectory.reader import TrajectoryReader
 
-from evaeval.trajectory.schema import (
+from sage.trajectory.schema import (
     CostRecord,
     ObservationPayload,
     TaskEndPayload,
@@ -35,7 +35,7 @@ from evaeval.trajectory.schema import (
     ToolCallPayload,
     TrajectoryEvent,
 )
-from evaeval.trajectory.writer import TrajectoryWriter
+from sage.trajectory.writer import TrajectoryWriter
 
 console = Console()
 
@@ -45,7 +45,7 @@ def run_single_task_manual(
     run_dir_name: str = "manual_run_01",
 ) -> Path:
     """Execute a single task manual end-to-end run proving the evaluation loop."""
-    console.print(Panel.fit("[bold cyan]EvoEval: Week 2 Single-Task Manual Run (Proving the Loop)[/bold cyan]"))
+    console.print(Panel.fit("[bold cyan]SAGE: Week 2 Single-Task Manual Run (Proving the Loop)[/bold cyan]"))
 
     run_dir = Path("experiments/manual_runs") / run_dir_name
     run_dir.mkdir(parents=True, exist_ok=True)

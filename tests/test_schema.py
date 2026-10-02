@@ -2,7 +2,7 @@
 
 import pytest
 from datetime import datetime, timezone
-from evaeval.trajectory.schema import (
+from sage.trajectory.schema import (
     CostRecord,
     TrajectoryEvent,
     TaskStartPayload,
@@ -101,8 +101,8 @@ def test_all_12_payload_types():
 
 def test_trajectory_writer_append_and_fsync(tmp_path):
     import json
-    from evaeval.trajectory.writer import TrajectoryWriter
-    from evaeval.trajectory.reader import TrajectoryReader
+    from sage.trajectory.writer import TrajectoryWriter
+    from sage.trajectory.reader import TrajectoryReader
 
     log_file = tmp_path / "trajectory.jsonl"
     with TrajectoryWriter(log_file) as writer:
@@ -129,8 +129,8 @@ def test_trajectory_writer_append_and_fsync(tmp_path):
 
 def test_trajectory_writer_concurrent_threads(tmp_path):
     import threading
-    from evaeval.trajectory.writer import TrajectoryWriter
-    from evaeval.trajectory.reader import TrajectoryReader
+    from sage.trajectory.writer import TrajectoryWriter
+    from sage.trajectory.reader import TrajectoryReader
 
     log_file = tmp_path / "concurrent_trajectory.jsonl"
     writer = TrajectoryWriter(log_file)

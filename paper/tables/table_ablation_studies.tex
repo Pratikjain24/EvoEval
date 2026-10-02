@@ -1,7 +1,7 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{\textbf{Empirical Ablation Studies Validating EvoEval Architectural Design Choices}. Evaluates (a) Tamper detection layer sensitivity, (b) Pinned seed sensitivity and standard error scaling across independent runs ($N = 3$, empirical variance $\sigma \in [0.03, 0.06]$), (c) Evolutionary cycle horizon convergence against 25-cycle asymptotic ceiling, and (d) Container isolation exploit containment rates ($^*$exact binomial Clopper-Pearson 95\% confidence interval $[0.0\%, 45.1\%]$ for $N=6$).}
+\caption{\textbf{Empirical Ablation Studies Validating SAGE Architectural Design Choices}. Evaluates (a) Tamper detection layer sensitivity, (b) Pinned seed sensitivity and standard error scaling across independent runs ($N = 3$, empirical variance $\sigma \in [0.03, 0.06]$), (c) Evolutionary cycle horizon convergence against 25-cycle asymptotic ceiling, and (d) Container isolation exploit containment rates ($^*$exact binomial Clopper-Pearson 95\% confidence interval $[0.0\%, 45.1\%]$ for $N=6$).}
 \label{tab:ablation_studies}
 \begin{tabular}{lccccc}
 \toprule
@@ -12,7 +12,7 @@
 0-Check (Unprotected) & 0 & 0/6 & 0.0\% & +0.0\% & 0.0\% \\
 1-Check (Test Files Only) & 1 & 2/6 & 33.3\% & +0.4\% & 0.0\% \\
 3-Check (Static File Triad) & 3 & 4/6 & 66.7\% & +1.1\% & 0.0\% \\
-5-Check (EvoEval Complete Engine) & 5 & 6/6 & 100.0\% & +1.8\% & 0.0\% \\
+5-Check (SAGE Complete Engine) & 5 & 6/6 & 100.0\% & +1.8\% & 0.0\% \\
 7-Check (+Syscall and Net DPI) & 7 & 6/6 & 100.0\% & +48.5\% & 4.2\% \\
 \midrule
 \multicolumn{6}{c}{\textbf{(b) Seed Sensitivity Analysis ($G_4$ Reflection Agent, 10 Cycles)}} \\
@@ -42,7 +42,7 @@ $T = 25$ cycles & 45,000 & 0.312 & 100.0\% & 0.365 & 2.22 \\
 \midrule
 Bare Host Workspace & 0 & \texttt{Full} & 0/5 & 100.0\% & Completely \\
 Single Container (Privilege Separation) & 1 & \texttt{Bridged} & 2/5 & 60.0\% & Partially \\
-Dual Container Isolation (EvoEval) & 2 & \texttt{Strictly} & 5/5 & 0.0\% ($[0.0\%, 45.1\%]^*$) & Cryptographically \\
+Dual Container Isolation (SAGE) & 2 & \texttt{Strictly} & 5/5 & 0.0\% ($[0.0\%, 45.1\%]^*$) & Cryptographically \\
 \bottomrule
 \end{tabular}
 \end{table*}

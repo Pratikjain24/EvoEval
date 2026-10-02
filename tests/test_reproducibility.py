@@ -12,23 +12,23 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from pathlib import Path
 import pytest
-from evaeval.config.models import (
+from sage.config.models import (
     ExperimentConfig,
     ModelConfig,
     SandboxConfig,
     TasksSplitConfig,
 )
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.llm.client import MockLLMClient
-from evaeval.runner.orchestrator import ExperimentOrchestrator
-from evaeval.trajectory.hashing import (
+from sage.environment.task_loader import TaskLoader
+from sage.llm.client import MockLLMClient
+from sage.runner.orchestrator import ExperimentOrchestrator
+from sage.trajectory.hashing import (
     compute_deterministic_trajectory_bytes,
     compute_deterministic_trajectory_hash,
     extract_deterministic_event_data,
     normalize_deterministic_text,
 )
-from evaeval.trajectory.reader import TrajectoryReader
-from evaeval.trajectory.schema import (
+from sage.trajectory.reader import TrajectoryReader
+from sage.trajectory.schema import (
     CostRecord,
     ObservationPayload,
     TaskEndPayload,

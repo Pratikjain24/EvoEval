@@ -13,7 +13,7 @@ from llama_cpp import Llama
 
 DEFAULT_MODEL = Path(__file__).resolve().parent.parent / "models" / "qwen2.5-coder-3b-instruct-q4_k_m.gguf"
 
-app = FastAPI(title="EvoEval Local OpenAI-Compatible Server")
+app = FastAPI(title="SAGE Local OpenAI-Compatible Server")
 llm: Optional[Llama] = None
 model_name: str = "qwen2.5-coder-3b-instruct"
 

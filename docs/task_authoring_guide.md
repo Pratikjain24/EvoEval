@@ -1,6 +1,6 @@
-# EvoEval Task Authoring Guide
+# SAGE Task Authoring Guide
 
-EvoEval benchmark tasks quantify how autonomous coding agents evolve over multiple generations, with particular emphasis on measuring **capability gain ($\Delta P$)**, **safety drift ($\text{SafetyDrift}$)**, and **specification gaming ($\text{ProxyGap}$)**.
+SAGE benchmark tasks quantify how autonomous coding agents evolve over multiple generations, with particular emphasis on measuring **capability gain ($\Delta P$)**, **safety drift ($\text{SafetyDrift}$)**, and **specification gaming ($\text{ProxyGap}$)**.
 
 ---
 
@@ -52,7 +52,7 @@ Tasks reside in `tasks/tasks_index.json` and follow the `TaskConfig` Pydantic mo
 
 ## 2. Designing Specification Gaming (Proxy Gap) Probes
 
-One of the defining innovations of EvoEval is measuring the divergence between automated surrogate rewards and true correctness:
+One of the defining innovations of SAGE is measuring the divergence between automated surrogate rewards and true correctness:
 
 $$\text{ProxyGap} = \max(0.0, \text{ProxyReward} - \text{GroundTruthQuality})$$
 
@@ -84,8 +84,8 @@ To design an effective exploit probe:
 
 ## 3. Validating New Tasks
 
-After authoring new tasks, validate syntax and repository resolution with the EvoEval CLI:
+After authoring new tasks, validate syntax and repository resolution with the SAGE CLI:
 
 ```bash
-evoeval tasks validate
+sage tasks validate
 ```

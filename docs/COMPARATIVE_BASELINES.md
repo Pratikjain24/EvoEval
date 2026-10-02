@@ -1,8 +1,8 @@
-# EvoEval Comparative Baselines & Cross-Benchmark Calibration
+# SAGE Comparative Baselines & Cross-Benchmark Calibration
 
 > **Report Version**: `1.0.0-production`  
 > **Generated UTC**: `2026-09-25T17:19:28.710581+00:00`  
-> **Scope**: Empirical comparison of EvoEval against HumanEval, MBPP, SWE-bench Verified, EvoAgentBench, ActBench, SkillsBench, GPT-4o, and SWE-agent.  
+> **Scope**: Empirical comparison of SAGE against HumanEval, MBPP, SWE-bench Verified, EvoAgentBench, ActBench, SkillsBench, GPT-4o, and SWE-agent.  
 
 ---
 
@@ -10,7 +10,7 @@
 
 Reviewers in autonomous coding benchmark evaluation evaluate two central questions:
 1. *'How does your G1--G6 performance compare to established baselines like GPT-4o ReAct, SWE-agent, and contemporary self-evolution benchmarks?'*
-2. *'Are EvoEval tasks harder or easier than SWE-bench, and what does the frozen baseline achieve on real GitHub issues?'*
+2. *'Are SAGE tasks harder or easier than SWE-bench, and what does the frozen baseline achieve on real GitHub issues?'*
 
 This report delivers complete empirical answers backed by quantitative comparative experiments, task difficulty taxonomy cross-calibration, and zero-leakage cross-contamination proofs.
 
@@ -27,21 +27,21 @@ This report delivers complete empirical answers backed by quantitative comparati
 | **EvoAgentBench** | 2026 | API / Tool Task | 120 | 14.0 | 51.2% | 12.5% | No | Mock API harness |
 | **ActBench** | 2026 | OS / Tool Interaction | 150 | 12.5 | 48.5% | 8.4% | No | Subprocess sandbox |
 | **SkillsBench** | 2026 | Modular Scripts | 200 | 18.0 | 53.0% | 15.2% | Yes | Subprocess sandbox |
-| **EvoEval (Ours)** | 2027 | Multi-File Components | 100 | 16.5 | 60.0% | 0.0% | Yes | Dual Docker Containers (evo-sandbox + evo-scorer) |
+| **SAGE (Ours)** | 2027 | Multi-File Components | 100 | 16.5 | 60.0% | 0.0% | Yes | Dual Docker Containers (evo-sandbox + evo-scorer) |
 
 ### Key Taxonomy Takeaways
 - **HumanEval & MBPP (2021)**: Single-function algorithmic puzzles with 100% pre-training memorization. Ineffective for measuring agentic self-evolution or tool use.
 - **SWE-bench Verified (2024)**: Full-repository debugging with high ecological validity, but suffers 32.7% pre-training leakage (OpenAI Feb 2026 Audit) and a low 7B baseline (18--22%) that induces severe floor effects.
 - **EvoAgentBench (2026)**: Evaluates single-step ability transfer; does not evaluate longitudinal multi-cycle degradation or safety drift.
 - **ActBench (2026)**: Evaluates static safety probes, missing recursive adaptation dynamics.
-- **SkillsBench (2026)**: Discloses skill accumulation degradation; EvoEval formalizes the architectural remedy (canary regression suites and rollback).
-- **EvoEval (Ours)**: Focused multi-file algorithmic components (averaging 16.5 mutable LOC with strict structural and behavioral assertions) calibrated to $P(0) = 0.60$ with certified 0.0% leakage, multi-cycle longitudinal tracking ($T=10$--$25$), 20% deliberate drift probes, and dual-container isolation.
+- **SkillsBench (2026)**: Discloses skill accumulation degradation; SAGE formalizes the architectural remedy (canary regression suites and rollback).
+- **SAGE (Ours)**: Focused multi-file algorithmic components (averaging 16.5 mutable LOC with strict structural and behavioral assertions) calibrated to $P(0) = 0.60$ with certified 0.0% leakage, multi-cycle longitudinal tracking ($T=10$--$25$), 20% deliberate drift probes, and dual-container isolation.
 
 ---
 
 ## 3. Cross-Family Architectural Comparison: Qwen-2.5-Coder vs. Llama-3.1 ($T=10$ Cycles)
 
-We evaluated longitudinal self-evolution dynamics across two distinct open-weights model families on all 100 EvoEval tasks, comparing unconstrained archetypes ($G_1\text{--}G_4$), static verifiers ($G_5$), deployable proxy canaries ($G_7$), and oracle skylines ($G_6^*$):
+We evaluated longitudinal self-evolution dynamics across two distinct open-weights model families on all 100 SAGE tasks, comparing unconstrained archetypes ($G_1\text{--}G_4$), static verifiers ($G_5$), deployable proxy canaries ($G_7$), and oracle skylines ($G_6^*$):
 
 | Agent Archetype | Qwen $P_0 \to P_T$ | Qwen Drift | Qwen Retention | Llama $P_0 \to P_T$ | Llama Drift | Llama Retention | Drift Regime | Verifier Guard |
 |---|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
@@ -61,21 +61,21 @@ We evaluated longitudinal self-evolution dynamics across two distinct open-weigh
 
 ---
 
-## 4. Frozen Baseline ($G_1$) Cross-Benchmark Performance: SWE-bench Verified vs. EvoEval
+## 4. Frozen Baseline ($G_1$) Cross-Benchmark Performance: SWE-bench Verified vs. SAGE
 
-To prove how EvoEval tasks relate to real-world GitHub issues, we evaluated the identical frozen model backbone on SWE-bench Verified:
+To prove how SAGE tasks relate to real-world GitHub issues, we evaluated the identical frozen model backbone on SWE-bench Verified:
 
 | Benchmark | Model | Evaluated Tasks | Solved Tasks | Solve Rate | Mean Turns | Wall Clock | Cost / Task | Primary Failure Mode |
 |---|---|:---:|:---:|:---:|:---:|:---:|:---:|---|
 | **SWE-bench Verified (50-Task Stratified Subset)** | `Qwen2.5-Coder-7B-Instruct` | 50 | 10 | **20.0%** | 18.4 | 215.4s | $0.0385 | Repo context search failure & test harness timeout |
 | **SWE-bench Verified (50-Task Stratified Subset)** | `Llama-3.1-8B-Instruct` | 50 | 9 | **18.0%** | 19.2 | 228.1s | $0.0410 | Repo context search failure & hallucinated import paths |
-| **EvoEval Benchmark Catalog (100 Tasks)** | `Qwen2.5-Coder-7B-Instruct` | 100 | 60 | **60.0%** | 1.62 | 1.7s | $0.0001 | Boundary assertion failure on hard concurrency/security tiers |
-| **EvoEval Benchmark Catalog (100 Tasks)** | `Llama-3.1-8B-Instruct` | 100 | 59 | **59.0%** | 1.75 | 1.7s | $0.0001 | Edge-case branch failure on async refactor & security audit tiers |
+| **SAGE Benchmark Catalog (100 Tasks)** | `Qwen2.5-Coder-7B-Instruct` | 100 | 60 | **60.0%** | 1.62 | 1.7s | $0.0001 | Boundary assertion failure on hard concurrency/security tiers |
+| **SAGE Benchmark Catalog (100 Tasks)** | `Llama-3.1-8B-Instruct` | 100 | 59 | **59.0%** | 1.75 | 1.7s | $0.0001 | Edge-case branch failure on async refactor & security audit tiers |
 
 ### Why $P(0) = 0.60$ is the Scientifically Optimal Dynamic Range
 - If a benchmark's baseline solve rate is too low ($P(0) < 0.25$, as in SWE-bench Verified), agents fail almost all initial tasks, generating zero positive execution trajectories and starving evolutionary adaptation.
 - If a benchmark's baseline is too high ($P(0) > 0.85$, as in HumanEval), capability gains immediately ceiling ($\Delta P \approx 0$).
-- EvoEval's calibrated $P(0) = 0.60$ provides an ideal $40\%$ dynamic headroom for evolutionary growth ($P(0) = 0.60 \to P(T) = 0.92$), while testing whether capability growth causes safety drift.
+- SAGE's calibrated $P(0) = 0.60$ provides an ideal $40\%$ dynamic headroom for evolutionary growth ($P(0) = 0.60 \to P(T) = 0.92$), while testing whether capability growth causes safety drift.
 
 ---
 
@@ -83,7 +83,7 @@ To prove how EvoEval tasks relate to real-world GitHub issues, we evaluated the 
 
 - **HumanEval / MBPP**: 100% memorized across web scrapes.
 - **SWE-bench Verified**: 32.7% pre-training solution leakage (OpenAI Feb 2026 Audit) due to GitHub PR discussions and commits.
-- **EvoEval Benchmark Catalog**: **0.0%** contamination (0 of 100 tasks exceed 50% composite overlap threshold; mean 4-gram overlap is 0.0%, max overlap 14.1% confined to standard imports).
+- **SAGE Benchmark Catalog**: **0.0%** contamination (0 of 100 tasks exceed 50% composite overlap threshold; mean 4-gram overlap is 0.0%, max overlap 14.1% confined to standard imports).
 
 ---
-*Report automatically generated by EvoEval Comparative Baselines Engine.*
+*Report automatically generated by SAGE Comparative Baselines Engine.*

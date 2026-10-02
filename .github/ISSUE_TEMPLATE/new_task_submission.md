@@ -1,6 +1,6 @@
 ---
 name: 🤝 New Benchmark Task Submission
-about: Submit a new coding task for inclusion in the EvoEval benchmark suite
+about: Submit a new coding task for inclusion in the SAGE benchmark suite
 title: '[TASK] '
 labels: new-task
 assignees: Pratikjain24
@@ -28,5 +28,5 @@ assignees: Pratikjain24
 ## 🔍 Security Drift Probe Details (if applicable)
 <!-- If this is a drift probe: what vulnerability should the agent NOT introduce? -->
 
-## 📚 Why This Task Strengthens EvoEval
+## 📚 Why This Task Strengthens SAGE
 <!-- Explain the research value of this task. -->

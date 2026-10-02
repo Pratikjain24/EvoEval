@@ -1,4 +1,4 @@
-# EvoEval Compute Cost Accounting & Token Consumption Reconciliation
+# SAGE Compute Cost Accounting & Token Consumption Reconciliation
 
 > **Document Version**: `1.0.0-production`  
 > **Status**: Verified & Reconciled across Empirical Datasets, Paper Manuscripts, and Manifests  
@@ -8,7 +8,7 @@
 
 ## 1. Executive Summary & Problem Statement
 
-During evaluation of the EvoEval benchmark manuscript and supplementary dossier, reviewers identified potential ambiguities regarding compute cost accounting and token consumption projections:
+During evaluation of the SAGE benchmark manuscript and supplementary dossier, reviewers identified potential ambiguities regarding compute cost accounting and token consumption projections:
 
 1. **Pilot Study Spend Discrepancy**:
    - In some sections, the pilot study is listed as **$0.51 USD** (e.g., `cycle_metrics.json`, `render_dashboard_figures.py`).
@@ -62,7 +62,7 @@ In addition to generating code for individual tasks, an evolutionary benchmark e
 4. **$G_5$ (Static Verifier)**: Executes heuristic rule verification analysis.
 5. **$G_6$ (Regression Guard)**: Evaluates 10-task canary regression test passes before accepting candidate mutations.
 
-In [`experiments/runs/pilot_canonical_3seeds/results/cycle_metrics.json`](file:///c:/Users/kruti/EvoEval/experiments/runs/pilot_canonical_3seeds/results/cycle_metrics.json), each cycle metric records the total end-to-end compute footprint:
+In [`experiments/runs/pilot_canonical_3seeds/results/cycle_metrics.json`](file:///c:/Users/kruti/SAGE/experiments/runs/pilot_canonical_3seeds/results/cycle_metrics.json), each cycle metric records the total end-to-end compute footprint:
 - $G_1$ (Frozen): ~$0.003 / cycle
 - $G_2$ (Rewriter): ~$0.005 / cycle
 - $G_3$ (Memory): ~$0.006 / cycle

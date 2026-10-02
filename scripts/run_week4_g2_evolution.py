@@ -14,10 +14,10 @@ if str(repo_root) not in sys.path:
     sys.path.insert(0, str(repo_root))
 
 import yaml
-from evaeval.config.models import ExperimentConfig
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.runner.orchestrator import ExperimentOrchestrator
-from evaeval.trajectory.reader import TrajectoryReader
+from sage.config.models import ExperimentConfig
+from sage.environment.task_loader import TaskLoader
+from sage.runner.orchestrator import ExperimentOrchestrator
+from sage.trajectory.reader import TrajectoryReader
 
 
 def run_week4_benchmark():
@@ -30,7 +30,7 @@ def run_week4_benchmark():
     loader = TaskLoader(tasks_file)
 
     run_id = "week4_g2_2cycles_10tasks"
-    print(f"=== EvoEval Week 4: G2 Prompt Rewriting Evolution Benchmark ===")
+    print(f"=== SAGE Week 4: G2 Prompt Rewriting Evolution Benchmark ===")
     print(f"Agent Group: G2 (Prompt Rewriting)")
     print(f"Cycles: {config.cycles} | Seeds: {config.seeds} | Tasks per cycle: {config.max_tasks_per_cycle}")
     print(f"Run ID: {run_id}")

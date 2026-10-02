@@ -6,16 +6,16 @@ setup:
 	uv pip install -e ".[dev]"
 
 reproduce:
-	$(PYTHON) -m evaeval.runner.cli verify-env --config configs/experiments/full_study.yaml
+	$(PYTHON) -m sage.runner.cli verify-env --config configs/experiments/full_study.yaml
 
 verify:
 	$(PYTHON) scripts/verify_reproducibility.py
 
 attest:
-	$(PYTHON) -m evaeval.runner.cli verify
+	$(PYTHON) -m sage.runner.cli verify
 
 run-full:
-	evoeval run --config configs/experiments/full_study.yaml
+	sage run --config configs/experiments/full_study.yaml
 
 docker-up:
 	docker compose -f docker/docker-compose.yml up -d
@@ -45,16 +45,16 @@ horizon-sensitivity:
 
 lint:
 	python -m pyproject_check || true
-	ruff check evaeval tests || true
+	ruff check sage tests || true
 
 run-pilot:
-	python -m evaeval.runner.cli run --config configs/experiments/pilot.yaml
+	python -m sage.runner.cli run --config configs/experiments/pilot.yaml
 
 dashboard-backend:
-	uvicorn evaeval.dashboard_backend.main:app --host 0.0.0.0 --port 8000 --reload
+	uvicorn sage.dashboard_backend.main:app --host 0.0.0.0 --port 8000 --reload
 
 dashboard-frontend:
-	cd evaeval/dashboard_frontend && npm run dev
+	cd sage/dashboard_frontend && npm run dev
 
 clean:
 	rm -rf .pytest_cache .ruff_cache __pycache__ *.egg-info build dist

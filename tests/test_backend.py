@@ -3,8 +3,8 @@
 from __future__ import annotations
 import pytest
 from fastapi.testclient import TestClient
-from evaeval.dashboard_backend.db.models import init_db
-from evaeval.dashboard_backend.main import app
+from sage.dashboard_backend.db.models import init_db
+from sage.dashboard_backend.main import app
 
 # Ensure tables are initialized
 init_db()
@@ -17,7 +17,7 @@ def test_health_endpoint():
     assert res.status_code == 200
     data = res.json()
     assert data["status"] == "ok"
-    assert data["service"] == "evoeval-dashboard-backend"
+    assert data["service"] == "sage-dashboard-backend"
     assert data["version"] == "1.0.0"
 
 

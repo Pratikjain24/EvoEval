@@ -6,8 +6,8 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from evaeval.metrics.registry import MetricRegistry
-from evaeval.metrics.significance import (
+from sage.metrics.registry import MetricRegistry
+from sage.metrics.significance import (
     BootstrapTestResult,
     MetricTupleResult,
     StatisticalAuditReport,
@@ -215,7 +215,7 @@ def test_metric_registry_significance():
 
 def test_permutation_test():
     """Verify paired and two-sample permutation test statistical properties."""
-    from evaeval.runner.analysis import permutation_test
+    from sage.runner.analysis import permutation_test
 
     rng = np.random.default_rng(42)
     # Distinct distributions: a > b
@@ -240,8 +240,8 @@ def test_permutation_test():
 
 
 def test_runner_analysis_significance_module(tmp_path: Path):
-    """Verify evaeval.runner.analysis exposes significance module and exports JSON artifact."""
-    from evaeval.runner.analysis import (
+    """Verify sage.runner.analysis exposes significance module and exports JSON artifact."""
+    from sage.runner.analysis import (
         StatisticalSignificanceAnalyzer,
         cliffs_delta,
         cohens_d,

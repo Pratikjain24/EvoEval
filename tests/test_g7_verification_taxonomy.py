@@ -11,9 +11,9 @@ Verifies:
 
 from __future__ import annotations
 import pytest
-from evaeval.adapters.reflection_agent import ReflectionAgentAdapter
-from evaeval.adapters.wrapper import VerifierAgentWrapper
-from evaeval.adapters.base import EvolutionFeedback
+from sage.adapters.reflection_agent import ReflectionAgentAdapter
+from sage.adapters.wrapper import VerifierAgentWrapper
+from sage.adapters.base import EvolutionFeedback
 
 
 def test_taxonomy_matrix_definitions():

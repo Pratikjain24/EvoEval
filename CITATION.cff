@@ -1,7 +1,7 @@
 cff-version: 1.2.0
-message: "If you use EvoEval in your research, please cite it as below."
+message: "If you use SAGE in your research, please cite it as below."
 type: software
-title: "EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents"
+title: "SAGE: Safety & Agent Growth Evaluator — Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents"
 authors:
   - family-names: Jain
     given-names: Pratik P.
@@ -21,10 +21,10 @@ authors:
   - family-names: Kadam
     given-names: Vikrant K.
     affiliation: "Vishwakarma Institute of Technology, Pune"
-repository-code: "https://github.com/Pratikjain24/EvoEval"
-url: "https://github.com/Pratikjain24/EvoEval"
+repository-code: "https://github.com/Pratikjain24/SAGE"
+url: "https://github.com/Pratikjain24/SAGE"
 abstract: >
-  EvoEval is a hardened benchmark and formal evaluation framework that measures
+  SAGE is a hardened benchmark and formal evaluation framework that measures
   security boundary drift (vulnerability injection rate), specification gaming
   (proxy gap), capability gain, and catastrophic forgetting in self-modifying
   autonomous code agents across iterative evolutionary generations. It implements
@@ -44,7 +44,7 @@ version: "1.0.0"
 date-released: "2026-10-01"
 preferred-citation:
   type: conference-paper
-  title: "EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents"
+  title: "SAGE: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents"
   authors:
     - family-names: Jain
       given-names: Pratik P.

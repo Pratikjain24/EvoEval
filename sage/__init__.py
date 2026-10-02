@@ -1,0 +1,19 @@
+"""SAGE: Measuring Safety Drift and Capability Retention in Self-Evolving Code Agents."""
+
+__version__ = "1.0.0"
+__author__ = "SAGE Research Team"
+
+from sage.trajectory.schema import TrajectoryEvent, CostRecord, SCHEMA_VERSION
+from sage.adapters.base import AgentAdapter, TaskSpec, TaskResult, EvolutionFeedback, EvolutionOutcome
+
+__all__ = [
+    "__version__",
+    "SCHEMA_VERSION",
+    "TrajectoryEvent",
+    "CostRecord",
+    "AgentAdapter",
+    "TaskSpec",
+    "TaskResult",
+    "EvolutionFeedback",
+    "EvolutionOutcome",
+]

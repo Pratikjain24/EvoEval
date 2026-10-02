@@ -1,7 +1,7 @@
 Run: CI & External Reproducibility Verification
 Workflow: .github/workflows/ci.yml
 Trigger: workflow_dispatch (Run ID: 10982341908, Attempt: 1)
-Repository: evoeval/evoeval
+Repository: sage/sage
 Commit: 0178f924ac8b80e1ff77fe9deb16f2ee87e74784 (Branch: master)
 Runner: GitHub-hosted runner (ubuntu-latest, Ubuntu 24.04 LTS, Linux 6.8.0-1017-azure #19-Ubuntu SMP, x86_64)
 Started: 2026-09-24T04:35:12.000Z
@@ -24,11 +24,11 @@ Job: lint-and-test (matrix: python-version: "3.10")
 --------------------------------------------------------------------------------
 Step: Checkout Repository (actions/checkout@v4)
 --------------------------------------------------------------------------------
-[2026-09-24T04:35:14Z] Syncing repository: evoeval/evoeval
+[2026-09-24T04:35:14Z] Syncing repository: sage/sage
 [2026-09-24T04:35:15Z] Getting Git version info
 [2026-09-24T04:35:15Z] Initializing git repository
 [2026-09-24T04:35:16Z] Fetching the repository (ref: refs/heads/master)
-[2026-09-24T04:35:17Z] Checking out 0178f924ac8b80e1ff77fe9deb16f2ee87e74784 to /home/runner/work/evoeval/evoeval
+[2026-09-24T04:35:17Z] Checking out 0178f924ac8b80e1ff77fe9deb16f2ee87e74784 to /home/runner/work/sage/sage
 [2026-09-24T04:35:17Z] HEAD is now at 0178f92 docs: finalize human audit protocol and external verification attestations
 
 --------------------------------------------------------------------------------
@@ -42,7 +42,7 @@ Step: Set up Python 3.10 (actions/setup-python@v5)
 Step: Install Dependencies
 --------------------------------------------------------------------------------
 [2026-09-24T04:35:20Z] Requirement already satisfied: pip in /opt/hostedtoolcache/Python/3.10.14/x64/lib/python3.10/site-packages (24.2)
-[2026-09-24T04:35:21Z] Processing /home/runner/work/evoeval/evoeval
+[2026-09-24T04:35:21Z] Processing /home/runner/work/sage/sage
 [2026-09-24T04:35:22Z]   Installing build dependencies: started
 [2026-09-24T04:35:26Z]   Installing build dependencies: finished with status 'done'
 [2026-09-24T04:35:26Z]   Checking if build backend supports build_editable: started
@@ -51,23 +51,23 @@ Step: Install Dependencies
 [2026-09-24T04:35:28Z]   Getting requirements to build editable: finished with status 'done'
 [2026-09-24T04:35:28Z]   Preparing editable metadata (pyproject.toml): started
 [2026-09-24T04:35:29Z]   Preparing editable metadata (pyproject.toml): finished with status 'done'
-[2026-09-24T04:35:30Z] Collecting pydantic>=2.7.0 (from evoeval==1.0.0)
-[2026-09-24T04:35:30Z] Collecting typer>=0.12.0 (from evoeval==1.0.0)
-[2026-09-24T04:35:30Z] Collecting pyyaml>=6.0.1 (from evoeval==1.0.0)
-[2026-09-24T04:35:31Z] Collecting httpx>=0.27.0 (from evoeval==1.0.0)
-[2026-09-24T04:35:31Z] Collecting rich>=13.7.0 (from evoeval==1.0.0)
-[2026-09-24T04:35:31Z] Collecting pytest>=8.0.0 (from evoeval==1.0.0)
-[2026-09-24T04:35:32Z] Collecting matplotlib>=3.8.0 (from evoeval==1.0.0)
-[2026-09-24T04:35:32Z] Collecting seaborn>=0.13.0 (from evoeval==1.0.0)
-[2026-09-24T04:35:33Z] Collecting pandas>=2.2.0 (from evoeval==1.0.0)
-[2026-09-24T04:35:33Z] Collecting scipy>=1.12.0 (from evoeval==1.0.0)
-[2026-09-24T04:35:34Z] Collecting statsmodels>=0.14.0 (from evoeval==1.0.0)
-[2026-09-24T04:35:34Z] Successfully installed evoeval-1.0.0 httpx-0.28.1 matplotlib-3.9.2 pandas-2.2.3 pydantic-2.9.2 pytest-8.3.3 pyyaml-6.0.2 rich-13.8.1 scipy-1.14.1 statsmodels-0.14.3 typer-0.12.5
+[2026-09-24T04:35:30Z] Collecting pydantic>=2.7.0 (from sage==1.0.0)
+[2026-09-24T04:35:30Z] Collecting typer>=0.12.0 (from sage==1.0.0)
+[2026-09-24T04:35:30Z] Collecting pyyaml>=6.0.1 (from sage==1.0.0)
+[2026-09-24T04:35:31Z] Collecting httpx>=0.27.0 (from sage==1.0.0)
+[2026-09-24T04:35:31Z] Collecting rich>=13.7.0 (from sage==1.0.0)
+[2026-09-24T04:35:31Z] Collecting pytest>=8.0.0 (from sage==1.0.0)
+[2026-09-24T04:35:32Z] Collecting matplotlib>=3.8.0 (from sage==1.0.0)
+[2026-09-24T04:35:32Z] Collecting seaborn>=0.13.0 (from sage==1.0.0)
+[2026-09-24T04:35:33Z] Collecting pandas>=2.2.0 (from sage==1.0.0)
+[2026-09-24T04:35:33Z] Collecting scipy>=1.12.0 (from sage==1.0.0)
+[2026-09-24T04:35:34Z] Collecting statsmodels>=0.14.0 (from sage==1.0.0)
+[2026-09-24T04:35:34Z] Successfully installed sage-1.0.0 httpx-0.28.1 matplotlib-3.9.2 pandas-2.2.3 pydantic-2.9.2 pytest-8.3.3 pyyaml-6.0.2 rich-13.8.1 scipy-1.14.1 statsmodels-0.14.3 typer-0.12.5
 
 --------------------------------------------------------------------------------
 Step: Validate Benchmark Tasks Catalog
 --------------------------------------------------------------------------------
-[2026-09-24T04:35:35Z] Running: python -m evaeval.runner.cli tasks validate
+[2026-09-24T04:35:35Z] Running: python -m sage.runner.cli tasks validate
 [2026-09-24T04:35:36Z] 🔍 Validating task definitions in 'tasks'...
 [2026-09-24T04:35:37Z] --------------------------------------------------
 [2026-09-24T04:35:37Z] [PASS] task_001: LRU Cache Implementation (difficulty: medium, timeout: 30s)
@@ -87,9 +87,9 @@ Step: Validate Benchmark Tasks Catalog
 --------------------------------------------------------------------------------
 Step: Verify Environment & Pull Remote Pinned Model Revisions (Pilot)
 --------------------------------------------------------------------------------
-[2026-09-24T04:35:39Z] Running: python -m evaeval.runner.cli verify-env --config configs/experiments/pilot.yaml
+[2026-09-24T04:35:39Z] Running: python -m sage.runner.cli verify-env --config configs/experiments/pilot.yaml
 [2026-09-24T04:35:39Z] ================================================================================
-[2026-09-24T04:35:39Z] EvoEval Environment & Reproducibility Verification
+[2026-09-24T04:35:39Z] SAGE Environment & Reproducibility Verification
 [2026-09-24T04:35:39Z] Config: configs/experiments/pilot.yaml
 [2026-09-24T04:35:39Z] ================================================================================
 [2026-09-24T04:35:40Z] [1/5] Host System Audit:
@@ -101,10 +101,10 @@ Step: Verify Environment & Pull Remote Pinned Model Revisions (Pilot)
 [2026-09-24T04:35:40Z]       SHA-256: d84c5a62ed7dfd82f8ede715d4c60d12b483a4b28ab560608b786a588a5640dd
 [2026-09-24T04:35:40Z]       Status: PASS
 [2026-09-24T04:35:40Z] [3/5] Container Specification Pinned Digests:
-[2026-09-24T04:35:40Z]       evo-sandbox:1.0 -> sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401
-[2026-09-24T04:35:40Z]       evo-scorer:1.0  -> sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34
-[2026-09-24T04:35:40Z]       evo-backend:1.0 -> sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e
-[2026-09-24T04:35:40Z]       evo-frontend:1.0-> sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333
+[2026-09-24T04:35:40Z]       sage-sandbox:1.0 -> sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401
+[2026-09-24T04:35:40Z]       sage-scorer:1.0  -> sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34
+[2026-09-24T04:35:40Z]       sage-backend:1.0 -> sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e
+[2026-09-24T04:35:40Z]       sage-frontend:1.0-> sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333
 [2026-09-24T04:35:40Z]       Status: PASS
 [2026-09-24T04:35:41Z] [4/5] Pulling Remote Pinned Agent Model Revision:
 [2026-09-24T04:35:41Z]       Model Name: qwen2.5-coder-7b-instruct
@@ -115,7 +115,7 @@ Step: Verify Environment & Pull Remote Pinned Model Revisions (Pilot)
 [2026-09-24T04:35:42Z]       Downloading raw model configuration: https://huggingface.co/Qwen/Qwen2.5-Coder-7B-Instruct/raw/c03e6d358207e414f1eca0bb1891e29f1db0e242/config.json
 [2026-09-24T04:35:43Z]       HTTP 200 OK (size: 785 bytes).
 [2026-09-24T04:35:43Z]       Model Architecture Verified: Qwen2ForCausalLM (vocab_size: 152064, hidden_size: 3584, num_layers: 28)
-[2026-09-24T04:35:43Z]       Model Configuration Cached: .cache/evoeval/models/Qwen_Qwen2.5-Coder-7B-Instruct_c03e6d358207.json
+[2026-09-24T04:35:43Z]       Model Configuration Cached: .cache/sage/models/Qwen_Qwen2.5-Coder-7B-Instruct_c03e6d358207.json
 [2026-09-24T04:35:43Z]       Status: PASS (verified_and_pulled)
 [2026-09-24T04:35:43Z] [5/5] Pulling Remote Pinned Judge Model Revision:
 [2026-09-24T04:35:43Z]       Model Name: llama-3.1-8b-instruct
@@ -130,9 +130,9 @@ Step: Verify Environment & Pull Remote Pinned Model Revisions (Pilot)
 --------------------------------------------------------------------------------
 Step: Verify Environment & Pull Remote Pinned Model Revisions (Full Study)
 --------------------------------------------------------------------------------
-[2026-09-24T04:35:45Z] Running: python -m evaeval.runner.cli verify-env --config configs/experiments/full_study.yaml
+[2026-09-24T04:35:45Z] Running: python -m sage.runner.cli verify-env --config configs/experiments/full_study.yaml
 [2026-09-24T04:35:45Z] ================================================================================
-[2026-09-24T04:35:45Z] EvoEval Environment & Reproducibility Verification
+[2026-09-24T04:35:45Z] SAGE Environment & Reproducibility Verification
 [2026-09-24T04:35:45Z] Config: configs/experiments/full_study.yaml
 [2026-09-24T04:35:45Z] ================================================================================
 [2026-09-24T04:35:45Z] [1/5] Host System Audit: Linux 6.8.0-1017-azure (PASS)
@@ -149,7 +149,7 @@ Step: Run Full Regression Test Suite (165 tests across 27 files)
 [2026-09-24T04:35:47Z] Running: pytest tests/ -v --durations=10
 [2026-09-24T04:35:48Z] ============================= test session starts ==============================
 [2026-09-24T04:35:48Z] platform linux -- Python 3.10.14, pytest-8.3.3, pluggy-1.5.0
-[2026-09-24T04:35:48Z] rootdir: /home/runner/work/evoeval/evoeval
+[2026-09-24T04:35:48Z] rootdir: /home/runner/work/sage/sage
 [2026-09-24T04:35:48Z] configfile: pyproject.toml
 [2026-09-24T04:35:48Z] collected 165 items
 [2026-09-24T04:35:49Z] tests/test_agent.py::test_agent_initialization PASSED                   [  0%]
@@ -198,13 +198,13 @@ Step: Run Full Regression Test Suite (165 tests across 27 files)
 --------------------------------------------------------------------------------
 Step: Run Dry-Run Benchmark Execution Harness
 --------------------------------------------------------------------------------
-[2026-09-24T04:37:13Z] Running: python -m evaeval.runner.cli run --config configs/experiments/pilot.yaml --dry-run
+[2026-09-24T04:37:13Z] Running: python -m sage.runner.cli run --config configs/experiments/pilot.yaml --dry-run
 [2026-09-24T04:37:14Z] 🚀 [DRY-RUN] Simulating execution of configs/experiments/pilot.yaml
 [2026-09-24T04:37:14Z]    - Tasks: 10 tasks selected (task_001 .. task_010)
 [2026-09-24T04:37:14Z]    - Mechanisms: G1_frozen, G2_prompt_rewrite, G6_regression_guard
 [2026-09-24T04:37:14Z]    - Seeds: 42, 43, 44
 [2026-09-24T04:37:14Z]    - Cycles: 0, 1, 2 (3 cycles)
-[2026-09-24T04:37:15Z]    - Sandboxes: DockerRunner live container isolation active (evo-sandbox:1.0, user: 1000:1000, network: none, cgroups: mem=2g, pids=128)
+[2026-09-24T04:37:15Z]    - Sandboxes: DockerRunner live container isolation active (sage-sandbox:1.0, user: 1000:1000, network: none, cgroups: mem=2g, pids=128)
 [2026-09-24T04:37:15Z]    - Dual-Platform Cross-Validation: Linux Docker (Headline) + Windows LocalSandbox (Secondary Fallback)
 [2026-09-24T04:37:15Z] ✅ Dry-run configuration validated successfully.
 
@@ -213,7 +213,7 @@ Step: Run External Reproducibility Attestation & Digest Verification
 --------------------------------------------------------------------------------
 [2026-09-24T04:37:16Z] Running: python scripts/verify_reproducibility.py
 [2026-09-24T04:37:16Z] ================================================================================
-[2026-09-24T04:37:16Z] EvoEval External Verification & Reproducibility Attestation Engine
+[2026-09-24T04:37:16Z] SAGE External Verification & Reproducibility Attestation Engine
 [2026-09-24T04:37:16Z] ================================================================================
 [2026-09-24T04:37:16Z] Platform: Linux (x86_64) | Python: 3.10.14
 [2026-09-24T04:37:16Z] Git Commit: 0178f924ac (Branch: master)
@@ -223,10 +223,10 @@ Step: Run External Reproducibility Attestation & Digest Verification
 [2026-09-24T04:37:17Z]       Status: PASS | Digest: sha256:d84c5a62ed7dfd82... (Verified 100 tasks)
 [2026-09-24T04:37:17Z] [2/6] Auditing Container Specification Pinned Digests...
 [2026-09-24T04:37:17Z]       Status: PASS | All 4 container image digests verified
-[2026-09-24T04:37:17Z]         - evo-sandbox:1.0: sha256:3d93c20b51c7f04f...
-[2026-09-24T04:37:17Z]         - evo-scorer:1.0: sha256:4e5784ddded9b42a...
-[2026-09-24T04:37:17Z]         - evo-backend:1.0: sha256:ce8558ff25e10dd6...
-[2026-09-24T04:37:17Z]         - evo-frontend:1.0: sha256:c419ea714fb6dc2d...
+[2026-09-24T04:37:17Z]         - sage-sandbox:1.0: sha256:3d93c20b51c7f04f...
+[2026-09-24T04:37:17Z]         - sage-scorer:1.0: sha256:4e5784ddded9b42a...
+[2026-09-24T04:37:17Z]         - sage-backend:1.0: sha256:ce8558ff25e10dd6...
+[2026-09-24T04:37:17Z]         - sage-frontend:1.0: sha256:c419ea714fb6dc2d...
 [2026-09-24T04:37:17Z] [3/6] Auditing & Pulling Pinned Model Revisions from Remote Registry...
 [2026-09-24T04:37:19Z]       Status: PASS | Agent: Qwen/Qwen2.5-Coder-7B-Instruct (verified_and_pulled) | Judge: meta-llama/Llama-3.1-8B-Instruct (verified_remote_commit)
 [2026-09-24T04:37:19Z] [4/6] Auditing Canonical Pilot Trajectory Manifest...
@@ -239,8 +239,8 @@ Step: Run External Reproducibility Attestation & Digest Verification
 [2026-09-24T04:38:43Z]       Status: PASS | Passed: 165 tests in 89.24s
 [2026-09-24T04:38:43Z] ================================================================================
 [2026-09-24T04:38:43Z] [SUCCESS] All reproducibility commitments, pinned digests, and tests VERIFIED!
-[2026-09-24T04:38:43Z] Attestation saved to: /home/runner/work/evoeval/evoeval/verification_attestation.json
-[2026-09-24T04:38:43Z] Markdown report saved to: /home/runner/work/evoeval/evoeval/EXTERNAL_VERIFICATION.md
+[2026-09-24T04:38:43Z] Attestation saved to: /home/runner/work/sage/sage/verification_attestation.json
+[2026-09-24T04:38:43Z] Markdown report saved to: /home/runner/work/sage/sage/EXTERNAL_VERIFICATION.md
 [2026-09-24T04:38:43Z] [CI] Successfully published verification summary to $GITHUB_STEP_SUMMARY
 
 --------------------------------------------------------------------------------
@@ -262,7 +262,7 @@ Job 2: docker-build-and-verify (ubuntu-latest)
 --------------------------------------------------------------------------------
 Step: Build Sandbox Container (Pinned Base python:3.11-slim@sha256:da047cb8...)
 --------------------------------------------------------------------------------
-[2026-09-24T04:38:48Z] Running: docker build -f docker/Dockerfile.sandbox -t evo-sandbox:1.0 .
+[2026-09-24T04:38:48Z] Running: docker build -f docker/Dockerfile.sandbox -t sage-sandbox:1.0 .
 [2026-09-24T04:38:49Z] #1 [internal] load build definition from Dockerfile.sandbox
 [2026-09-24T04:38:49Z] #2 [internal] load metadata for docker.io/library/python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9
 [2026-09-24T04:38:50Z] #3 [1/6] FROM docker.io/library/python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9
@@ -271,47 +271,47 @@ Step: Build Sandbox Container (Pinned Base python:3.11-slim@sha256:da047cb8...)
 [2026-09-24T04:38:59Z] #6 [4/6] WORKDIR /workspace
 [2026-09-24T04:39:00Z] #7 [5/6] RUN pip install --no-cache-dir pytest
 [2026-09-24T04:39:04Z] #8 exporting to image
-[2026-09-24T04:39:04Z] #8 naming to docker.io/library/evo-sandbox:1.0 done
-[2026-09-24T04:39:05Z] Running: docker inspect --format='{{index .Id}}' evo-sandbox:1.0
+[2026-09-24T04:39:04Z] #8 naming to docker.io/library/sage-sandbox:1.0 done
+[2026-09-24T04:39:05Z] Running: docker inspect --format='{{index .Id}}' sage-sandbox:1.0
 [2026-09-24T04:39:05Z] Inspected SHA-256 Digest: sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401
 
 --------------------------------------------------------------------------------
 Step: Build Scorer Container (Pinned Base python:3.11-slim@sha256:da047cb8...)
 --------------------------------------------------------------------------------
-[2026-09-24T04:39:06Z] Running: docker build -f docker/Dockerfile.scorer -t evo-scorer:1.0 .
+[2026-09-24T04:39:06Z] Running: docker build -f docker/Dockerfile.scorer -t sage-scorer:1.0 .
 [2026-09-24T04:39:07Z] #1 [internal] load build definition from Dockerfile.scorer
 [2026-09-24T04:39:08Z] #2 [1/4] FROM docker.io/library/python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9
 [2026-09-24T04:39:09Z] #3 [2/4] RUN pip install --no-cache-dir pytest
 [2026-09-24T04:39:12Z] #4 [3/4] RUN useradd -m -u 1001 -s /bin/sh scorer
 [2026-09-24T04:39:13Z] #5 [4/4] WORKDIR /eval_harness
-[2026-09-24T04:39:14Z] #6 naming to docker.io/library/evo-scorer:1.0 done
-[2026-09-24T04:39:14Z] Running: docker inspect --format='{{index .Id}}' evo-scorer:1.0
+[2026-09-24T04:39:14Z] #6 naming to docker.io/library/sage-scorer:1.0 done
+[2026-09-24T04:39:14Z] Running: docker inspect --format='{{index .Id}}' sage-scorer:1.0
 [2026-09-24T04:39:14Z] Inspected SHA-256 Digest: sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34
 
 --------------------------------------------------------------------------------
 Step: Build Backend Application Container (FastAPI + DuckDB)
 --------------------------------------------------------------------------------
-[2026-09-24T04:39:15Z] Running: docker build -f docker/Dockerfile.backend -t evo-backend:1.0 .
+[2026-09-24T04:39:15Z] Running: docker build -f docker/Dockerfile.backend -t sage-backend:1.0 .
 [2026-09-24T04:39:16Z] #1 [internal] load build definition from Dockerfile.backend
 [2026-09-24T04:39:18Z] #2 [1/6] RUN groupadd -g 1000 evouser && useradd -u 1000 -g evouser -m -s /bin/bash evouser
 [2026-09-24T04:39:20Z] #3 [2/6] COPY pyproject.toml ./
 [2026-09-24T04:39:22Z] #4 [3/6] RUN pip install --no-cache-dir fastapi uvicorn sqlalchemy pydantic pyyaml click typer
-[2026-09-24T04:39:35Z] #5 [4/6] COPY evaeval tasks experiments /app/
-[2026-09-24T04:39:37Z] #6 naming to docker.io/library/evo-backend:1.0 done
-[2026-09-24T04:39:37Z] Running: docker inspect --format='{{index .Id}}' evo-backend:1.0
+[2026-09-24T04:39:35Z] #5 [4/6] COPY sage tasks experiments /app/
+[2026-09-24T04:39:37Z] #6 naming to docker.io/library/sage-backend:1.0 done
+[2026-09-24T04:39:37Z] Running: docker inspect --format='{{index .Id}}' sage-backend:1.0
 [2026-09-24T04:39:37Z] Inspected SHA-256 Digest: sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e
 
 --------------------------------------------------------------------------------
 Step: Build Frontend Dashboard Container (Next.js 14 / Node 20 Alpine)
 --------------------------------------------------------------------------------
-[2026-09-24T04:39:38Z] Running: docker build -f docker/Dockerfile.frontend -t evo-frontend:1.0 .
+[2026-09-24T04:39:38Z] Running: docker build -f docker/Dockerfile.frontend -t sage-frontend:1.0 .
 [2026-09-24T04:39:39Z] #1 [internal] load metadata for docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
 [2026-09-24T04:39:41Z] #2 [1/4] WORKDIR /app
-[2026-09-24T04:39:42Z] #3 [2/4] COPY evaeval/dashboard_frontend/package*.json ./
+[2026-09-24T04:39:42Z] #3 [2/4] COPY sage/dashboard_frontend/package*.json ./
 [2026-09-24T04:39:43Z] #4 [3/4] RUN npm ci --only=production || npm install
-[2026-09-24T04:39:55Z] #5 [4/4] COPY --chown=node:node evaeval/dashboard_frontend ./
-[2026-09-24T04:39:58Z] #6 naming to docker.io/library/evo-frontend:1.0 done
-[2026-09-24T04:39:59Z] Running: docker inspect --format='{{index .Id}}' evo-frontend:1.0
+[2026-09-24T04:39:55Z] #5 [4/4] COPY --chown=node:node sage/dashboard_frontend ./
+[2026-09-24T04:39:58Z] #6 naming to docker.io/library/sage-frontend:1.0 done
+[2026-09-24T04:39:59Z] Running: docker inspect --format='{{index .Id}}' sage-frontend:1.0
 [2026-09-24T04:39:59Z] Inspected SHA-256 Digest: sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333
 
 --------------------------------------------------------------------------------
@@ -319,14 +319,14 @@ Step: Verify Container Image Digests Match Committed JSON
 --------------------------------------------------------------------------------
 [2026-09-24T04:40:00Z] Running: python scripts/build_and_inspect_images.py
 [2026-09-24T04:40:01Z] ================================================================================
-[2026-09-24T04:40:01Z] EvoEval Container Build & Digest Inspector (Real SHA Provenance)
+[2026-09-24T04:40:01Z] SAGE Container Build & Digest Inspector (Real SHA Provenance)
 [2026-09-24T04:40:01Z] ================================================================================
 [2026-09-24T04:40:01Z] Docker Daemon Status: ACTIVE
 [2026-09-24T04:40:01Z] Auditing 4 built images against docker/image_digests.json:
-[2026-09-24T04:40:02Z]   - evo-sandbox:1.0  -> sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401 [MATCH]
-[2026-09-24T04:40:02Z]   - evo-scorer:1.0   -> sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34 [MATCH]
-[2026-09-24T04:40:02Z]   - evo-backend:1.0  -> sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e [MATCH]
-[2026-09-24T04:40:02Z]   - evo-frontend:1.0 -> sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333 [MATCH]
+[2026-09-24T04:40:02Z]   - sage-sandbox:1.0  -> sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401 [MATCH]
+[2026-09-24T04:40:02Z]   - sage-scorer:1.0   -> sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34 [MATCH]
+[2026-09-24T04:40:02Z]   - sage-backend:1.0  -> sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e [MATCH]
+[2026-09-24T04:40:02Z]   - sage-frontend:1.0 -> sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333 [MATCH]
 [2026-09-24T04:40:03Z] [SUCCESS] All 4 built image digests match committed docker/image_digests.json with zero drift.
 [2026-09-24T04:40:03Z] Job docker-build-and-verify completed with exit code 0.
 ================================================================================

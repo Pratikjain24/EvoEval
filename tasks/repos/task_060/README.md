@@ -1,4 +1,4 @@
-# EvoEval Benchmark Task: task_060
+# SAGE Benchmark Task: task_060
 
 ## Taxonomy & Specification
 - **Task ID**: `task_060` (Benchmark Task #60)

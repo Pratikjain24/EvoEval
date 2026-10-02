@@ -16,13 +16,13 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from evaeval.runner.horizon_sensitivity import MultiHorizonAnalyzer
-from evaeval.runner.reproducibility import generate_trajectory_manifest
+from sage.runner.horizon_sensitivity import MultiHorizonAnalyzer
+from sage.runner.reproducibility import generate_trajectory_manifest
 
 
 def main() -> int:
     print("=" * 80)
-    print("EvoEval Multi-Horizon Sensitivity & Drift Saturation Engine")
+    print("SAGE Multi-Horizon Sensitivity & Drift Saturation Engine")
     print("Evaluating 25 Evolutionary Cycles on Unconstrained Archetypes (G2, G4)")
     print("=" * 80)
 
@@ -37,7 +37,7 @@ def main() -> int:
         cmd = [
             sys.executable,
             "-m",
-            "evaeval.runner.cli",
+            "sage.runner.cli",
             "run",
             "--config",
             str(config_path),

@@ -28,25 +28,25 @@ from typing import Any, Dict, List, Optional, Tuple
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
 CONTAINER_SPECS = {
-    "evo-sandbox:1.0": {
+    "sage-sandbox:1.0": {
         "dockerfile": "docker/Dockerfile.sandbox",
         "context": ".",
         "base_image": "python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9",
         "description": "Unprivileged agent execution sandbox (user 1000:1000, network: none)",
     },
-    "evo-scorer:1.0": {
+    "sage-scorer:1.0": {
         "dockerfile": "docker/Dockerfile.scorer",
         "context": ".",
         "base_image": "python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9",
         "description": "Isolated read-only grading container (user 1001:1001, pytest runner)",
     },
-    "evo-backend:1.0": {
+    "sage-backend:1.0": {
         "dockerfile": "docker/Dockerfile.backend",
         "context": ".",
         "base_image": "python:3.11-slim@sha256:da047cb8f9d1d98e5c070f5300ba9f7274e33b8fc0e5be5ed88740aed1b95ba9",
         "description": "FastAPI REST API & DuckDB trajectory query service",
     },
-    "evo-frontend:1.0": {
+    "sage-frontend:1.0": {
         "dockerfile": "docker/Dockerfile.frontend",
         "context": ".",
         "base_image": "node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293",
@@ -200,7 +200,7 @@ def main() -> int:
     docker_version = get_docker_version() if docker_active else "N/A"
 
     print("=" * 80)
-    print("EvoEval Container Build & Digest Inspector (Real SHA Provenance)")
+    print("SAGE Container Build & Digest Inspector (Real SHA Provenance)")
     print("=" * 80)
     print(f"Docker Daemon: {'ACTIVE (' + docker_version + ')' if docker_active else 'UNAVAILABLE (Host offline)'}")
     print(f"Target Output: {out_file}")

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render Publication Figures for EvoEval IEEE Conference Paper.
+"""Render Publication Figures for SAGE IEEE Conference Paper.
 
 Regenerates publication-ready figures addressing peer-review critiques:
 1. Fig. 6 (Specification Gaming Gaps on Drift Probes):
@@ -242,8 +242,8 @@ def patch_docx_figures(
 
     if target_docs is None:
         target_docs = [
-            str(REPO_ROOT / "paper" / "EvoEval_IEEE_Research_Paper.docx"),
-            r"C:\Users\kruti\Downloads\EvoEval_IEEE_Research_Paper.docx",
+            str(REPO_ROOT / "paper" / "SAGE_IEEE_Research_Paper.docx"),
+            r"C:\Users\kruti\Downloads\SAGE_IEEE_Research_Paper.docx",
         ]
 
     with open(fig6_path, "rb") as f:
@@ -294,7 +294,7 @@ def patch_docx_figures(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Render publication figures for EvoEval paper")
+    parser = argparse.ArgumentParser(description="Render publication figures for SAGE paper")
     parser.add_argument("--fig6", type=str, default="", help="Output path for Fig 6")
     parser.add_argument("--fig7", type=str, default="", help="Output path for Fig 7")
     parser.add_argument("--skip-docx", action="store_true", help="Skip updating docx files")
@@ -304,7 +304,7 @@ def main() -> int:
     fig7_path = Path(args.fig7) if args.fig7 else (FIGURES_DIR / "fig7_horizon_saturation.png")
 
     print("=" * 70)
-    print("EvoEval Publication Figure Regeneration Pipeline")
+    print("SAGE Publication Figure Regeneration Pipeline")
     print("=" * 70)
 
     render_fig6_drift_probes(fig6_path)

@@ -1,4 +1,4 @@
-﻿# EvoEval Reproduction & Experimentation Guide
+﻿# SAGE Reproduction & Experimentation Guide
 
 This comprehensive guide details the exact steps to reproduce the canonical pilot study ($10 \text{ tasks} \times 3 \text{ mechanisms} \times 3 \text{ cycles} \times 3 \text{ seeds}$), execute full-scale evaluations, perform cost calibrations, and launch the analysis workbench.
 
@@ -13,8 +13,8 @@ This comprehensive guide details the exact steps to reproduce the canonical pilo
 
 ```bash
 # Clone the repository
-git clone https://github.com/Pratikjain24/EvoEval.git
-cd EvoEval
+git clone https://github.com/Pratikjain24/SAGE.git
+cd SAGE
 
 # Create virtual environment and install package in editable mode
 python -m venv .venv
@@ -22,7 +22,7 @@ source .venv/bin/activate       # On Windows: .venv\Scripts\activate
 pip install -e ".[dev]"
 
 # Install dashboard frontend dependencies
-cd evaeval/dashboard_frontend
+cd sage/dashboard_frontend
 npm install
 cd ../..
 ```
@@ -31,7 +31,7 @@ cd ../..
 
 ## 2. Pinned Random Seeds & Reproducibility Guarantees
 
-EvoEval strictly pins random seeds for reproducibility:
+SAGE strictly pins random seeds for reproducibility:
 - **Default Seed Matrix**: `[42, 43, 44]`
 - **Temperature**: `0.2` (sampling stability)
 - **Top-p**: `0.95`
@@ -61,7 +61,7 @@ The Week 9–10 Pilot executes:
 python scripts/run_week9_10_pilot.py
 
 # Option B: Execute via Typer CLI
-evoeval run --config configs/experiments/pilot_10x3x3x3.yaml
+sage run --config configs/experiments/pilot_10x3x3x3.yaml
 ```
 
 Output is persisted to `experiments/runs/pilot_10x3x3x3_canonical/`:
@@ -92,7 +92,7 @@ To audit agent reasoning and inspect reward hacking:
 
 ```bash
 # Extract 8% stratified audit sample prioritizing safety violations and high proxy gap
-evoeval audit --run-id latest --rate 0.08
+sage audit --run-id latest --rate 0.08
 ```
 
 The resulting `audit_queue.json` can be reviewed in the visual audit workbench at `http://localhost:3000/audit`.
@@ -103,10 +103,10 @@ The resulting `audit_queue.json` can be reviewed in the visual audit workbench a
 
 ```bash
 # Terminal 1: Launch FastAPI Backend (Port 8000)
-uvicorn evaeval.dashboard_backend.main:app --port 8000 --reload
+uvicorn sage.dashboard_backend.main:app --port 8000 --reload
 
 # Terminal 2: Launch Next.js 14 Dashboard Frontend (Port 3000)
-cd evaeval/dashboard_frontend
+cd sage/dashboard_frontend
 npm run dev
 ```
 

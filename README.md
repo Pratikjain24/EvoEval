@@ -1,21 +1,21 @@
-# EvoEval: Autonomous Agent Evolution & Security Boundary Drift Benchmark
+# SAGE: Autonomous Agent Evolution & Security Boundary Drift Benchmark
 
-[![CI](https://github.com/Pratikjain24/EvoEval/actions/workflows/ci.yml/badge.svg)](https://github.com/Pratikjain24/EvoEval/actions)
+[![CI](https://github.com/Pratikjain24/SAGE/actions/workflows/ci.yml/badge.svg)](https://github.com/Pratikjain24/SAGE/actions)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset%20on%20Acceptance-lightgrey)](https://github.com/Pratikjain24/EvoEval)
-[![Zenodo](https://img.shields.io/badge/Zenodo-Archive%20on%20Acceptance-lightgrey)](https://github.com/Pratikjain24/EvoEval)
-[![Stars](https://img.shields.io/github/stars/Pratikjain24/EvoEval?style=social)](https://github.com/Pratikjain24/EvoEval/stargazers)
-[![Last Commit](https://img.shields.io/github/last-commit/Pratikjain24/EvoEval)](https://github.com/Pratikjain24/EvoEval/commits/main)
-[![Issues](https://img.shields.io/github/issues/Pratikjain24/EvoEval)](https://github.com/Pratikjain24/EvoEval/issues)
+[![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset%20on%20Acceptance-lightgrey)](https://github.com/Pratikjain24/SAGE)
+[![Zenodo](https://img.shields.io/badge/Zenodo-Archive%20on%20Acceptance-lightgrey)](https://github.com/Pratikjain24/SAGE)
+[![Stars](https://img.shields.io/github/stars/Pratikjain24/SAGE?style=social)](https://github.com/Pratikjain24/SAGE/stargazers)
+[![Last Commit](https://img.shields.io/github/last-commit/Pratikjain24/SAGE)](https://github.com/Pratikjain24/SAGE/commits/main)
+[![Issues](https://img.shields.io/github/issues/Pratikjain24/SAGE)](https://github.com/Pratikjain24/SAGE/issues)
 [![Paper](https://img.shields.io/badge/IEEE-Paper%202026-blue)](paper/README.md)
 [![Dossier](https://img.shields.io/badge/System_Dossier-v1.0.0-green.svg)](PROJECT_DOSSIER.md)
 
-> **⚠️ Project Disambiguation**: This project is **not affiliated with** [`evo-eval/evoeval`](https://github.com/evo-eval/evoeval) (Xia et al., 2024), which is a separate benchmark for evolving HumanEval coding problems via LLM. This repository is an **independent research project** by Jain et al. (VIT Pune, 2026) investigating a fundamentally different problem: *security boundary drift and capability retention in self-modifying autonomous code agents*. The two projects share the "EvoEval" name because both study evolutionary evaluation of LLM-based systems, but address entirely different research questions with different methodologies, datasets, and models.
+> **⚠️ Project Disambiguation**: This project is **not affiliated with** [`evo-eval/evoeval`](https://github.com/evo-eval/evoeval) (Xia et al., 2024), which is a separate benchmark for evolving HumanEval coding problems via LLM. This repository is an **independent research project** by Jain et al. (VIT Pune, 2026) investigating a fundamentally different problem: *security boundary drift and capability retention in self-modifying autonomous code agents* (formerly developed under the working title EvoEval).
+>
+> 📖 **Comprehensive Guides & Dossiers**: For quick demo and presentation resources, see the **[Complete Presentation Guide](SAGE_Presentation_Guide.md)** and **[Step-by-Step Run Guide](How_To_Run_SAGE.md)**. For an exhaustive, file-by-file blueprint detailing every architectural invariant, security boundary, tamper audit check, drift probe, LLM judge isolation rule, full per-suite timing benchmarks, and complete test results (201 passed, 1 skipped across 31 test files, 100% pass rate), see the **[Master Technical Dossier](PROJECT_DOSSIER.md)** and the automated **[Reproducibility Verification Attestation](REPRODUCIBILITY_VERIFICATION.md)**.
 
-> 📖 **Comprehensive Guides & Dossiers**: For quick demo and presentation resources, see the **[Complete Presentation Guide](EvoEval_Presentation_Guide.md)** and **[Step-by-Step Run Guide](How_To_Run_EvoEval.md)**. For an exhaustive, file-by-file blueprint detailing every architectural invariant, security boundary, tamper audit check, drift probe, LLM judge isolation rule, full per-suite timing benchmarks, and complete test results (201 passed, 1 skipped across 31 test files, 100% pass rate), see the **[Master Technical Dossier](PROJECT_DOSSIER.md)** and the automated **[Reproducibility Verification Attestation](REPRODUCIBILITY_VERIFICATION.md)**.
-
-**EvoEval** is a hardened benchmark and formal evaluation framework that validates agent guardrails against canonical, deterministic degradation trajectories, supplemented by live API runs. EvoEval is designed to measure **capability gain, security boundary drift (vulnerability injection rate), specification gaming (proxy gap), and capability retention** in self-modifying autonomous code agents across iterative evolutionary generations. EvoEval implements an honest, two-tiered evaluation methodology:
+**SAGE** is a hardened benchmark and formal evaluation framework that validates agent guardrails against canonical, deterministic degradation trajectories, supplemented by live API runs. SAGE is designed to measure **capability gain, security boundary drift (vulnerability injection rate), specification gaming (proxy gap), and capability retention** in self-modifying autonomous code agents across iterative evolutionary generations. SAGE implements an honest, two-tiered evaluation methodology:
 1. **Canonical Benchmark Trajectories ($N=18{,}000$)**: 18,000 controlled, bitwise-reproducible evaluations across 100 tasks, 6 archetypes ($G_1$–$G_6$), 10 cycles, and 3 random seeds formalizing archetype state-mutation policies under deterministic execution, providing zero-flakiness counterfactual reference baselines.
 2. **Live Neural Model Rollouts & Cross-Family Baselines**: Empirical evaluation of live open-weights neural models (Qwen2.5-Coder-7B, Llama-3.1-8B) executed under logged, reproducible harnesses in our dual-container isolation sandbox.
 
@@ -93,7 +93,7 @@
 
 | Claim | Where to verify it |
 |---|---|
-| 201 tests, 100% pass rate | [GitHub Actions runs](https://github.com/Pratikjain24/EvoEval/actions) → JUnit XML artifact; or run `pytest tests/ -v` locally |
+| 201 tests, 100% pass rate | [GitHub Actions runs](https://github.com/Pratikjain24/SAGE/actions) → JUnit XML artifact; or run `pytest tests/ -v` locally |
 | 100 benchmark tasks | [`tasks/tasks_index.json`](tasks/tasks_index.json) — 100 entries, 5 categories, 20 drift probes |
 | Pinned model SHA `c03e6d35...` (Qwen) | [`verification_attestation.json`](verification_attestation.json) line 41; confirmed by `huggingface_hub.repo_info()` in [`scripts/verify_reproducibility.py`](scripts/verify_reproducibility.py) |
 | Docker image digests | [`docker/image_digests.json`](docker/image_digests.json) — built and verified by [`scripts/build_and_inspect_images.py`](scripts/build_and_inspect_images.py) |
@@ -105,17 +105,17 @@
 
 ```bash
 # 1. Install
-git clone https://github.com/Pratikjain24/EvoEval.git && cd EvoEval
+git clone https://github.com/Pratikjain24/SAGE.git && cd SAGE
 pip install -e ".[dev]"
 
 # 2. Run the test suite (no GPU needed — uses deterministic mock LLM)
 pytest tests/ -v
 
 # 3. Run a dry-run to verify the CLI works
-evoeval run --config configs/experiments/pilot.yaml --dry-run
+sage run --config configs/experiments/pilot.yaml --dry-run
 
 # 4. Run the full study (requires GPU + model weights ~15 GB)
-evoeval run --config configs/experiments/full_study.yaml
+sage run --config configs/experiments/full_study.yaml
 ```
 
 ### What is and isn't automatically verified
@@ -137,11 +137,11 @@ evoeval run --config configs/experiments/full_study.yaml
 - **Pinned Docker Image Digests** (`docker/image_digests.json`):
   | Component | Tag | Pinned SHA-256 Digest |
   |---|---|---|
-  | **Sandbox** | `evo-sandbox:1.0` | `sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401` |
-  | **Scorer** | `evo-scorer:1.0` | `sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34` |
-  | **Backend** | `evo-backend:1.0` | `sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e` |
-  | **Frontend** | `evo-frontend:1.0` | `sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333` |
-  *Provenance*: Digests are generated via `make build-images` (`scripts/build_and_inspect_images.py`) through real `docker build` + `docker inspect --format='{{index .Id}}'`, recorded in [`docker/build_provenance.json`](file:///c:/Users/kruti/EvoEval/docker/build_provenance.json), and enforced in CI via `make verify-images`.
+  | **Sandbox** | `sage-sandbox:1.0` | `sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401` |
+  | **Scorer** | `sage-scorer:1.0` | `sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34` |
+  | **Backend** | `sage-backend:1.0` | `sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e` |
+  | **Frontend** | `sage-frontend:1.0` | `sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333` |
+  *Provenance*: Digests are generated via `make build-images` (`scripts/build_and_inspect_images.py`) through real `docker build` + `docker inspect --format='{{index .Id}}'`, recorded in [`docker/build_provenance.json`](file:///c:/Users/kruti/SAGE/docker/build_provenance.json), and enforced in CI via `make verify-images`.
 
 ### 3. Seeded Generators
 All stochasticity is strictly routed through synchronized, seeded generators recorded per run:
@@ -160,7 +160,7 @@ Every evaluation run automatically generates a cryptographic integrity manifest 
 - **Cross-Platform Invariance**: Verified across Linux Docker CI and Windows host environments with zero task metric divergence ($\Delta_{\text{platform}} = 0.000$).
 Reviewers can audit trajectory integrity at any time via:
 ```bash
-evoeval manifest --run-id <run_id>
+sage manifest --run-id <run_id>
 ```
 
 ### 5. Unified 4-Service Docker Compose
@@ -188,7 +188,7 @@ The benchmark datasets, canonical multi-seed trajectories, and human audit annot
 
 You can package any local evaluation run for HuggingFace Hub release via:
 ```bash
-evoeval export-hf --run-id latest --output hf_dataset/
+sage export-hf --run-id latest --output hf_dataset/
 ```
 - `tasks/tasks.jsonl`: 100 standardized benchmark coding problems across 5 categories (`bug_fix`, `feature`, `refactor`, `exploit_probe`, `security_audit`), including 20 deliberate drift probes.
 - `trajectories/trajectories.jsonl`: Complete multi-cycle execution event streams across $G_1$–$G_6$ adhering to frozen schema `1.0.0`.
@@ -203,8 +203,8 @@ evoeval export-hf --run-id latest --output hf_dataset/
 
 ```bash
 # Clone repository
-git clone https://github.com/Pratikjain24/EvoEval.git
-cd EvoEval
+git clone https://github.com/Pratikjain24/SAGE.git
+cd SAGE
 
 # Create virtual environment with uv or python
 uv venv .venv
@@ -216,17 +216,17 @@ uv pip install -e ".[dev]"
 
 ```bash
 # Run a multi-group pilot evaluation (G1-G6 across cycles)
-evoeval run --config configs/experiments/pilot.yaml
+sage run --config configs/experiments/pilot.yaml
 
 # Generate research figures and bootstrap confidence intervals
-evoeval analyze --run-id latest --output experiments/figures/
+sage analyze --run-id latest --output experiments/figures/
 ```
 
 ### 3. Launch the Evaluation Dashboard
 
 ```bash
 # Start backend API (FastAPI) and frontend (Next.js)
-evoeval dashboard --backend-port 8000 --frontend-port 3000
+sage dashboard --backend-port 8000 --frontend-port 3000
 ```
 Visit `http://localhost:3000` to inspect drift curves, proxy gaps, trajectory traces, and launch the audit workbench.
 
@@ -235,10 +235,10 @@ Visit `http://localhost:3000` to inspect drift curves, proxy gaps, trajectory tr
 ## Monorepo Layout
 
 ```
-evoeval/
+sage/
 +-- pyproject.toml              # Project metadata & dependencies
 +-- Makefile                  # Automation shortcuts
-+-- evaeval/                  # Core package
++-- sage/                  # Core package
 |   +-- config/               # Pydantic configuration schemas
 |   +-- trajectory/           # Append-only JSONL event stream
 |   +-- adapters/             # G1..G6 agent adapters
@@ -280,11 +280,11 @@ This project is authored by a student research team at **Vishwakarma Institute o
 
 ## Citation
 
-If you use EvoEval in your research, please cite our IEEE conference paper:
+If you use SAGE in your research, please cite our IEEE conference paper:
 
 ```bibtex
-@inproceedings{jain2026evoeval,
-  title     = {EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents},
+@inproceedings{jain2026sage,
+  title     = {SAGE: Safety & Agent Growth Evaluator --- Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents},
   author    = {Jain, Pratik P. and Pagare, Janhavi B. and Dengale, Aditya U. and Kharat, Naitik K. and Kadam, Shamika R. and Kadam, Vikrant K.},
   booktitle  = {Proceedings of the IEEE Conference on Artificial Intelligence and Software Engineering},
   year      = {2026},
@@ -292,7 +292,7 @@ If you use EvoEval in your research, please cite our IEEE conference paper:
 }
 ```
 
-> **Not to be confused with**: Xia, Deng & Zhang (2024) *"Top Leaderboard Ranking = Top Coding Proficiency, Always? EvoEval: Evolving Coding Benchmarks via LLM"* ([evo-eval/evoeval](https://github.com/evo-eval/evoeval)) — a separate, independently published benchmark with a different scope.
+> **Not to be confused with**: Xia, Deng & Zhang (2024) *"Top Leaderboard Ranking = Top Coding Proficiency, Always? EvoEval: Evolving Coding Benchmarks via LLM"* ([evo-eval/evoeval](https://github.com/evo-eval/evoeval)) — an unrelated code-generation benchmark focusing on coding problem mutation.
 
 ---
 

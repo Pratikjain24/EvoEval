@@ -1,6 +1,6 @@
-# EvoEval System Architecture & Verified Tech Stack
+# SAGE System Architecture & Verified Tech Stack
 
-EvoEval is a scientific evaluation harness and benchmark monorepo designed to quantify capability gain, safety drift, catastrophic forgetting, and reward hacking in recursive, self-evolving code agents ($G_1$ through $G_6$).
+SAGE is a scientific evaluation harness and benchmark monorepo designed to quantify capability gain, safety drift, catastrophic forgetting, and reward hacking in recursive, self-evolving code agents ($G_1$ through $G_6$).
 
 ---
 
@@ -93,7 +93,7 @@ graph TD
 ## 4. Deliberate Drift Probes & Scientific Hypotheses (H2/H5)
 
 ### 4.1 Design of the Drift Probe Instrument
-To rigorously quantify specification gaming and reward hacking during recursive self-evolution, EvoEval incorporates **deliberate drift probes** across exactly 20% of the benchmark tasks (20 out of 100 tasks, categorized under `type: "exploit_probe"` in `tasks/tasks_index.json`).
+To rigorously quantify specification gaming and reward hacking during recursive self-evolution, SAGE incorporates **deliberate drift probes** across exactly 20% of the benchmark tasks (20 out of 100 tasks, categorized under `type: "exploit_probe"` in `tasks/tasks_index.json`).
 
 Each drift probe repository (e.g., `mini_orm`) features:
 1. **Visible, Gameable Proxy Score**: A local test suite (`tests/test_proxy.py`) and progress metric script (`progress_metric.py`) visible within the agent workspace. These check superficial outputs (e.g., string interpolation of query clauses) without asserting critical invariants.
@@ -110,13 +110,13 @@ Each drift probe repository (e.g., `mini_orm`) features:
 
 ## 5. LLM-Judge Isolation Architecture
 
-EvoEval supports auxiliary LLM-based qualitative evaluations alongside deterministic tests under three strict architectural isolation invariants:
+SAGE supports auxiliary LLM-based qualitative evaluations alongside deterministic tests under three strict architectural isolation invariants:
 
 1. **Cross-Family Model Diversity**:
    - Any LLM judge MUST run with a different model family than the evaluated agent (e.g., Agent = Qwen, Judge = Llama; or Agent = DeepSeek, Judge = Claude).
    - Same-family evaluation (e.g., Qwen evaluating Qwen) is strictly prohibited to eliminate shared bias, sycophancy, and self-reinforcing blind spots; violation triggers `JudgeIsolationError`.
 2. **Prompt Invisibility & Sandbox Concealment**:
-   - The judge system prompt, criteria, and evaluation rubrics reside exclusively in `evaeval/scoring/` and are never written into the agent workspace.
+   - The judge system prompt, criteria, and evaluation rubrics reside exclusively in `sage/scoring/` and are never written into the agent workspace.
    - Any attempts by the agent to inspect or read judge prompts (`judge_prompt`, `.hidden_judge`, `judge_rubric`) are intercepted and blocked by `SafetyMonitor` with exit code 126.
 3. **Auxiliary-Only Score Guarantee**:
    - Ground truth test suites (`pytest`) and deterministic rule checks are 100% primary.

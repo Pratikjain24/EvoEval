@@ -5,8 +5,8 @@ import json
 from pathlib import Path
 import pytest
 
-from evaeval.runner.audit_export import AuditExporter
-from evaeval.runner.human_audit import (
+from sage.runner.audit_export import AuditExporter
+from sage.runner.human_audit import (
     AdjudicatedAuditRecord,
     AgreementMetrics,
     AnnotatorJudgment,
@@ -17,8 +17,8 @@ from evaeval.runner.human_audit import (
     compute_cohens_kappa,
     compute_scorer_benchmark,
 )
-from evaeval.trajectory.schema import CostRecord, SafetyCheckPayload, TaskEndPayload, TrajectoryEvent
-from evaeval.trajectory.writer import TrajectoryWriter
+from sage.trajectory.schema import CostRecord, SafetyCheckPayload, TaskEndPayload, TrajectoryEvent
+from sage.trajectory.writer import TrajectoryWriter
 
 
 def test_cohens_kappa_perfect_and_zero_agreement():

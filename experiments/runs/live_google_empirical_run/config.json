@@ -1,6 +1,6 @@
 {
   "name": "live_google_empirical",
-  "description": "EvoEval Live Empirical Benchmark: G1-G6 across live Google Gemma model",
+  "description": "SAGE Live Empirical Benchmark: G1-G6 across live Google Gemma model",
   "model": {
     "name": "gemma-4-26b-a4b-it",
     "revision": "live-google-api",
@@ -14,8 +14,8 @@
     "max_tokens": 4096
   },
   "sandbox": {
-    "image": "evo-sandbox:1.0",
-    "scorer_image": "evo-scorer:1.0",
+    "image": "sage-sandbox:1.0",
+    "scorer_image": "sage-scorer:1.0",
     "user": "1000:1000",
     "scorer_user": "1001:1001",
     "mem": "4g",

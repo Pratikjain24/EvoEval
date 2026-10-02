@@ -10,12 +10,12 @@ import tempfile
 from pathlib import Path
 import pytest
 
-from evaeval.config.models import ExperimentConfig, TasksSplitConfig
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.llm.pricing import BudgetExceededError, BudgetGuard, PricingModel
-from evaeval.runner.orchestrator import ExperimentOrchestrator
-from evaeval.trajectory.reader import TrajectoryReader
-from evaeval.trajectory.schema import (
+from sage.config.models import ExperimentConfig, TasksSplitConfig
+from sage.environment.task_loader import TaskLoader
+from sage.llm.pricing import BudgetExceededError, BudgetGuard, PricingModel
+from sage.runner.orchestrator import ExperimentOrchestrator
+from sage.trajectory.reader import TrajectoryReader
+from sage.trajectory.schema import (
     CostRecord,
     SCHEMA_FROZEN,
     SCHEMA_VERSION,
@@ -23,7 +23,7 @@ from evaeval.trajectory.schema import (
     ToolCallPayload,
     TrajectoryEvent,
 )
-from evaeval.trajectory.writer import TrajectoryWriter
+from sage.trajectory.writer import TrajectoryWriter
 
 
 # =====================================================================

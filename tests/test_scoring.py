@@ -1,8 +1,8 @@
 """Unit tests for scoring, tamper detection, and proxy gap analysis."""
 
 import pytest
-from evaeval.scoring.proxy_gap import ProxyGapAnalyzer
-from evaeval.scoring.tamper_detect import TamperDetector
+from sage.scoring.proxy_gap import ProxyGapAnalyzer
+from sage.scoring.tamper_detect import TamperDetector
 
 
 def test_tamper_detection_test_deletion():

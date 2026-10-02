@@ -1,12 +1,12 @@
-# EvoEval Dashboard & Monitoring API Reference (v1.0.0)
+# SAGE Dashboard & Monitoring API Reference (v1.0.0)
 
-This reference documents the complete REST API specification, OpenAPI schema contracts, request/response payloads, and Docker Compose orchestration topology for the **EvoEval 4-Service Evaluation Stack** (`sandbox` + `scorer` + `backend` + `frontend`).
+This reference documents the complete REST API specification, OpenAPI schema contracts, request/response payloads, and Docker Compose orchestration topology for the **SAGE 4-Service Evaluation Stack** (`sandbox` + `scorer` + `backend` + `frontend`).
 
 ---
 
 ## 1. 4-Service Container Topology
 
-The EvoEval evaluation infrastructure is orchestrated via Docker Compose (`docker/docker-compose.yml`), separating untrusted agent execution from sequestered ground-truth evaluation, administrative state ingestion, and interactive user interfaces:
+The SAGE evaluation infrastructure is orchestrated via Docker Compose (`docker/docker-compose.yml`), separating untrusted agent execution from sequestered ground-truth evaluation, administrative state ingestion, and interactive user interfaces:
 
 ```
                                   +------------------------------------+
@@ -45,10 +45,10 @@ The EvoEval evaluation infrastructure is orchestrated via Docker Compose (`docke
 
 | Service Name | Container Image | Port | Network Mode | Security Privileges | Purpose |
 |---|---|---|---|---|---|
-| `evo_sandbox` | `evo-sandbox:1.0` | None | `none` (isolated) | `cap_drop: ALL`, unprivileged `1000:1000` | Untrusted recursive agent code execution workspace |
-| `evo_scorer` | `evo-scorer:1.0` | None | `none` (isolated) | `cap_drop: ALL`, unprivileged `1001:1001` | Sequestered ground-truth unit test scoring harness |
-| `evo_backend` | `evo-backend:1.0` | `8000:8000` | `bridge` (`evo-net`) | `cap_drop: ALL`, unprivileged `1000:1000` | FastAPI REST service, telemetry ingestion, audit API |
-| `evo_frontend` | `evo-frontend:1.0` | `3000:3000` | `bridge` (`evo-net`) | `cap_drop: ALL`, unprivileged `1000:1000` | Next.js 14 production UI, SSR charts, human audit workbench |
+| `evo_sandbox` | `sage-sandbox:1.0` | None | `none` (isolated) | `cap_drop: ALL`, unprivileged `1000:1000` | Untrusted recursive agent code execution workspace |
+| `evo_scorer` | `sage-scorer:1.0` | None | `none` (isolated) | `cap_drop: ALL`, unprivileged `1001:1001` | Sequestered ground-truth unit test scoring harness |
+| `evo_backend` | `sage-backend:1.0` | `8000:8000` | `bridge` (`evo-net`) | `cap_drop: ALL`, unprivileged `1000:1000` | FastAPI REST service, telemetry ingestion, audit API |
+| `evo_frontend` | `sage-frontend:1.0` | `3000:3000` | `bridge` (`evo-net`) | `cap_drop: ALL`, unprivileged `1000:1000` | Next.js 14 production UI, SSR charts, human audit workbench |
 
 ---
 
@@ -90,7 +90,7 @@ Returns service health status, container metadata, and API version. Used by Dock
   ```json
   {
     "status": "ok",
-    "service": "evoeval-dashboard-backend",
+    "service": "sage-dashboard-backend",
     "version": "1.0.0"
   }
   ```
@@ -319,12 +319,12 @@ Returns aggregate metrics for human verification progress, confirmed violation r
 #### `POST /audit/labels`
 Records or updates an independent human audit assessment. Implements idempotent upsert semantics by `audit_id`.
 
-- **Authentication**: `X-API-Key` or `Authorization: Bearer <token>` when `EVOEVAL_API_KEY` is set.
+- **Authentication**: `X-API-Key` or `Authorization: Bearer <token>` when `SAGE_API_KEY` is set.
 - **Rate Limit**: 20 requests / minute
 - **Request Headers**:
   ```http
   Content-Type: application/json
-  X-API-Key: evoeval-dev-key-change-in-production
+  X-API-Key: sage-dev-key-change-in-production
   ```
 - **Request Body (JSON)**:
   ```json

@@ -1,7 +1,7 @@
 # Alias configuration for Multi-Horizon Sensitivity Extension
 # See configs/experiments/horizon_sensitivity.yaml
 name: multi_horizon
-description: "EvoEval Multi-Horizon Sensitivity Extension: 25-cycle evaluation for G2/G4 drift saturation"
+description: "SAGE Multi-Horizon Sensitivity Extension: 25-cycle evaluation for G2/G4 drift saturation"
 model:
   name: qwen2.5-coder-7b-instruct
   revision: "c03e6d358207e414f1eca0bb1891e29f1db0e242"
@@ -18,7 +18,7 @@ judge:
   temperature: 0.0
 
 sandbox:
-  image: evo-sandbox:1.0
+  image: sage-sandbox:1.0
   mem: 4g
   cpus: 2
   network: none

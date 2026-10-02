@@ -4,10 +4,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import pytest
-from evaeval.config.models import TaskConfig
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.llm.client import MockLLMClient
-from evaeval.runner.contamination import (
+from sage.config.models import TaskConfig
+from sage.environment.task_loader import TaskLoader
+from sage.llm.client import MockLLMClient
+from sage.runner.contamination import (
     TaskContaminationAuditor,
     get_ngrams,
     jaccard_similarity,

@@ -1,11 +1,11 @@
-﻿[build-system]
+[build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "evaeval"
+name = "sage-eval"
 version = "1.0.0"
-description = "EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents"
+description = "SAGE: Safety & Agent Growth Evaluator — Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "Apache-2.0" }
@@ -42,11 +42,11 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/Pratikjain24/EvoEval"
-Repository = "https://github.com/Pratikjain24/EvoEval"
-Documentation = "https://github.com/Pratikjain24/EvoEval#readme"
-"HuggingFace Dataset" = "https://github.com/Pratikjain24/EvoEval"
-"Issue Tracker" = "https://github.com/Pratikjain24/EvoEval/issues"
+Homepage = "https://github.com/Pratikjain24/SAGE"
+Repository = "https://github.com/Pratikjain24/SAGE"
+Documentation = "https://github.com/Pratikjain24/SAGE#readme"
+"HuggingFace Dataset" = "https://github.com/Pratikjain24/SAGE"
+"Issue Tracker" = "https://github.com/Pratikjain24/SAGE/issues"
 
 [project.optional-dependencies]
 dev = [
@@ -57,11 +57,11 @@ dev = [
 ]
 
 [project.scripts]
-evoeval = "evaeval.runner.cli:app"
+sage = "sage.runner.cli:app"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["evaeval*"]
+include = ["sage*"]
 
 [tool.pytest.ini_options]
 # Comprehensive regression test suite: 201 tests across 31 test files (100% pass rate)

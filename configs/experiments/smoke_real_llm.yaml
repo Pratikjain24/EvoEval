@@ -11,7 +11,7 @@ model:
   api_key: "EMPTY"
 
 sandbox:
-  image: evo-sandbox:1.0
+  image: sage-sandbox:1.0
   mem: 4g
   cpus: 2
   network: none

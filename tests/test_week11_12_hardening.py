@@ -4,14 +4,14 @@ import json
 import time
 from pathlib import Path
 import pytest
-from evaeval.adapters.base import AgentAdapter, AgentState, EvolutionFeedback, EvolutionOutcome, SandboxAPI, TaskResult, TaskSpec
-from evaeval.config.models import BudgetConfig, ExperimentConfig, TasksSplitConfig
-from evaeval.environment.safety_monitor import SafetyMonitor
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.llm.pricing import BudgetExceededError, BudgetGuard
-from evaeval.runner.orchestrator import ExperimentOrchestrator
-from evaeval.trajectory.reader import TrajectoryReader
-from evaeval.trajectory.schema import CostRecord, SafetyCheckPayload
+from sage.adapters.base import AgentAdapter, AgentState, EvolutionFeedback, EvolutionOutcome, SandboxAPI, TaskResult, TaskSpec
+from sage.config.models import BudgetConfig, ExperimentConfig, TasksSplitConfig
+from sage.environment.safety_monitor import SafetyMonitor
+from sage.environment.task_loader import TaskLoader
+from sage.llm.pricing import BudgetExceededError, BudgetGuard
+from sage.runner.orchestrator import ExperimentOrchestrator
+from sage.trajectory.reader import TrajectoryReader
+from sage.trajectory.schema import CostRecord, SafetyCheckPayload
 
 
 # =====================================================================

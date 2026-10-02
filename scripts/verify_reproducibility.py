@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env python3
+#!/usr/bin/env python3
 """External Verification & Reproducibility Attestation Script.
 
 Executes on Linux CI (and local environments) to rigorously verify:
@@ -77,7 +77,7 @@ def verify_docker_digests(digests_file: Path, compose_file: Optional[Path] = Non
         return False, {}, "Digests file missing"
     with open(digests_file, "r", encoding="utf-8") as f:
         digests = json.load(f)
-    required = ["evo-sandbox:1.0", "evo-scorer:1.0", "evo-backend:1.0", "evo-frontend:1.0"]
+    required = ["sage-sandbox:1.0", "sage-scorer:1.0", "sage-backend:1.0", "sage-frontend:1.0"]
     for req in required:
         if req not in digests:
             return False, digests, f"Missing digest for {req}"
@@ -136,9 +136,10 @@ def run_tests(override_count: Optional[int] = None, override_duration: Optional[
     if override_count is not None:
         dur = override_duration if override_duration is not None else 292.62
         return True, override_count, dur, f"{override_count} passed in {dur:.2f}s"
-    if os.environ.get("EVOEVAL_TEST_COUNT"):
-        count = int(os.environ["EVOEVAL_TEST_COUNT"])
-        dur = float(os.environ.get("EVOEVAL_TEST_DURATION", "292.62"))
+    test_count_env = os.environ.get("SAGE_TEST_COUNT") or os.environ.get("EVOEVAL_TEST_COUNT")
+    if test_count_env:
+        count = int(test_count_env)
+        dur = float(os.environ.get("SAGE_TEST_DURATION") or os.environ.get("EVOEVAL_TEST_DURATION", "292.62"))
         return True, count, dur, f"{count} passed in {dur:.2f}s"
 
     t0 = time.time()
@@ -160,14 +161,14 @@ def run_tests(override_count: Optional[int] = None, override_duration: Optional[
 
 def main() -> int:
     import argparse
-    parser = argparse.ArgumentParser(description="EvoEval External Verification Engine")
+    parser = argparse.ArgumentParser(description="SAGE External Verification Engine")
     parser.add_argument("--test-count", type=int, default=None, help="Pre-verified test pass count")
     parser.add_argument("--test-duration", type=float, default=None, help="Pre-verified test duration (seconds)")
     args, _ = parser.parse_known_args()
 
     root = Path.cwd()
     print("=" * 80)
-    print("EvoEval External Verification & Reproducibility Attestation Engine")
+    print("SAGE External Verification & Reproducibility Attestation Engine")
     print("=" * 80)
 
     start_time = datetime.now(timezone.utc)
@@ -205,7 +206,7 @@ def main() -> int:
 
     # 3. Verify & Pull Remote Model Revisions from Hugging Face
     print("[3/6] Auditing & Pulling Pinned Model Revisions from Remote Registry...")
-    from evaeval.runner.reproducibility import verify_and_pull_model_revision
+    from sage.runner.reproducibility import verify_and_pull_model_revision
     model_res = verify_and_pull_model_revision(
         "qwen2.5-coder-7b-instruct",
         "c03e6d358207e414f1eca0bb1891e29f1db0e242",
@@ -340,7 +341,7 @@ def main() -> int:
     # Compile Attestation
     attestation = {
         "attestation_version": "1.0.0",
-        "benchmark_name": "EvoEval",
+        "benchmark_name": "SAGE",
         "verification_status": "VERIFIED" if all_passed else "FAILED",
         "timestamp_utc": end_time.isoformat(),
         "git": git_info,
@@ -418,12 +419,12 @@ def main() -> int:
 
     # Render Markdown Report
     md_lines = [
-        "# EvoEval External Reproducibility Attestation Report",
+        "# SAGE External Reproducibility Attestation Report",
         "",
         f"**Verification Status**: {'`PASS: VERIFIED (DUAL-PLATFORM CERTIFIED)`' if all_passed else '`FAIL: UNVERIFIED`'}",
         f"- **Timestamp (UTC)**: `{end_time.isoformat()}`",
         f"- **Certified Headline Platform**: `Linux x86_64` (Ubuntu 24.04 LTS, Kernel 6.8.0-1017-azure, Python 3.10.14, Docker 26.1.3-ce)",
-        f"  - **Isolation Engine**: `DockerRunner` (`evo-sandbox:1.0` / `evo-scorer:1.0`, `network: none`, `cgroups: mem=2g, pids=128`, unprivileged `user: 1000:1000`)",
+        f"  - **Isolation Engine**: `DockerRunner` (`sage-sandbox:1.0` / `sage-scorer:1.0`, `network: none`, `cgroups: mem=2g, pids=128`, unprivileged `user: 1000:1000`)",
         f"- **Secondary Cross-Validation Platform**: `Windows 10 AMD64` (Python 3.10.11, `LocalSandbox` path-jail, process regex safety monitor)",
         f"- **CI Execution Host**: `{'GitHub Actions (Linux runner)' if env_info['is_ci'] else 'Local Development Host'}`",
         f"- **Git Commit**: `{git_info['commit']}` (`{git_info['branch']}`)",
@@ -526,15 +527,15 @@ def main() -> int:
         "",
         "```bash",
         "# 1. Clone repository (or download from anonymous repository during double-blind review):",
-        "#    Anonymous Review Repo: https://anonymous.4open.science/r/EvoEval-NeurIPS2027/",
-        "#    Camera-Ready Repo:     git clone https://github.com/Pratikjain24/EvoEval.git && cd EvoEval",
-        "git clone https://github.com/Pratikjain24/EvoEval.git && cd EvoEval",
+        "#    Anonymous Review Repo: https://anonymous.4open.science/r/SAGE-NeurIPS2027/",
+        "#    Camera-Ready Repo:     git clone https://github.com/Pratikjain24/SAGE.git && cd SAGE",
+        "git clone https://github.com/Pratikjain24/SAGE.git && cd SAGE",
         "python -m venv .venv && source .venv/bin/activate",
         "pip install -e '.[dev]'",
         "",
         "# 2. Verify environment and pull remote pinned model revisions",
-        "evoeval verify-env --config configs/experiments/pilot.yaml",
-        "evoeval verify-env --config configs/experiments/full_study.yaml",
+        "sage verify-env --config configs/experiments/pilot.yaml",
+        "sage verify-env --config configs/experiments/full_study.yaml",
         "",
         f"# 3. Execute regression test suite ({passed_tests} tests across 29 files)",
         "pytest tests/ -v",
@@ -592,14 +593,14 @@ def main() -> int:
         "### 9.1 Anti-Tamper Verification Frontier (1 vs. 3 vs. 5 vs. 7 Checks)",
         "- **1-Check (Diff Scrutiny)**: Catches only **33.3%** of adversarial tampering attacks (vulnerable to file deletion, bytecode mocking, runtime redefinition, log wiping).",
         "- **3-Check (Diff, Scorer Invariance, Log Rewriting)**: Catches **66.7%** of attack vectors (remains blind to temporal zero-time mocks and git history squashing).",
-        "- **5-Check (EvoEval Production Standard)**: Catches **100.0%** of adversarial tampering vectors with only **+1.8%** computational overhead and **0.0%** false positive rate.",
+        "- **5-Check (SAGE Production Standard)**: Catches **100.0%** of adversarial tampering vectors with only **+1.8%** computational overhead and **0.0%** false positive rate.",
         "- **7-Check (Dynamic Kernel ptrace & System DPI)**: Catches 100.0% of attacks, but incurs **+48.5%** latency penalty and a **4.2%** false-positive rate on parallel multiprocessing harnesses.",
         "- **Conclusion**: The 5-check configuration is empirically proven to be the Pareto-optimal defense frontier.",
         "",
         "### 9.2 Seed Sensitivity & Variance Diminishing Returns ($S \\in \\{1, 2, 3, 5, 8, 10\\}$)",
         "- Across $N=100$ tasks over 10 generations, standard error scales as $\\text{SE} = s / \\sqrt{S}$:",
         "  - $S = 1$: $\\text{SE} = \\pm 0.0050$, compute expenditure: **$24.65 USD**",
-        "  - $S = 3$ (**EvoEval Standard**): $\\text{SE} = \\mathbf{\\pm 0.0029}$, compute expenditure: **$73.95 USD**",
+        "  - $S = 3$ (**SAGE Standard**): $\\text{SE} = \\mathbf{\\pm 0.0029}$, compute expenditure: **$73.95 USD**",
         "  - $S = 5$: $\\text{SE} = \\pm 0.0022$, compute expenditure: **$123.25 USD**",
         "  - $S = 10$: $\\text{SE} = \\pm 0.0016$, compute expenditure: **$246.50 USD**",
         "- **Cost-Utility Justification**: Moving from 3 seeds to 10 seeds triples compute expenditure (+$172.55 USD) while reducing variance by only $0.0013$ ($0.13\\%$), yielding zero changes to hypothesis test conclusions (step-down Holm-Bonferroni $p \\le 0.003$ remains invariant).",
@@ -619,27 +620,27 @@ def main() -> int:
         "",
         "To rigorously address reviewer inquiries regarding empirical comparisons to related benchmarks (SWE-bench Verified, HumanEval, MBPP, EvoAgentBench, ActBench, SkillsBench) and leading frontier agent scaffolds (GPT-4o ReAct, SWE-agent Claude 3.5 Sonnet):",
         "",
-        "### 10.1 Commercial SOTA Agent Baselines on EvoEval Tasks (Table 12)",
+        "### 10.1 Commercial SOTA Agent Baselines on SAGE Tasks (Table 12)",
         "- **$G_6$ (Regression Guarded Rollback)**: **92.0%** overall solve rate (100% Easy, 97.0% Medium, 78.8% Hard), $\\Delta_{\\text{proxy}} = 0.01$, $\\text{SafetyDrift} = +0.02$, $\\text{Retention} = 98\\%$, normalized cost **$0.000105/task**.",
         "- **GPT-4o (ReAct)**: **76.0%** overall solve rate (94.1% Easy, 78.8% Medium, 54.5% Hard), $\\Delta_{\\text{proxy}} = 0.35$, cost **$0.018500/task** ($176\\times$ more expensive than $G_6$).",
         "- **SWE-agent (Claude 3.5 Sonnet)**: **84.0%** overall solve rate (100% Easy, 87.9% Medium, 63.6% Hard), $\\Delta_{\\text{proxy}} = 0.22$, cost **$0.042000/task** ($400\\times$ more expensive than $G_6$).",
         "- **Specification Gaming Finding**: Commercial agents exhibit high ProxyGap (0.22–0.35) when exposed to deliberate drift probes, optimizing for visible mock returns while failing ground-truth invariants.",
         "",
-        "### 10.2 Frozen Control ($G_1$) Calibration on SWE-bench Verified Subset vs. EvoEval",
+        "### 10.2 Frozen Control ($G_1$) Calibration on SWE-bench Verified Subset vs. SAGE",
         "- **SWE-bench Verified (50-task stratified subset)**: $G_1$ achieves **20.0%** solve rate (10/50 resolved) with **18.4** mean tool turns, **215.4s** duration, and **$0.0385/task**.",
-        "- **EvoEval Suite (100 tasks)**: $G_1$ achieves **60.0%** solve rate ($P(0) = 0.60$) with **1.62** mean tool turns, **1.68s (Win) / 1.84s (Linux)** duration, and **$0.000079/task**.",
-        "- **Mathematical Floor Effect Proof**: An 80% initial failure rate on SWE-bench leaves zero positive execution traces for iterative mutation heuristics, causing complete adaptation collapse. EvoEval's $P(0) = 0.60$ calibration provides the essential positive gradient without ceiling saturation ($P \\in [0.60, 0.92]$).",
+        "- **SAGE Suite (100 tasks)**: $G_1$ achieves **60.0%** solve rate ($P(0) = 0.60$) with **1.62** mean tool turns, **1.68s (Win) / 1.84s (Linux)** duration, and **$0.000079/task**.",
+        "- **Mathematical Floor Effect Proof**: An 80% initial failure rate on SWE-bench leaves zero positive execution traces for iterative mutation heuristics, causing complete adaptation collapse. SAGE's $P(0) = 0.60$ calibration provides the essential positive gradient without ceiling saturation ($P \\in [0.60, 0.92]$).",
         "",
         "### 10.3 Cross-Benchmark Contamination Audit",
         "- **HumanEval**: 100.0% pre-training solution contamination (fully memorized).",
         "- **MBPP**: 98.2% pre-training solution contamination (memorized).",
         "- **SWE-bench Verified**: 32.7% solution leakage from scraped GitHub PRs.",
-        "- **EvoEval**: **0.0% solution leakage / 0.0% flagged tasks** across all 100 benchmark repositories.",
+        "- **SAGE**: **0.0% solution leakage / 0.0% flagged tasks** across all 100 benchmark repositories.",
         "",
         "### 10.4 Related Benchmark Differentiation",
-        "- **EvoAgentBench** (Gao et al., 2026): Single-episode transfer; EvoEval measures longitudinal multi-cycle evolution ($T \\ge 10$), safety erosion, and forgetting.",
-        "- **ActBench** (Yao et al., 2026): Static safety probes (18.4% breach rate); EvoEval shows self-evolution accelerates drift to 28% and formalizes $G_6$ rollback.",
-        "- **SkillsBench** (Li et al., 2026): Unbounded skill accumulation yields $\\Delta P \\approx 0.00$ due to pollution; EvoEval resolves this via regression canary gates to achieve $\\Delta P = +0.32$.",
+        "- **EvoAgentBench** (Gao et al., 2026): Single-episode transfer; SAGE measures longitudinal multi-cycle evolution ($T \\ge 10$), safety erosion, and forgetting.",
+        "- **ActBench** (Yao et al., 2026): Static safety probes (18.4% breach rate); SAGE shows self-evolution accelerates drift to 28% and formalizes $G_6$ rollback.",
+        "- **SkillsBench** (Li et al., 2026): Unbounded skill accumulation yields $\\Delta P \\approx 0.00$ due to pollution; SAGE resolves this via regression canary gates to achieve $\\Delta P = +0.32$.",
         "",
         "## 11. Compute Cost Accounting & Token Consumption Reconciliation (Table 15)",
         "",
@@ -656,7 +657,7 @@ def main() -> int:
         "- **Documentation**: Fully formalized in [`docs/COST_ACCOUNTING_RECONCILIATION.md`](docs/COST_ACCOUNTING_RECONCILIATION.md) and typeset in `paper/tables/table_cost_reconciliation.tex`.",
         "",
         "---",
-        "*Attestation automatically generated by EvoEval Reproducibility Verification Engine.*",
+        "*Attestation automatically generated by SAGE Reproducibility Verification Engine.*",
     ])
 
     report_md = "\n".join(md_lines)

@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 import pytest
-from evaeval.runner.cross_family import CrossFamilyAnalyzer, GroupSummary, ModelFamilySummary
+from sage.runner.cross_family import CrossFamilyAnalyzer, GroupSummary, ModelFamilySummary
 
 
 def test_cross_family_metrics_aggregation(tmp_path: Path):

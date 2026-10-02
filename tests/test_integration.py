@@ -5,11 +5,11 @@ import tempfile
 import time
 from pathlib import Path
 import pytest
-from evaeval.config.models import ExperimentConfig, ModelConfig, SandboxConfig, TasksSplitConfig
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.llm.client import MockLLMClient
-from evaeval.runner.orchestrator import ExperimentOrchestrator
-from evaeval.trajectory.reader import TrajectoryReader
+from sage.config.models import ExperimentConfig, ModelConfig, SandboxConfig, TasksSplitConfig
+from sage.environment.task_loader import TaskLoader
+from sage.llm.client import MockLLMClient
+from sage.runner.orchestrator import ExperimentOrchestrator
+from sage.trajectory.reader import TrajectoryReader
 
 
 def test_deterministic_mock_llm_integration_g1_g2_fast(tmp_path: Path):

@@ -3,7 +3,7 @@ name: CI & Public Reproducibility Verification
 # ─────────────────────────────────────────────────────────────────────────────
 # All jobs run on GitHub-hosted runners (ubuntu-latest).
 # Logs, test reports, and attestation artifacts are publicly visible at:
-#   https://github.com/Pratikjain24/EvoEval/actions
+#   https://github.com/Pratikjain24/SAGE/actions
 # This constitutes genuine third-party infrastructure verification —
 # results cannot be modified by the repository author after the run completes.
 # ─────────────────────────────────────────────────────────────────────────────
@@ -45,13 +45,13 @@ jobs:
         pip install pytest-junit-xml pytest-md-report
 
     - name: Validate Benchmark Tasks Catalog
-      run: python -m evaeval.runner.cli tasks validate
+      run: python -m sage.runner.cli tasks validate
 
     - name: Verify Pinned Model Revisions (Pilot Config)
-      run: python -m evaeval.runner.cli verify-env --config configs/experiments/pilot.yaml
+      run: python -m sage.runner.cli verify-env --config configs/experiments/pilot.yaml
 
     - name: Verify Pinned Model Revisions (Full Study Config)
-      run: python -m evaeval.runner.cli verify-env --config configs/experiments/full_study.yaml
+      run: python -m sage.runner.cli verify-env --config configs/experiments/full_study.yaml
 
     - name: Run Full Regression Test Suite
       run: |
@@ -63,7 +63,7 @@ jobs:
     - name: Publish Test Results to GitHub Job Summary
       if: always()
       run: |
-        echo "## 🧪 EvoEval Test Suite — Python ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+        echo "## 🧪 SAGE Test Suite — Python ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
         echo "" >> $GITHUB_STEP_SUMMARY
         echo "**Runner**: \`${{ runner.os }}\` / \`ubuntu-latest\` (GitHub-hosted)" >> $GITHUB_STEP_SUMMARY
         echo "**Commit**: \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
@@ -89,12 +89,12 @@ jobs:
       uses: mikepenz/action-junit-report@v4
       with:
         report_paths: 'test-results/junit-3.10.xml'
-        check_name: 'EvoEval Test Results'
+        check_name: 'SAGE Test Results'
         fail_on_failure: true
         require_tests: true
 
     - name: Run Dry-Run Benchmark Execution Harness
-      run: python -m evaeval.runner.cli run --config configs/experiments/pilot.yaml --dry-run
+      run: python -m sage.runner.cli run --config configs/experiments/pilot.yaml --dry-run
 
     - name: Run Reproducibility Digest Verification
       run: python scripts/verify_reproducibility.py
@@ -122,23 +122,23 @@ jobs:
 
     - name: Build Sandbox Container
       run: |
-        docker build -f docker/Dockerfile.sandbox -t evo-sandbox:1.0 .
-        docker inspect --format='{{index .Id}}' evo-sandbox:1.0
+        docker build -f docker/Dockerfile.sandbox -t sage-sandbox:1.0 .
+        docker inspect --format='{{index .Id}}' sage-sandbox:1.0
 
     - name: Build Scorer Container
       run: |
-        docker build -f docker/Dockerfile.scorer -t evo-scorer:1.0 .
-        docker inspect --format='{{index .Id}}' evo-scorer:1.0
+        docker build -f docker/Dockerfile.scorer -t sage-scorer:1.0 .
+        docker inspect --format='{{index .Id}}' sage-scorer:1.0
 
     - name: Build Backend Container
       run: |
-        docker build -f docker/Dockerfile.backend -t evo-backend:1.0 .
-        docker inspect --format='{{index .Id}}' evo-backend:1.0
+        docker build -f docker/Dockerfile.backend -t sage-backend:1.0 .
+        docker inspect --format='{{index .Id}}' sage-backend:1.0
 
     - name: Build Frontend Container
       run: |
-        docker build -f docker/Dockerfile.frontend -t evo-frontend:1.0 .
-        docker inspect --format='{{index .Id}}' evo-frontend:1.0
+        docker build -f docker/Dockerfile.frontend -t sage-frontend:1.0 .
+        docker inspect --format='{{index .Id}}' sage-frontend:1.0
 
     - name: Verify Container Image Digests Match Committed JSON
       run: python scripts/build_and_inspect_images.py --verify

@@ -1,5 +1,5 @@
 name: pilot
-description: "EvoEval Pilot Study: G1 through G6 across 5 evolutionary cycles"
+description: "SAGE Pilot Study: G1 through G6 across 5 evolutionary cycles"
 model:
   name: qwen2.5-coder-7b-instruct
   revision: "c03e6d358207e414f1eca0bb1891e29f1db0e242"
@@ -9,7 +9,7 @@ model:
   seed: 42
 
 sandbox:
-  image: evo-sandbox:1.0
+  image: sage-sandbox:1.0
   mem: 4g
   cpus: 2
   network: none

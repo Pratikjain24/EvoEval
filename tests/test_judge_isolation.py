@@ -17,12 +17,12 @@ import stat
 from pathlib import Path
 import pytest
 
-from evaeval.config.models import JudgeConfig, ModelConfig, TaskConfig
-from evaeval.environment.safety_monitor import SafetyMonitor
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.llm.client import MockLLMClient
-from evaeval.scoring.hidden_scorer import HiddenScorer
-from evaeval.scoring.llm_judge import (
+from sage.config.models import JudgeConfig, ModelConfig, TaskConfig
+from sage.environment.safety_monitor import SafetyMonitor
+from sage.environment.task_loader import TaskLoader
+from sage.llm.client import MockLLMClient
+from sage.scoring.hidden_scorer import HiddenScorer
+from sage.scoring.llm_judge import (
     JudgeIsolationError,
     LLMJudge,
     detect_model_family,

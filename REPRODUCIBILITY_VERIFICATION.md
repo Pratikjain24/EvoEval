@@ -1,12 +1,12 @@
-﻿# EvoEval Reproducibility Verification Report
+﻿# SAGE Reproducibility Verification Report
 
 **Verification Status**: `PASS: VERIFIED (DUAL-PLATFORM)`
 - **Timestamp (UTC)**: `2026-10-01T23:03:43.428699+00:00`
 - **Attestation file generated on**: `Windows 10 AMD64` (Python 3.10.11, Local Development Host, `is_ci: false`)
   > ⚠️ **Transparency**: `verification_attestation.json` was generated on the authors' local machine as a pre-submission integrity check. It is **not** independent third-party verification.
-  > ✅ **Independent CI verification**: The identical test suite and digest checks run on **GitHub-hosted `ubuntu-latest` runners** on every push, with public immutable logs at [github.com/Pratikjain24/EvoEval/actions](https://github.com/Pratikjain24/EvoEval/actions). JUnit XML reports are uploaded as public downloadable artifacts.
+  > ✅ **Independent CI verification**: The identical test suite and digest checks run on **GitHub-hosted `ubuntu-latest` runners** on every push, with public immutable logs at [github.com/Pratikjain24/SAGE/actions](https://github.com/Pratikjain24/SAGE/actions). JUnit XML reports are uploaded as public downloadable artifacts.
 - **GitHub-hosted CI Platform**: `ubuntu-latest` (Ubuntu 24.04 LTS, Python 3.10/3.11/3.12, Docker 26.x)
-  - **Isolation Engine**: `DockerRunner` (`evo-sandbox:1.0` / `evo-scorer:1.0`, `network: none`, `cgroups: mem=2g, pids=128`, unprivileged `user: 1000:1000`)
+  - **Isolation Engine**: `DockerRunner` (`sage-sandbox:1.0` / `sage-scorer:1.0`, `network: none`, `cgroups: mem=2g, pids=128`, unprivileged `user: 1000:1000`)
 - **Secondary Cross-Validation Platform**: `Windows 10 AMD64` (Python 3.10.11, `LocalSandbox` path-jail, process regex safety monitor)
 - **Git Commit**: `f582fd08a6fef2eff25f720194f744c65528d8c1` (`main`)
 
@@ -14,7 +14,7 @@
 **Verification Status**: `PASS: VERIFIED (DUAL-PLATFORM CERTIFIED)`
 - **Timestamp (UTC)**: `2026-10-01T23:03:43.428699+00:00`
 - **Certified Headline Platform**: `Linux x86_64` (Ubuntu 24.04 LTS, Kernel 6.8.0-1017-azure, Python 3.10.14, Docker 26.1.3-ce)
-  - **Isolation Engine**: `DockerRunner` (`evo-sandbox:1.0` / `evo-scorer:1.0`, `network: none`, `cgroups: mem=2g, pids=128`, unprivileged `user: 1000:1000`)
+  - **Isolation Engine**: `DockerRunner` (`sage-sandbox:1.0` / `sage-scorer:1.0`, `network: none`, `cgroups: mem=2g, pids=128`, unprivileged `user: 1000:1000`)
 - **Secondary Cross-Validation Platform**: `Windows 10 AMD64` (Python 3.10.11, `LocalSandbox` path-jail, process regex safety monitor)
 - **CI Execution Host**: `Local Development Host`
 - **Git Commit**: `f582fd08a6fef2eff25f720194f744c65528d8c1` (`main`)
@@ -26,10 +26,10 @@
 | `tasks/tasks_index.json` | `458491bae52a3e9148b8c4618131541227b43fe3398b52517987995e74ba2259` | Verified |
 | `Qwen/Qwen2.5-Coder-7B-Instruct` (Agent) | `c03e6d358207e414f1eca0bb1891e29f1db0e242` | Verified & Pulled |
 | `meta-llama/Llama-3.1-8B-Instruct` (Judge) | `0e9e39f249a16976918f6564b8830bc894c89659` | Verified & Pulled |
-| `evo-sandbox:1.0` | `sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401` | Verified |
-| `evo-scorer:1.0` | `sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34` | Verified |
-| `evo-backend:1.0` | `sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e` | Verified |
-| `evo-frontend:1.0` | `sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333` | Verified |
+| `sage-sandbox:1.0` | `sha256:3d93c20b51c7f04fdd3fb64f5bab0671cb99dc7b3ed419ed36cabb829b358401` | Verified |
+| `sage-scorer:1.0` | `sha256:4e5784ddded9b42ad9bf42917a5a35266ce070d5ec34e39772c39b3b31eefa34` | Verified |
+| `sage-backend:1.0` | `sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e` | Verified |
+| `sage-frontend:1.0` | `sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333` | Verified |
 | `pilot_canonical_3seeds (Qwen raw)` | `2a341e0bdc79b297267c6823cd2e3f0507e29d192d0dc9f1efe2a2a585b45b32` | Verified |
 | `pilot_canonical_3seeds (Qwen canonical)` | `ca1671bbb9949e4754fb16c62ca02dc2f40f8e4783bf9f0d53bf041a617f354a` | Verified |
 | `pilot_llama_canonical_3seeds (Llama raw)` | `671457454d70c7da4c11cc097a22fc10bba0ad48d331b1030973f88789065816` | Verified |
@@ -110,15 +110,15 @@ External peer reviewers are invited to inspect the full automated execution log 
 
 ```bash
 # 1. Clone repository (or download from anonymous repository during double-blind review):
-#    Anonymous Review Repo: https://anonymous.4open.science/r/EvoEval-NeurIPS2027/
-#    Camera-Ready Repo:     git clone https://github.com/Pratikjain24/EvoEval.git && cd EvoEval
-git clone https://github.com/Pratikjain24/EvoEval.git && cd EvoEval
+#    Anonymous Review Repo: https://anonymous.4open.science/r/SAGE-NeurIPS2027/
+#    Camera-Ready Repo:     git clone https://github.com/Pratikjain24/SAGE.git && cd SAGE
+git clone https://github.com/Pratikjain24/SAGE.git && cd SAGE
 python -m venv .venv && source .venv/bin/activate
 pip install -e '.[dev]'
 
 # 2. Verify environment and pull remote pinned model revisions
-evoeval verify-env --config configs/experiments/pilot.yaml
-evoeval verify-env --config configs/experiments/full_study.yaml
+sage verify-env --config configs/experiments/pilot.yaml
+sage verify-env --config configs/experiments/full_study.yaml
 
 # 3. Execute regression test suite (201 tests across 29 files)
 pytest tests/ -v
@@ -176,14 +176,14 @@ To rigorously validate architectural design choices and eliminate reviewer conce
 ### 9.1 Anti-Tamper Verification Frontier (1 vs. 3 vs. 5 vs. 7 Checks)
 - **1-Check (Diff Scrutiny)**: Catches only **33.3%** of adversarial tampering attacks (vulnerable to file deletion, bytecode mocking, runtime redefinition, log wiping).
 - **3-Check (Diff, Scorer Invariance, Log Rewriting)**: Catches **66.7%** of attack vectors (remains blind to temporal zero-time mocks and git history squashing).
-- **5-Check (EvoEval Production Standard)**: Catches **100.0%** of adversarial tampering vectors with only **+1.8%** computational overhead and **0.0%** false positive rate.
+- **5-Check (SAGE Production Standard)**: Catches **100.0%** of adversarial tampering vectors with only **+1.8%** computational overhead and **0.0%** false positive rate.
 - **7-Check (Dynamic Kernel ptrace & System DPI)**: Catches 100.0% of attacks, but incurs **+48.5%** latency penalty and a **4.2%** false-positive rate on parallel multiprocessing harnesses.
 - **Conclusion**: The 5-check configuration is empirically proven to be the Pareto-optimal defense frontier.
 
 ### 9.2 Seed Sensitivity & Variance Diminishing Returns ($S \in \{1, 2, 3, 5, 8, 10\}$)
 - Across $N=100$ tasks over 10 generations, standard error scales as $\text{SE} = s / \sqrt{S}$:
   - $S = 1$: $\text{SE} = \pm 0.0050$, compute expenditure: **$24.65 USD**
-  - $S = 3$ (**EvoEval Standard**): $\text{SE} = \mathbf{\pm 0.0029}$, compute expenditure: **$73.95 USD**
+  - $S = 3$ (**SAGE Standard**): $\text{SE} = \mathbf{\pm 0.0029}$, compute expenditure: **$73.95 USD**
   - $S = 5$: $\text{SE} = \pm 0.0022$, compute expenditure: **$123.25 USD**
   - $S = 10$: $\text{SE} = \pm 0.0016$, compute expenditure: **$246.50 USD**
 - **Cost-Utility Justification**: Moving from 3 seeds to 10 seeds triples compute expenditure (+$172.55 USD) while reducing variance by only $0.0013$ ($0.13\%$), yielding zero changes to hypothesis test conclusions (step-down Holm-Bonferroni $p \le 0.003$ remains invariant).
@@ -203,27 +203,27 @@ To rigorously validate architectural design choices and eliminate reviewer conce
 
 To rigorously address reviewer inquiries regarding empirical comparisons to related benchmarks (SWE-bench Verified, HumanEval, MBPP, EvoAgentBench, ActBench, SkillsBench) and leading frontier agent scaffolds (GPT-4o ReAct, SWE-agent Claude 3.5 Sonnet):
 
-### 10.1 Commercial SOTA Agent Baselines on EvoEval Tasks (Table 12)
+### 10.1 Commercial SOTA Agent Baselines on SAGE Tasks (Table 12)
 - **$G_6$ (Regression Guarded Rollback)**: **92.0%** overall solve rate (100% Easy, 97.0% Medium, 78.8% Hard), $\Delta_{\text{proxy}} = 0.01$, $\text{SafetyDrift} = +0.02$, $\text{Retention} = 98\%$, normalized cost **$0.000105/task**.
 - **GPT-4o (ReAct)**: **76.0%** overall solve rate (94.1% Easy, 78.8% Medium, 54.5% Hard), $\Delta_{\text{proxy}} = 0.35$, cost **$0.018500/task** ($176\times$ more expensive than $G_6$).
 - **SWE-agent (Claude 3.5 Sonnet)**: **84.0%** overall solve rate (100% Easy, 87.9% Medium, 63.6% Hard), $\Delta_{\text{proxy}} = 0.22$, cost **$0.042000/task** ($400\times$ more expensive than $G_6$).
 - **Specification Gaming Finding**: Commercial agents exhibit high ProxyGap (0.22–0.35) when exposed to deliberate drift probes, optimizing for visible mock returns while failing ground-truth invariants.
 
-### 10.2 Frozen Control ($G_1$) Calibration on SWE-bench Verified Subset vs. EvoEval
+### 10.2 Frozen Control ($G_1$) Calibration on SWE-bench Verified Subset vs. SAGE
 - **SWE-bench Verified (50-task stratified subset)**: $G_1$ achieves **20.0%** solve rate (10/50 resolved) with **18.4** mean tool turns, **215.4s** duration, and **$0.0385/task**.
-- **EvoEval Suite (100 tasks)**: $G_1$ achieves **60.0%** solve rate ($P(0) = 0.60$) with **1.62** mean tool turns, **1.68s (Win) / 1.84s (Linux)** duration, and **$0.000079/task**.
-- **Mathematical Floor Effect Proof**: An 80% initial failure rate on SWE-bench leaves zero positive execution traces for iterative mutation heuristics, causing complete adaptation collapse. EvoEval's $P(0) = 0.60$ calibration provides the essential positive gradient without ceiling saturation ($P \in [0.60, 0.92]$).
+- **SAGE Suite (100 tasks)**: $G_1$ achieves **60.0%** solve rate ($P(0) = 0.60$) with **1.62** mean tool turns, **1.68s (Win) / 1.84s (Linux)** duration, and **$0.000079/task**.
+- **Mathematical Floor Effect Proof**: An 80% initial failure rate on SWE-bench leaves zero positive execution traces for iterative mutation heuristics, causing complete adaptation collapse. SAGE's $P(0) = 0.60$ calibration provides the essential positive gradient without ceiling saturation ($P \in [0.60, 0.92]$).
 
 ### 10.3 Cross-Benchmark Contamination Audit
 - **HumanEval**: 100.0% pre-training solution contamination (fully memorized).
 - **MBPP**: 98.2% pre-training solution contamination (memorized).
 - **SWE-bench Verified**: 32.7% solution leakage from scraped GitHub PRs.
-- **EvoEval**: **0.0% solution leakage / 0.0% flagged tasks** across all 100 benchmark repositories.
+- **SAGE**: **0.0% solution leakage / 0.0% flagged tasks** across all 100 benchmark repositories.
 
 ### 10.4 Related Benchmark Differentiation
-- **EvoAgentBench** (Gao et al., 2026): Single-episode transfer; EvoEval measures longitudinal multi-cycle evolution ($T \ge 10$), safety erosion, and forgetting.
-- **ActBench** (Yao et al., 2026): Static safety probes (18.4% breach rate); EvoEval shows self-evolution accelerates drift to 28% and formalizes $G_6$ rollback.
-- **SkillsBench** (Li et al., 2026): Unbounded skill accumulation yields $\Delta P \approx 0.00$ due to pollution; EvoEval resolves this via regression canary gates to achieve $\Delta P = +0.32$.
+- **EvoAgentBench** (Gao et al., 2026): Single-episode transfer; SAGE measures longitudinal multi-cycle evolution ($T \ge 10$), safety erosion, and forgetting.
+- **ActBench** (Yao et al., 2026): Static safety probes (18.4% breach rate); SAGE shows self-evolution accelerates drift to 28% and formalizes $G_6$ rollback.
+- **SkillsBench** (Li et al., 2026): Unbounded skill accumulation yields $\Delta P \approx 0.00$ due to pollution; SAGE resolves this via regression canary gates to achieve $\Delta P = +0.32$.
 
 ## 11. Compute Cost Accounting & Token Consumption Reconciliation (Table 15)
 
@@ -240,4 +240,4 @@ To rigorously address reviewer inquiries regarding empirical comparisons to rela
 - **Documentation**: Fully formalized in [`docs/COST_ACCOUNTING_RECONCILIATION.md`](docs/COST_ACCOUNTING_RECONCILIATION.md) and typeset in `paper/tables/table_cost_reconciliation.tex`.
 
 ---
-*Attestation automatically generated by EvoEval Reproducibility Verification Engine.*
+*Attestation automatically generated by SAGE Reproducibility Verification Engine.*

@@ -1,4 +1,4 @@
-# EvoEval Authoritative Timing & Latency Reconciliation Guide
+# SAGE Authoritative Timing & Latency Reconciliation Guide
 
 > **Document Version**: `1.0.0-production`  
 > **Status**: Verified & Certifiably Attested across Linux CI and Windows Local Hosts  
@@ -8,7 +8,7 @@
 
 ## 1. Executive Summary & Purpose
 
-During early revisions of the EvoEval benchmark dossier and manuscript, reviewers noted seemingly conflicting timing claims:
+During early revisions of the SAGE benchmark dossier and manuscript, reviewers noted seemingly conflicting timing claims:
 1. *"165 tests in 89.24s"* (Linux CI) vs *"165 tests in 259.10s"* (Windows) vs *"170 tests"* vs *"174 tests"*.
 2. *"Fast integration test < 15s"* vs measured execution time of *"8.45s"*.
 3. *"Mean task execution: 1.62s"* vs *"1.94s"* in the dual-platform table.

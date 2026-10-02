@@ -5,7 +5,7 @@ import hmac
 import time
 from typing import Dict, Optional
 
-SECRET_KEY = b"evoeval_super_secret_signing_key_2026"
+SECRET_KEY = b"sage_super_secret_signing_key_2026"
 
 
 def hash_password(password: str, salt: str = "fixed_salt") -> str:

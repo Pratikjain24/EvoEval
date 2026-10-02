@@ -19,12 +19,12 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 import pytest
-from evaeval.adapters.static_agent import StaticAgentAdapter
-from evaeval.config.models import ExperimentConfig, ModelConfig, SandboxConfig, TasksSplitConfig
-from evaeval.environment.task_loader import TaskLoader
-from evaeval.llm.client import LLMResponse, MockLLMClient, OpenAICompatibleClient
-from evaeval.runner.orchestrator import ExperimentOrchestrator
-from evaeval.trajectory.reader import TrajectoryReader
+from sage.adapters.static_agent import StaticAgentAdapter
+from sage.config.models import ExperimentConfig, ModelConfig, SandboxConfig, TasksSplitConfig
+from sage.environment.task_loader import TaskLoader
+from sage.llm.client import LLMResponse, MockLLMClient, OpenAICompatibleClient
+from sage.runner.orchestrator import ExperimentOrchestrator
+from sage.trajectory.reader import TrajectoryReader
 
 
 class MockVLLMHandler(BaseHTTPRequestHandler):

@@ -1,13 +1,13 @@
 """Unit tests for agent adapters G1 through G6."""
 
 import pytest
-from evaeval.adapters.base import EvolutionFeedback, TaskSpec
-from evaeval.adapters.memory_agent import MemoryAgentAdapter
-from evaeval.adapters.prompt_agent import PromptAgentAdapter
-from evaeval.adapters.reflection_agent import ReflectionAgentAdapter
-from evaeval.adapters.static_agent import StaticAgentAdapter
-from evaeval.adapters.wrapper import VerifierAgentWrapper
-from evaeval.environment.sandbox import LocalSandbox
+from sage.adapters.base import EvolutionFeedback, TaskSpec
+from sage.adapters.memory_agent import MemoryAgentAdapter
+from sage.adapters.prompt_agent import PromptAgentAdapter
+from sage.adapters.reflection_agent import ReflectionAgentAdapter
+from sage.adapters.static_agent import StaticAgentAdapter
+from sage.adapters.wrapper import VerifierAgentWrapper
+from sage.environment.sandbox import LocalSandbox
 
 
 class DummySandbox:

@@ -13,7 +13,7 @@ Closes #<!-- issue number -->
 
 ## ✅ Checklist
 - [ ] I have run `pytest tests/ -v` and all tests pass
-- [ ] I have run `black evaeval/ tests/` and `isort evaeval/ tests/`
+- [ ] I have run `black sage/ tests/` and `isort sage/ tests/`
 - [ ] I have added tests for any new functionality
 - [ ] I have updated the relevant docs (`docs/`, `README.md`, `PROJECT_DOSSIER.md` if applicable)
 - [ ] I have verified no new security vulnerabilities are introduced

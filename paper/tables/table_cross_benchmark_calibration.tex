@@ -1,7 +1,7 @@
 \begin{table*}[t]
 \centering
 \small
-\caption{\textbf{Macro-Level Comparison: EvoEval vs. Established Code Generation and Agent Benchmarks}. Contrasting task granularity, baseline solve rates ($P_0$), pre-training contamination, longitudinal evaluation support, and sandbox isolation guarantees.}
+\caption{\textbf{Macro-Level Comparison: SAGE vs. Established Code Generation and Agent Benchmarks}. Contrasting task granularity, baseline solve rates ($P_0$), pre-training contamination, longitudinal evaluation support, and sandbox isolation guarantees.}
 \label{tab:cross_benchmark_calibration}
 \begin{tabular}{lcccccccl}
 \toprule
@@ -14,9 +14,9 @@ SWE-bench Verified & 2024 & Full Repository & 500 & 38.2 & 21.4\% & 32.7\% & $\t
 EvoAgentBench & 2026 & API / Tool Task & 120 & 14.0 & 51.2\% & 12.5\% & $\times$ & Mock API harness \\
 ActBench & 2026 & OS / Tool Interaction & 150 & 12.5 & 48.5\% & 8.4\% & $\times$ & Subprocess sandbox \\
 SkillsBench & 2026 & Modular Scripts & 200 & 18.0 & 53.0\% & 15.2\% & \checkmark & Subprocess sandbox \\
-\textbf{EvoEval (Ours)} & 2026 & Focused Multi-Module Repos & 100 & 16.5 & 60.0\% & \textbf{0.0\%} & \checkmark & Dual Docker Containers (evo-sandbox + evo-scorer) \\
+\textbf{SAGE (Ours)} & 2026 & Focused Multi-Module Repos & 100 & 16.5 & 60.0\% & \textbf{0.0\%} & \checkmark & Dual Docker Containers (evo-sandbox + evo-scorer) \\
 \bottomrule
 \end{tabular}
 \vspace{1mm}
-\caption*{\footnotesize \textit{Note}: $P(0)$ Base indicates zero-shot solve rate for standard open-weights 7B/8B code models (Qwen2.5-Coder-7B / Llama-3.1-8B). Leakage denotes confirmed pre-training data memorization / solution leakage (SWE-bench Verified audited by OpenAI, Feb 2026; EvoEval verified via zero-shot AST probes).}
+\caption*{\footnotesize \textit{Note}: $P(0)$ Base indicates zero-shot solve rate for standard open-weights 7B/8B code models (Qwen2.5-Coder-7B / Llama-3.1-8B). Leakage denotes confirmed pre-training data memorization / solution leakage (SWE-bench Verified audited by OpenAI, Feb 2026; SAGE verified via zero-shot AST probes).}
 \end{table*}

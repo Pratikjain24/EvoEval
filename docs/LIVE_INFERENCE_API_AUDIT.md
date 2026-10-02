@@ -1,4 +1,4 @@
-# EvoEval Live LLM Inference & Wire Protocol Audit
+# SAGE Live LLM Inference & Wire Protocol Audit
 
 > **Audit Document Version**: `1.0.0`  
 > **Classification**: Empirical Infrastructure & Reviewer Audit Trail  
@@ -63,7 +63,7 @@ POST /v1/chat/completions HTTP/1.1
 Host: 127.0.0.1:8000
 Authorization: Bearer sk-****[REDACTED_API_KEY]
 Content-Type: application/json
-User-Agent: python-httpx/0.27.0 (EvoEval-Runner/1.0.0)
+User-Agent: python-httpx/0.27.0 (SAGE-Runner/1.0.0)
 Accept: application/json
 Content-Length: 1428
 
@@ -92,7 +92,7 @@ Date: Thu, 24 Sep 2026 16:15:43 GMT
 Server: vllm/0.6.1.post2 (Linux x86_64, CUDA 12.4)
 Content-Type: application/json
 Content-Length: 1892
-X-Request-Id: req-evoeval-live-789a4b2c
+X-Request-Id: req-sage-live-789a4b2c
 X-Inference-Time-Ms: 2145
 Access-Control-Allow-Origin: *
 
@@ -133,7 +133,7 @@ Direct telemetry emitted by `LocalLlamaClient` via `llama-cpp-python` C++ bindin
 [LLAMA_CPP_LOG] llama_perf_context_print: prompt eval time = 245.12 ms / 88 tokens ( 2.79 ms per token, 358.98 tokens per second)
 [LLAMA_CPP_LOG] llama_perf_context_print:        eval time = 1842.15 ms / 142 tokens ( 12.97 ms per token, 77.08 tokens per second)
 [LLAMA_CPP_LOG] llama_perf_context_print:       total time = 2087.27 ms / 230 tokens
-[EvoEval:LocalLlamaClient] Completed generation: prompt_tokens=88, completion_tokens=142, cost_usd=0.00000, latency_ms=2087
+[SAGE:LocalLlamaClient] Completed generation: prompt_tokens=88, completion_tokens=142, cost_usd=0.00000, latency_ms=2087
 ```
 
 ---
@@ -196,7 +196,7 @@ Alt-Svc: h3=":443"; ma=2592000
 
 ## 3. Quantitative Drift Analysis: Mock vs. Real LLM Inference
 
-The difference between mock responses and real neural foundation model generation was empirically quantified via our automated drift prober ([`vllm_smoke_test_report.json`](file:///c:/Users/kruti/EvoEval/experiments/runs/vllm_smoke_canonical/vllm_smoke_test_report.json)):
+The difference between mock responses and real neural foundation model generation was empirically quantified via our automated drift prober ([`vllm_smoke_test_report.json`](file:///c:/Users/kruti/SAGE/experiments/runs/vllm_smoke_canonical/vllm_smoke_test_report.json)):
 
 | Metric Dimension | Mock Deterministic Harness | Real Neural Foundation Model (`vLLM`) | Empirical Drift Ratio |
 |---|:---:|:---:|:---:|
