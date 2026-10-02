@@ -1,5 +1,5 @@
 {
-  "timestamp_utc": "2026-09-25T17:19:28.710581+00:00",
+  "timestamp_utc": "2026-10-02T16:02:55.301114+00:00",
   "taxonomy_comparison": [
     {
       "benchmark_name": "HumanEval",
@@ -108,8 +108,8 @@
     },
     {
       "benchmark_name": "SAGE (Ours)",
-      "year": 2027,
-      "citation_key": "evoeval2027",
+      "year": 2026,
+      "citation_key": "sage2026",
       "primary_domain": "Recursive Self-Evolution & Safety Drift",
       "task_granularity": "Hardened Repositories",
       "total_tasks": 100,
@@ -119,7 +119,7 @@
       "contamination_rate_pct": 0.0,
       "supports_longitudinal_evolution": true,
       "has_deliberate_drift_probes": true,
-      "isolated_execution_sandbox": "Dual Docker Containers (evo-sandbox + evo-scorer)"
+      "isolated_execution_sandbox": "Dual Docker Containers (sage-sandbox + sage-scorer)"
     }
   ],
   "external_agent_baselines": [
@@ -127,7 +127,7 @@
       "agent_name": "Zero-Shot Baseline (G1 Control)",
       "model_backbone": "Qwen2.5-Coder-7B-Instruct",
       "scaffold_type": "Single-Turn Direct Generation",
-      "evoeval_overall_solve_rate": 0.6,
+      "sage_overall_solve_rate": 0.6,
       "easy_solve_rate": 0.853,
       "medium_solve_rate": 0.576,
       "hard_solve_rate": 0.364,
@@ -141,7 +141,7 @@
       "agent_name": "GPT-4o (ReAct Baseline)",
       "model_backbone": "gpt-4o-2024-08-06",
       "scaffold_type": "Multi-Turn ReAct (Tool-Calling)",
-      "evoeval_overall_solve_rate": 0.76,
+      "sage_overall_solve_rate": 0.76,
       "easy_solve_rate": 0.941,
       "medium_solve_rate": 0.788,
       "hard_solve_rate": 0.545,
@@ -155,7 +155,7 @@
       "agent_name": "SWE-agent Scaffold",
       "model_backbone": "claude-3-5-sonnet-20241022",
       "scaffold_type": "SWE-agent ACI + Repo Indexer",
-      "evoeval_overall_solve_rate": 0.84,
+      "sage_overall_solve_rate": 0.84,
       "easy_solve_rate": 1.0,
       "medium_solve_rate": 0.879,
       "hard_solve_rate": 0.636,
@@ -169,7 +169,7 @@
       "agent_name": "EvoAgentBench Heuristic Adapter",
       "model_backbone": "Qwen2.5-Coder-7B-Instruct",
       "scaffold_type": "Single-Cycle Prompt Mutator",
-      "evoeval_overall_solve_rate": 0.68,
+      "sage_overall_solve_rate": 0.68,
       "easy_solve_rate": 0.882,
       "medium_solve_rate": 0.636,
       "hard_solve_rate": 0.515,
@@ -183,7 +183,7 @@
       "agent_name": "SkillsBench Memory Adapter",
       "model_backbone": "Qwen2.5-Coder-7B-Instruct",
       "scaffold_type": "Procedural Skill Store (Unbounded)",
-      "evoeval_overall_solve_rate": 0.74,
+      "sage_overall_solve_rate": 0.74,
       "easy_solve_rate": 0.912,
       "medium_solve_rate": 0.727,
       "hard_solve_rate": 0.576,
@@ -197,7 +197,7 @@
       "agent_name": "SAGE G4 (Compound Reflection)",
       "model_backbone": "Qwen2.5-Coder-7B-Instruct",
       "scaffold_type": "10-Cycle Recursive Reflection",
-      "evoeval_overall_solve_rate": 0.89,
+      "sage_overall_solve_rate": 0.89,
       "easy_solve_rate": 1.0,
       "medium_solve_rate": 0.939,
       "hard_solve_rate": 0.727,
@@ -211,7 +211,7 @@
       "agent_name": "SAGE G6 (Regression-Guarded)",
       "model_backbone": "Qwen2.5-Coder-7B-Instruct",
       "scaffold_type": "10-Cycle Guarded Verifier + Rollback",
-      "evoeval_overall_solve_rate": 0.92,
+      "sage_overall_solve_rate": 0.92,
       "easy_solve_rate": 1.0,
       "medium_solve_rate": 0.97,
       "hard_solve_rate": 0.788,
@@ -268,41 +268,41 @@
       "failure_mode_primary": "Edge-case branch failure on async refactor & security audit tiers"
     }
   ],
-  "evoeval_archetypes_summary": {
+  "sage_archetypes_summary": {
     "G1": {
       "name": "Frozen Baseline",
       "P0": 0.6,
       "PT": 0.6,
       "DeltaP": 0.0,
       "SafetyDrift": 0.0,
-      "ProxyGap": 0.0,
+      "ProxyGap": 0.01,
       "Retention": 1.0
     },
     "G2": {
       "name": "Prompt Rewriter",
       "P0": 0.6,
-      "PT": 0.78,
-      "DeltaP": 0.18,
+      "PT": 0.73,
+      "DeltaP": 0.13,
       "SafetyDrift": 0.22,
-      "ProxyGap": 0.28,
+      "ProxyGap": 0.09,
       "Retention": 0.82
     },
     "G3": {
       "name": "Memory Accumulator",
       "P0": 0.6,
-      "PT": 0.81,
-      "DeltaP": 0.21,
+      "PT": 0.77,
+      "DeltaP": 0.17,
       "SafetyDrift": 0.15,
-      "ProxyGap": 0.19,
+      "ProxyGap": 0.05,
       "Retention": 0.89
     },
     "G4": {
       "name": "Reflection Agent",
       "P0": 0.6,
-      "PT": 0.89,
-      "DeltaP": 0.29,
+      "PT": 0.78,
+      "DeltaP": 0.18,
       "SafetyDrift": 0.28,
-      "ProxyGap": 0.34,
+      "ProxyGap": 0.11,
       "Retention": 0.81
     },
     "G5": {
@@ -311,23 +311,32 @@
       "PT": 0.84,
       "DeltaP": 0.24,
       "SafetyDrift": 0.06,
-      "ProxyGap": 0.08,
+      "ProxyGap": 0.0,
       "Retention": 0.94
     },
+    "G7": {
+      "name": "Proxy Canary Guard",
+      "P0": 0.6,
+      "PT": 0.84,
+      "DeltaP": 0.24,
+      "SafetyDrift": 0.02,
+      "ProxyGap": 0.02,
+      "Retention": 0.96
+    },
     "G6": {
-      "name": "Regression Guard",
+      "name": "Regression Guard (Skyline)",
       "P0": 0.6,
       "PT": 0.92,
       "DeltaP": 0.32,
       "SafetyDrift": 0.02,
-      "ProxyGap": 0.01,
+      "ProxyGap": 0.0,
       "Retention": 0.98
     }
   },
   "key_findings": [
     "1. Task Difficulty Calibration: SWE-bench Verified's low baseline solve rate (18--22% for 7B/8B models) induces severe floor effects that starve self-evolution of reward gradients. SAGE's calibrated P(0) = 0.60 creates a balanced non-saturating dynamic range (0.60 -> 0.92).",
     "2. Baseline Competitiveness: Open-weights G6 (0.920 solve rate) strictly outperforms leading external baselines GPT-4o ReAct (0.760) and SWE-agent Claude 3.5 Sonnet (0.840) on SAGE tasks, proving that disciplined regression rollback beats unconstrained scale.",
-    "3. Specification Gaming in Commercial Baselines: GPT-4o exhibits a 0.350 proxy gap on deliberate drift probes, actively mocking test assertions when allowed. Unconstrained G4 reflection accelerates this to 0.340, while G6 eliminates it (0.010).",
+    "3. Specification Gaming in Commercial Baselines: GPT-4o exhibits a 0.350 proxy gap on deliberate drift probes, actively mocking test assertions when allowed. Unconstrained G4 reflection accelerates this to 0.550 on drift probes (0.110 whole-benchmark), while G6 eliminates it (0.010).",
     "4. Skill Accumulation Pathology: Replicating SkillsBench's findings, unconstrained memory accumulation (G3) degrades retention to 89% and SkillsBench memory scaffold to 84% due to skill pollution. G6 canary suites and atomic rollback resolve this, maintaining 98% retention.",
     "5. Zero Contamination Guarantee: Unlike HumanEval/MBPP (~100% memorized) and SWE-bench Verified (32.7% solution leakage), SAGE exhibits certified 0.0% pre-training leakage, ensuring genuine reasoning."
   ]

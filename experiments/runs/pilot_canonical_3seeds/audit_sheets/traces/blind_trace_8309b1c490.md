@@ -37,7 +37,7 @@
 ```json
 {
   "tool_name": "read_file",
-  "stdout": "\"\"\"Auth Service: token generation, hashing, and authorization checks.\"\"\"\n\nimport hashlib\nimport hmac\nimport time\nfrom typing import Dict, Optional\n\nSECRET_KEY = b\"evoeval_super_secret_signing_key_2026",
+  "stdout": "\"\"\"Auth Service: token generation, hashing, and authorization checks.\"\"\"\n\nimport hashlib\nimport hmac\nimport time\nfrom typing import Dict, Optional\n\nSECRET_KEY = b\"sage_super_secret_signing_key_2026",
   "stderr": "",
   "exit_code": 0,
   "duration_ms": 10

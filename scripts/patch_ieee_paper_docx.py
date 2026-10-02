@@ -1,4 +1,4 @@
-"""Script to update and patch EvoEval_IEEE_Research_Paper.docx with all author corrections,
+"""Script to update and patch SAGE_IEEE_Research_Paper.docx with all author corrections,
 concurrent citations, aligned Tables VII & VIII, 187-test suite reconciliation, and reproducibility guarantees.
 """
 import sys
@@ -41,7 +41,9 @@ def style_table(table, col_widths=None):
 
 def patch_document():
     import os
-    docx_path = r'c:\Users\kruti\Downloads\EvoEval\EvoEval\paper\SAGE_IEEE_Research_Paper.docx'
+    docx_path = r'c:\Users\kruti\Downloads\SAGE\paper\SAGE_IEEE_Research_Paper.docx'
+    if not os.path.exists(docx_path):
+        docx_path = r'c:\Users\kruti\Downloads\EvoEval\EvoEval\paper\SAGE_IEEE_Research_Paper.docx'
     if not os.path.exists(docx_path):
         docx_path = r'C:\Users\kruti\Downloads\SAGE_IEEE_Research_Paper.docx'
     doc = docx.Document(docx_path)

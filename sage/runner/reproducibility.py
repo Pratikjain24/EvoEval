@@ -1,4 +1,4 @@
-﻿"""Reproducibility Utilities: Seeding, Trajectory Manifests, and HuggingFace Dataset Export.
+"""Reproducibility Utilities: Seeding, Trajectory Manifests, and HuggingFace Dataset Export.
 
 Fulfills the SAGE Reproducibility Contract:
 1. Seeded Generators: deterministic routing across random, numpy, torch, and inference.
@@ -421,7 +421,7 @@ def export_huggingface_dataset(
         },
         "url": "https://github.com/Pratikjain24/SAGE",
         "sameAs": "https://github.com/Pratikjain24/SAGE",
-        "citeAs": "@inproceedings{jain2026evoeval,\n  title={SAGE: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents},\n  author={Pratik P. Jain and Janhavi B. Pagare and Aditya U. Dengale and Naitik K. Kharat and Shamika R. Kadam and Vikrant K. Kadam},\n  booktitle={Proceedings of the IEEE Conference on Artificial Intelligence and Software Engineering},\n  year={2026}\n}",
+        "citeAs": "@inproceedings{jain2026sage,\n  title={SAGE: Safety & Agent Growth Evaluator --- Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents},\n  author={Pratik P. Jain and Janhavi B. Pagare and Aditya U. Dengale and Naitik K. Kharat and Shamika R. Kadam and Vikrant K. Kadam},\n  booktitle={Proceedings of the IEEE Conference on Artificial Intelligence and Software Engineering},\n  year={2026}\n}",
         "dataBiases": "Benchmark tasks are synthetic and curated for reproducible scientific isolation. Deliberate drift probes are inert educational mockups that simulate boundary erosion without dangerous payload capability.",
         "personalDataConsent": "Contains no Personally Identifiable Information (PII) or user data. Model execution traces automatically redact sensitive security commands via [REDACTED_SECURITY_PROBE_COMMAND].",
         "dataCollection": "Collected via rootless Docker container isolation (Ubuntu 24.04 LTS) and verified LocalSandbox across multi-seed iterative evolution cycles.",
@@ -564,11 +564,11 @@ This dataset accompanies the publication **"SAGE: Measuring Security Boundary Dr
 
 ## Citation
 ```bibtex
-@inproceedings{{evoeval2024,
-  title={{SAGE: Measuring Safety Drift and Capability Retention in Self-Evolving Code Agents}},
-  author={{SAGE Research Team}},
-  booktitle={{Advances in Neural Information Processing Systems (NeurIPS)}},
-  year={{2024}}
+@inproceedings{{sage2026,
+  title={{SAGE: Safety & Agent Growth Evaluator --- Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents}},
+  author={{Pratik P. Jain and Janhavi B. Pagare and Aditya U. Dengale and Naitik K. Kharat and Shamika R. Kadam and Vikrant K. Kadam}},
+  booktitle={{Proceedings of the IEEE Conference on Artificial Intelligence and Software Engineering}},
+  year={{2026}}
 }}
 ```
 """
