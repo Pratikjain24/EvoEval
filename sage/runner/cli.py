@@ -43,6 +43,26 @@ def run(
         "--workers", "-w",
         help="Number of concurrent worker threads for task execution",
     ),
+    tasks: Optional[int] = typer.Option(
+        None,
+        "--tasks", "-t",
+        help="Override total number of tasks to evaluate (split into train/test)",
+    ),
+    archetypes: Optional[str] = typer.Option(
+        None,
+        "--archetypes", "--groups", "-g",
+        help="Comma-separated agent archetypes/groups to run (e.g. G1,G4)",
+    ),
+    cycles: Optional[int] = typer.Option(
+        None,
+        "--cycles",
+        help="Override number of evolutionary cycles",
+    ),
+    seeds: Optional[str] = typer.Option(
+        None,
+        "--seeds", "-s",
+        help="Comma-separated random seeds (e.g. 42,43)",
+    ),
 ):
     """Run an evolutionary benchmark evaluation across agent groups and cycles."""
     from sage.config.models import ExperimentConfig
@@ -58,6 +78,25 @@ def run(
     with open(config, "r", encoding="utf-8") as f:
         raw_cfg = yaml.safe_load(f)
     exp_cfg = ExperimentConfig.model_validate(raw_cfg)
+
+    # Apply CLI overrides if specified
+    if tasks is not None:
+        train_n = max(1, int(tasks * 0.6))
+        test_n = max(1, tasks - train_n)
+        exp_cfg.tasks.train = train_n
+        exp_cfg.tasks.test = test_n
+        exp_cfg.max_tasks_per_cycle = min(tasks, exp_cfg.max_tasks_per_cycle or tasks)
+
+    if archetypes:
+        parsed_groups = [g.strip().upper() for g in archetypes.split(",") if g.strip()]
+        exp_cfg.groups = parsed_groups  # type: ignore
+
+    if cycles is not None:
+        exp_cfg.cycles = cycles
+
+    if seeds:
+        parsed_seeds = [int(s.strip()) for s in seeds.split(",") if s.strip()]
+        exp_cfg.seeds = parsed_seeds
 
     console.print(f"[green]Loaded config:[/green] {exp_cfg.name} (groups: {exp_cfg.groups}, cycles: {exp_cfg.cycles}, seeds: {exp_cfg.seeds})")
 

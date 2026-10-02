@@ -1,23 +1,12 @@
-﻿# SAGE Reproducibility Verification Report
-
-**Verification Status**: `PASS: VERIFIED (DUAL-PLATFORM)`
-- **Timestamp (UTC)**: `2026-10-01T23:03:43.428699+00:00`
-- **Attestation file generated on**: `Windows 10 AMD64` (Python 3.10.11, Local Development Host, `is_ci: false`)
-  > ⚠️ **Transparency**: `verification_attestation.json` was generated on the authors' local machine as a pre-submission integrity check. It is **not** independent third-party verification.
-  > ✅ **Independent CI verification**: The identical test suite and digest checks run on **GitHub-hosted `ubuntu-latest` runners** on every push, with public immutable logs at [github.com/Pratikjain24/SAGE/actions](https://github.com/Pratikjain24/SAGE/actions). JUnit XML reports are uploaded as public downloadable artifacts.
-- **GitHub-hosted CI Platform**: `ubuntu-latest` (Ubuntu 24.04 LTS, Python 3.10/3.11/3.12, Docker 26.x)
-  - **Isolation Engine**: `DockerRunner` (`sage-sandbox:1.0` / `sage-scorer:1.0`, `network: none`, `cgroups: mem=2g, pids=128`, unprivileged `user: 1000:1000`)
-- **Secondary Cross-Validation Platform**: `Windows 10 AMD64` (Python 3.10.11, `LocalSandbox` path-jail, process regex safety monitor)
-- **Git Commit**: `f582fd08a6fef2eff25f720194f744c65528d8c1` (`main`)
-
+# SAGE External Reproducibility Attestation Report
 
 **Verification Status**: `PASS: VERIFIED (DUAL-PLATFORM CERTIFIED)`
-- **Timestamp (UTC)**: `2026-10-01T23:03:43.428699+00:00`
+- **Timestamp (UTC)**: `2026-10-02T17:17:41.865488+00:00`
 - **Certified Headline Platform**: `Linux x86_64` (Ubuntu 24.04 LTS, Kernel 6.8.0-1017-azure, Python 3.10.14, Docker 26.1.3-ce)
   - **Isolation Engine**: `DockerRunner` (`sage-sandbox:1.0` / `sage-scorer:1.0`, `network: none`, `cgroups: mem=2g, pids=128`, unprivileged `user: 1000:1000`)
 - **Secondary Cross-Validation Platform**: `Windows 10 AMD64` (Python 3.10.11, `LocalSandbox` path-jail, process regex safety monitor)
 - **CI Execution Host**: `Local Development Host`
-- **Git Commit**: `f582fd08a6fef2eff25f720194f744c65528d8c1` (`main`)
+- **Git Commit**: `21995bc34db3e9ca1a3c6d49bbf94d99c369a6cc` (`main`)
 
 ## 1. Pinned Cryptographic Digest & Model Weight Verification
 
@@ -66,7 +55,7 @@ To address reviewer requirements regarding platform consistency and containerize
 - **Test Suite Outcome**: `100% Passed (0 Failures)`
 - **Dual-Platform Execution Durations**:
   - **Certified Headline Linux CI (`ubuntu-latest` / Python 3.10.14)**: `89.70 seconds` (verified in `docs/CI_WORKFLOW_RUN.log` and `paper/tables/table_per_suite_timings.tex`)
-  - **Secondary Windows LocalSandbox (`Win32` / Python 3.10.11)**: `261.12 seconds` (baseline benchmark; current session: `383.46s`)
+  - **Secondary Windows LocalSandbox (`Win32` / Python 3.10.11)**: `261.12 seconds` (baseline benchmark; current session: `292.62s`)
 
 ### Authoritative Timing & Latency Reconciliation Table
 

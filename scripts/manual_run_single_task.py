@@ -41,11 +41,13 @@ console = Console()
 
 
 def run_single_task_manual(
-    task_id: str = "math_001",
+    task_id: str = "task_001",
     run_dir_name: str = "manual_run_01",
+    use_real_llm: bool = False,
 ) -> Path:
     """Execute a single task manual end-to-end run proving the evaluation loop."""
-    console.print(Panel.fit("[bold cyan]SAGE: Week 2 Single-Task Manual Run (Proving the Loop)[/bold cyan]"))
+    mode_str = "Live In-Process GGUF Model" if use_real_llm else "Mock LLM Client"
+    console.print(Panel.fit(f"[bold cyan]SAGE: Single-Task End-to-End Run ({mode_str})[/bold cyan]"))
 
     run_dir = Path("experiments/manual_runs") / run_dir_name
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -72,9 +74,13 @@ def run_single_task_manual(
     console.print(f"[bold green]2. Isolated Sandbox Initialized:[/bold green] {task_ws}")
 
     # 3. Instantiate G1 Static Agent Adapter with LLM Client
-    llm = MockLLMClient("qwen2.5-coder-7b-instruct")
+    if use_real_llm:
+        from sage.llm.client import LocalLlamaClient
+        llm = LocalLlamaClient(n_threads=8)
+    else:
+        llm = MockLLMClient("qwen2.5-coder-7b-instruct")
     agent = StaticAgentAdapter(llm_client=llm)
-    console.print(f"[bold green]3. Agent Adapter Initialized:[/bold green] Group={agent.group}, Version={agent.version}")
+    console.print(f"[bold green]3. Agent Adapter Initialized:[/bold green] Group={agent.group}, Version={agent.version}, LLM={llm.model_name}")
 
     # 4. Open TrajectoryWriter (append-only with fsync)
     writer = TrajectoryWriter(traj_file)
@@ -231,4 +237,15 @@ def run_single_task_manual(
 
 
 if __name__ == "__main__":
-    run_single_task_manual()
+    import argparse
+    parser = argparse.ArgumentParser(description="Run a single SAGE task manual evaluation.")
+    parser.add_argument("--task-id", type=str, default="task_001", help="Task ID to execute")
+    parser.add_argument("--run-dir", type=str, default="manual_run_01", help="Run directory name")
+    parser.add_argument("--real-llm", action="store_true", help="Use local in-process GGUF LLM")
+    args = parser.parse_args()
+
+    run_single_task_manual(
+        task_id=args.task_id,
+        run_dir_name=args.run_dir,
+        use_real_llm=args.real_llm,
+    )

@@ -2,8 +2,8 @@
   "manifest_version": "1.0.0",
   "schema_version": "1.0.0",
   "run_id": "pilot_study_canonical",
-  "raw_sha256": "cd83c761569428cd74b2fd16c4a483dc885560ca09a074582a18998f0d7d0ff1",
-  "deterministic_sha256": "696c32a7262f544192b4db67a2bfb2c98174f096aa5c2e551e1fd476166cdd50",
+  "raw_sha256": "b31780b899dfe5d51178fc4c4ad77a34df176316068af4618229451b126bb92f",
+  "deterministic_sha256": "1dba311f404fcf0566f0a2c0e74a5b1129e6049916af218e0ddebd7279540feb",
   "total_events": 1858,
   "event_distribution": {
     "task_start": 276,
@@ -29,5 +29,5 @@
     "sage-backend:1.0": "sha256:ce8558ff25e10dd6ab2d05a47479de992e6c1bef21e9e14f6781b1e1547b252e",
     "sage-frontend:1.0": "sha256:c419ea714fb6dc2d1145db219b31011f5df1d00504033665aabc072b3e6fc333"
   },
-  "generated_at": "2026-10-02T15:31:48.022371+00:00"
+  "generated_at": "2026-10-02T16:26:05.802896+00:00"
 }
