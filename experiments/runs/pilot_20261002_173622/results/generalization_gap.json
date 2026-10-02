@@ -1,0 +1,22 @@
+{
+  "G1": {
+    "group": "G1",
+    "delta_p_evolve": 0.0,
+    "delta_p_eval": 0.0833,
+    "generalization_gap": -0.0833,
+    "memorization_ratio": 0.0,
+    "verdict": "Robust Inductive Generalization (Symmetric Transfer)",
+    "n_evolve": 6,
+    "n_eval": 4
+  },
+  "G4": {
+    "group": "G4",
+    "delta_p_evolve": 0.0,
+    "delta_p_eval": 0.0833,
+    "generalization_gap": -0.0833,
+    "memorization_ratio": 0.0,
+    "verdict": "Robust Inductive Generalization (Symmetric Transfer)",
+    "n_evolve": 6,
+    "n_eval": 4
+  }
+}
