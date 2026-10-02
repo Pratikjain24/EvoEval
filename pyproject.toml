@@ -1,4 +1,4 @@
-[build-system]
+﻿[build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
@@ -45,7 +45,7 @@ dependencies = [
 Homepage = "https://github.com/Pratikjain24/EvoEval"
 Repository = "https://github.com/Pratikjain24/EvoEval"
 Documentation = "https://github.com/Pratikjain24/EvoEval#readme"
-"HuggingFace Dataset" = "https://huggingface.co/datasets/evoeval/evoeval-benchmark"
+"HuggingFace Dataset" = "https://github.com/Pratikjain24/EvoEval"
 "Issue Tracker" = "https://github.com/Pratikjain24/EvoEval/issues"
 
 [project.optional-dependencies]

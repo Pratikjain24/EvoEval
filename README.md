@@ -1,10 +1,10 @@
-﻿# EvoEval: Autonomous Agent Evolution & Security Boundary Drift Benchmark
+# EvoEval: Autonomous Agent Evolution & Security Boundary Drift Benchmark
 
 [![CI](https://github.com/Pratikjain24/EvoEval/actions/workflows/ci.yml/badge.svg)](https://github.com/Pratikjain24/EvoEval/actions)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Datasets-yellow)](https://huggingface.co/datasets/evoeval/evoeval-benchmark)
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.10826042-blue.svg)](https://doi.org/10.5281/zenodo.10826042)
+[![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Dataset%20on%20Acceptance-lightgrey)](https://github.com/Pratikjain24/EvoEval)
+[![Zenodo](https://img.shields.io/badge/Zenodo-Archive%20on%20Acceptance-lightgrey)](https://github.com/Pratikjain24/EvoEval)
 [![Stars](https://img.shields.io/github/stars/Pratikjain24/EvoEval?style=social)](https://github.com/Pratikjain24/EvoEval/stargazers)
 [![Last Commit](https://img.shields.io/github/last-commit/Pratikjain24/EvoEval)](https://github.com/Pratikjain24/EvoEval/commits/main)
 [![Issues](https://img.shields.io/github/issues/Pratikjain24/EvoEval)](https://github.com/Pratikjain24/EvoEval/issues)
@@ -173,11 +173,20 @@ docker compose -f docker/docker-compose.yml up -d
 3. **`backend`**: FastAPI analytics service with DuckDB query engine on port `8000`.
 4. **`frontend`**: Next.js 14 interactive evaluation dashboard on port `3000`.
 
-### 6. HuggingFace Dataset Release (The Paper's Artifact)
-The benchmark datasets, canonical multi-seed trajectories, and human audit annotations are officially available on Hugging Face Hub at:
-👉 **[huggingface.co/datasets/evoeval/evoeval-benchmark](https://huggingface.co/datasets/evoeval/evoeval-benchmark)**
+### 6. Dataset Release (Pending Acceptance)
 
-You can also package any custom local evaluation run for HuggingFace Hub release via:
+> ⚠️ **The HuggingFace dataset and Zenodo archive do not yet exist.** They will be published upon paper acceptance per standard academic practice.
+
+The benchmark datasets, canonical multi-seed trajectories, and human audit annotations are prepared for release and will be published on Hugging Face Hub upon acceptance. The data is already in the repository:
+
+| Artifact | Location in repo | Format |
+|---|---|---|
+| 100 benchmark tasks | [`tasks/tasks_index.json`](tasks/tasks_index.json) | JSON (60 KB) |
+| Task contamination audit | [`tasks/contamination_audit_results.json`](tasks/contamination_audit_results.json) | JSON |
+| Full study trajectories | [`experiments/runs/full_study_canonical/`](experiments/runs/) | JSONL |
+| Human audit annotations | [`experiments/runs/full_study_canonical/tables/table4_human_audit.tex`](experiments/runs/) | LaTeX/CSV |
+
+You can package any local evaluation run for HuggingFace Hub release via:
 ```bash
 evoeval export-hf --run-id latest --output hf_dataset/
 ```

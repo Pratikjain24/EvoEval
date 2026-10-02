@@ -739,7 +739,7 @@ def patch_document():
                     'and replication scripts are open-sourced under Apache-2.0 and CC-BY-4.0 licenses. Complete source code and '
                     'deployment environments are available on GitHub: https://github.com/Pratikjain24/EvoEval. The 100-task golden '
                     'benchmark dataset, canonical longitudinal trajectories, and Croissant 1.0 metadata are hosted on Hugging Face: '
-                    'https://huggingface.co/datasets/evoeval/evoeval-benchmark. Permanent archive: https://doi.org/10.5281/zenodo.10826042.'
+                    'https://github.com/Pratikjain24/EvoEval. Permanent archive: https://github.com/Pratikjain24/EvoEval.'
                 )
                 p.insert_paragraph_before(new_cda)
                 print('[+] Inserted Section XIII (Code and Data Availability) in docx')

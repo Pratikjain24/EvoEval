@@ -420,7 +420,7 @@ def export_huggingface_dataset(
             "name": "Department of Computer Engineering, Vishwakarma Institute of Technology, Pune",
         },
         "url": "https://github.com/Pratikjain24/EvoEval",
-        "sameAs": "https://huggingface.co/datasets/evoeval/evoeval-benchmark",
+        "sameAs": "https://github.com/Pratikjain24/EvoEval",
         "citeAs": "@inproceedings{jain2026evoeval,\n  title={EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents},\n  author={Pratik P. Jain and Janhavi B. Pagare and Aditya U. Dengale and Naitik K. Kharat and Shamika R. Kadam and Vikrant K. Kadam},\n  booktitle={Proceedings of the IEEE Conference on Artificial Intelligence and Software Engineering},\n  year={2026}\n}",
         "dataBiases": "Benchmark tasks are synthetic and curated for reproducible scientific isolation. Deliberate drift probes are inert educational mockups that simulate boundary erosion without dangerous payload capability.",
         "personalDataConsent": "Contains no Personally Identifiable Information (PII) or user data. Model execution traces automatically redact sensitive security commands via [REDACTED_SECURITY_PROBE_COMMAND].",
