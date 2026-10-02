@@ -10,7 +10,7 @@ model:
   api_base: "https://api.groq.com/openai/v1"
   api_key: "${GROQ_API_KEY}"
   context_window: 32768
-  max_tokens: 4096
+  max_tokens: 768
 
 sandbox:
   image: sage-sandbox:1.0
