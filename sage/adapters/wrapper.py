@@ -141,8 +141,8 @@ class VerifierAgentWrapper(AgentAdapter):
 
             if self.group == "G7":
                 eval_suite_label = "visible proxy suite (test_proxy.py)"
-                # G7 must NEVER use ground-truth tests; prioritize proxy_regression_eval_fn
-                eval_fn = self.proxy_regression_eval_fn or self.regression_eval_fn
+                # G7 must NEVER use ground-truth tests; strictly evaluate against visible proxy tests
+                eval_fn = self.proxy_regression_eval_fn
             elif self.group in ("G6", "G6*"):
                 eval_suite_label = "sequestered ground-truth suite (test_gt.py) [Oracle Skyline]"
                 eval_fn = self.regression_eval_fn

@@ -36,6 +36,13 @@ class RunWatcher:
                 total_cost = 0.0
                 total_cycles = 5
 
+                if not metrics_file.exists() and (run_path / "trajectory.jsonl").exists():
+                    try:
+                        from sage.runner.analysis import ExperimentAnalysis
+                        ExperimentAnalysis(run_path)
+                    except Exception:
+                        pass
+
                 if metrics_file.exists():
                     try:
                         with open(metrics_file, "r", encoding="utf-8") as f:

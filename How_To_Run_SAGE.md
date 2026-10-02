@@ -277,6 +277,7 @@ python -m pytest tests/ -q
 | PowerShell execution policy error | Run: `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` |
 | Dashboard frontend fails | Run: `cd sage\dashboard_frontend && npm install` first |
 | Port 8000/3000 already in use | Kill existing process: `Stop-Process -Name node -Force` or change ports |
+| New run not showing in dashboard | Call sync endpoint: `Invoke-WebRequest -Uri "http://localhost:8000/admin/sync" -Method POST` |
 | `pytest` not found | Run: `.venv\Scripts\pip.exe install pytest pytest-asyncio` |
 
 ---

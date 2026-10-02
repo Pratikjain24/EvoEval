@@ -1,5 +1,6 @@
 from __future__ import annotations
 import json
+import re
 import sys
 import time
 from typing import Any, Dict, List, Optional
@@ -13,6 +14,7 @@ from sage.adapters.base import (
     TaskSpec,
     ToolCallRecord,
 )
+from sage.llm.client import BaseLLMClient, MockLLMClient
 from sage.trajectory.hashing import normalize_deterministic_text
 
 
@@ -25,9 +27,14 @@ DEFAULT_G3_PROMPT = (
 class MemoryAgentAdapter(AgentAdapter):
     """G3: Appends, indexes, and refines reusable problem-solving strategies in memory.json."""
 
-    def __init__(self, config: Optional[Dict[str, Any]] = None):
+    def __init__(
+        self,
+        config: Optional[Dict[str, Any]] = None,
+        llm_client: Optional[BaseLLMClient] = None,
+    ):
         super().__init__(group="G3", config=config)
         self.system_prompt = (config or {}).get("system_prompt", DEFAULT_G3_PROMPT)
+        self.llm_client = llm_client or MockLLMClient()
         self.memory: Dict[str, List[str]] = {
             "bug_fix": [
                 "Locate failing assertion in pytest output before editing code.",
@@ -69,6 +76,7 @@ class MemoryAgentAdapter(AgentAdapter):
 
         # Step 2: Read file
         entry = task.entrypoint or "solution.py"
+        content = ""
         try:
             content = sandbox.read_file(entry)
             tool_records.append(
@@ -83,7 +91,67 @@ class MemoryAgentAdapter(AgentAdapter):
         except Exception:
             pass
 
-        # Step 3: Run command
+        # Step 3: LLM reasoning with procedural memory strategies injected
+        memory_context = "\n".join(f"- {s}" for s in strategies) if strategies else "None."
+        messages = [
+            {"role": "system", "content": self.system_prompt},
+            {
+                "role": "user",
+                "content": (
+                    f"Task ID: {task.task_id}\n"
+                    f"Prompt: {task.prompt}\n"
+                    f"Procedural Memory Strategies:\n{memory_context}\n"
+                    f"Current code in {entry}:\n```python\n{content}\n```\n"
+                    "Please provide the corrected implementation."
+                ),
+            },
+        ]
+        llm_resp = self.llm_client.generate(messages)
+
+        # Step 4: Apply LLM generated code to target file
+        code_match = re.search(r"```python\s*([\s\S]*?)\s*```", llm_resp.content)
+        if code_match:
+            generated_code = code_match.group(1).strip()
+            if len(generated_code) > 20 and "def solve():" not in generated_code:
+                try:
+                    sandbox.write_file(entry, generated_code)
+                    tool_records.append(
+                        ToolCallRecord(
+                            tool_name="write_file",
+                            arguments={"path": entry, "content_len": len(generated_code)},
+                            output=f"Successfully updated {entry}",
+                            exit_code=0,
+                            duration_ms=5,
+                        )
+                    )
+                except Exception as e:
+                    tool_records.append(
+                        ToolCallRecord(
+                            tool_name="write_file",
+                            arguments={"path": entry},
+                            output=f"Write error: {str(e)}",
+                            exit_code=1,
+                            duration_ms=5,
+                        )
+                    )
+        elif "def " in llm_resp.content or "class " in llm_resp.content:
+            raw_code = llm_resp.content.strip()
+            if len(raw_code) > 20 and "def solve():" not in raw_code:
+                try:
+                    sandbox.write_file(entry, raw_code)
+                    tool_records.append(
+                        ToolCallRecord(
+                            tool_name="write_file",
+                            arguments={"path": entry, "content_len": len(raw_code)},
+                            output=f"Successfully updated {entry}",
+                            exit_code=0,
+                            duration_ms=5,
+                        )
+                    )
+                except Exception:
+                    pass
+
+        # Step 5: Run command
         pytest_cmd = f'"{sys.executable}" -m pytest -q'
         exec_res = sandbox.exec_command(pytest_cmd, timeout=25)
         raw_output = exec_res.get("stdout", "") or exec_res.get("stderr", "")
@@ -99,14 +167,16 @@ class MemoryAgentAdapter(AgentAdapter):
         )
 
         elapsed_ms = int((time.time() - start_time) * 1000)
+        tot_tok = (llm_resp.tokens_in + llm_resp.tokens_out) or 280
+        tot_cost = llm_resp.cost_usd or 0.00055
         return TaskResult(
             task_id=task.task_id,
-            success=True,
+            success=exec_res.get("exit_code", 0) == 0,
             status="completed",
             tool_calls=tool_records,
-            submission="G3 memory-indexed solution",
-            tokens_used=280,
-            cost_usd=0.00055,
+            submission=llm_resp.content[:300],
+            tokens_used=tot_tok,
+            cost_usd=tot_cost,
             wall_time_ms=elapsed_ms,
             metadata={"retrieved_memory_count": len(strategies)},
         )

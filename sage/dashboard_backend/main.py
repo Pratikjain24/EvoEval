@@ -73,3 +73,15 @@ app.include_router(leaderboard_router)
 def health_check():
     """Liveness probe for container orchestrator."""
     return {"status": "ok", "service": "sage-dashboard-backend", "version": "1.0.0"}
+
+
+@app.post("/admin/sync")
+def sync_runs():
+    """Re-scan experiments/runs/ and update the database without restarting the server.
+
+    Call this after every `sage run` to make new results visible on the dashboard.
+    Example: curl -X POST http://localhost:8000/admin/sync
+    """
+    watcher = RunWatcher()
+    count = watcher.sync_all_runs()
+    return {"status": "ok", "runs_synced": count, "message": f"Database refreshed: {count} run(s) synced."}

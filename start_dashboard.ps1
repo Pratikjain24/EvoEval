@@ -18,3 +18,6 @@ Write-Host "Opening browser at http://localhost:3000..." -ForegroundColor Green
 Start-Process "http://localhost:3000"
 
 Write-Host "Done! Leave the two open terminal windows running during your demo." -ForegroundColor Cyan
+Write-Host ""
+Write-Host "TIP: After running 'sage run ...', refresh the dashboard DB with:" -ForegroundColor Yellow
+Write-Host "     Invoke-WebRequest -Uri 'http://localhost:8000/admin/sync' -Method POST" -ForegroundColor Yellow

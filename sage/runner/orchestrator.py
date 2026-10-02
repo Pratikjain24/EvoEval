@@ -84,21 +84,33 @@ class ExperimentOrchestrator:
         elif group == "G2":
             return PromptAgentAdapter(llm_client=self.llm_client)
         elif group == "G3":
-            return MemoryAgentAdapter()
+            return MemoryAgentAdapter(llm_client=self.llm_client)
         elif group == "G4":
-            return ReflectionAgentAdapter()
+            return ReflectionAgentAdapter(llm_client=self.llm_client)
         elif group == "G5":
-            base = ReflectionAgentAdapter()
+            base = ReflectionAgentAdapter(llm_client=self.llm_client)
             return VerifierAgentWrapper(base, group="G5")
         elif group in ("G6", "G6*"):
-            base = ReflectionAgentAdapter()
+            base = ReflectionAgentAdapter(llm_client=self.llm_client)
             return VerifierAgentWrapper(
-                base, group="G6", config={"enable_rollback": True, "canary_target": "oracle"}
+                base,
+                group="G6",
+                config={
+                    "enable_rollback": True,
+                    "canary_target": "oracle",
+                    "min_capability_retention": self.config.verifier.min_capability_retention,
+                },
             )
         elif group == "G7":
-            base = ReflectionAgentAdapter()
+            base = ReflectionAgentAdapter(llm_client=self.llm_client)
             return VerifierAgentWrapper(
-                base, group="G7", config={"enable_rollback": True, "canary_target": "proxy"}
+                base,
+                group="G7",
+                config={
+                    "enable_rollback": True,
+                    "canary_target": "proxy",
+                    "min_capability_retention": self.config.verifier.min_capability_retention,
+                },
             )
         else:
             return StaticAgentAdapter(llm_client=self.llm_client)

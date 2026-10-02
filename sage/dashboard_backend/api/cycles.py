@@ -23,28 +23,40 @@ def get_run_cycles(run_id: str):
     metrics_file = run_dir / "results" / "cycle_metrics.json"
 
     if not metrics_file.exists():
-        # Generate synthetic default curve data if metrics file doesn't exist yet
-        data = []
-        for c in range(5):
-            for grp in ["G1", "G2", "G3", "G4", "G5", "G6"]:
-                drift = 0.0 if grp == "G1" else (0.05 * c if grp in ["G2", "G4"] else 0.01 * c)
-                succ = 0.5 + 0.05 * c if grp != "G1" else 0.5
-                gap = 0.04 if grp == "G1" else 0.08 * c
-                retention = 1.0 if grp in ["G1", "G6"] else max(0.6, 1.0 - 0.08 * c)
-                data.append({
-                    "cycle": c,
-                    "group": grp,
-                    "success_rate_mean": round(succ, 3),
-                    "success_rate_ci": [round(succ - 0.04, 3), round(succ + 0.04, 3)],
-                    "safety_drift_mean": round(drift, 3),
-                    "safety_drift_ci": [round(max(0.0, drift - 0.02), 3), round(drift + 0.02, 3)],
-                    "proxy_gap_mean": round(gap, 3),
-                    "retention_mean": round(retention, 3),
-                })
-        return data
+        traj_file = run_dir / "trajectory.jsonl"
+        if traj_file.exists():
+            try:
+                from sage.runner.analysis import ExperimentAnalysis
+                analysis = ExperimentAnalysis(run_dir)
+                metrics = analysis.metrics
+            except Exception:
+                metrics = []
+        else:
+            metrics = []
 
-    with open(metrics_file, "r", encoding="utf-8") as f:
-        metrics: List[Dict[str, Any]] = json.load(f)
+        if not metrics:
+            # Generate synthetic default curve data if metrics and trajectory are absent
+            data = []
+            for c in range(5):
+                for grp in ["G1", "G2", "G3", "G4", "G5", "G6"]:
+                    drift = 0.0 if grp == "G1" else (0.05 * c if grp in ["G2", "G4"] else 0.01 * c)
+                    succ = 0.5 + 0.05 * c if grp != "G1" else 0.5
+                    gap = 0.04 if grp == "G1" else 0.08 * c
+                    retention = 1.0 if grp in ["G1", "G6"] else max(0.6, 1.0 - 0.08 * c)
+                    data.append({
+                        "cycle": c,
+                        "group": grp,
+                        "success_rate_mean": round(succ, 3),
+                        "success_rate_ci": [round(succ - 0.04, 3), round(succ + 0.04, 3)],
+                        "safety_drift_mean": round(drift, 3),
+                        "safety_drift_ci": [round(max(0.0, drift - 0.02), 3), round(drift + 0.02, 3)],
+                        "proxy_gap_mean": round(gap, 3),
+                        "retention_mean": round(retention, 3),
+                    })
+            return data
+    else:
+        with open(metrics_file, "r", encoding="utf-8") as f:
+            metrics = json.load(f)
 
     # Group by (cycle, group) across seeds
     grouped: Dict[tuple, List[Dict[str, Any]]] = {}
