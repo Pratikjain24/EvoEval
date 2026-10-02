@@ -1,4 +1,4 @@
-# EvoEval: Comprehensive System Architecture, Implementation Blueprint & Empirical Quality Dossier
+﻿# EvoEval: Comprehensive System Architecture, Implementation Blueprint & Empirical Quality Dossier
 
 > **Document Version**: `1.0.0-production`  
 > **Release Tag**: [`v1.0.0`](file:///c:/Users/kruti/EvoEval)  
@@ -1000,8 +1000,8 @@ To enable peer reviewers to audit test execution latency and profile performance
 ### 1. Environment Setup
 ```bash
 # Clone and enter repository
-git clone https://github.com/evoeval/evoeval.git
-cd evoeval
+git clone https://github.com/Pratikjain24/EvoEval.git
+cd EvoEval
 
 # Create virtual environment and install dependencies
 uv venv .venv
@@ -1368,7 +1368,7 @@ Framed explicitly under NeurIPS 2027 Datasets and Benchmarks Track guidelines:
 ### P6. Author Affiliations, Code Availability & Artifact Repositories
 EvoEval is published with verified academic metadata and open-source artifact distribution:
 - **Authors & Affiliation**: Pratik P. Jain, Janhavi B. Pagare, Aditya U. Dengale, Naitik K. Kharat, Shamika R. Kadam, and Vikrant K. Kadam. Department of Computer Engineering, Vishwakarma Institute of Technology, Pune, India. Contact: `{pratik.12620589, janhavi.1252010010, aditya.1252010025, naitik.12620301, shamika.12620290, vikrant.1252010030}@vit.edu`.
-- **Public GitHub Repository**: Full source code, CLI, test suites, Dockerfiles, and dashboard platform are available at [`https://github.com/evoeval/evoeval`](https://github.com/evoeval/evoeval) under the Apache-2.0 license.
+- **Public GitHub Repository**: Full source code, CLI, test suites, Dockerfiles, and dashboard platform are available at [`https://github.com/Pratikjain24/EvoEval`](https://github.com/Pratikjain24/EvoEval) under the Apache-2.0 license.
 - **HuggingFace Dataset Hub**: The 100-task golden benchmark dataset, canonical 18,000 multi-cycle execution event streams, and double-blind human audit annotations are hosted at [`https://huggingface.co/datasets/evoeval/evoeval-benchmark`](https://huggingface.co/datasets/evoeval/evoeval-benchmark) under CC-BY-4.0.
 - **Permanent Zenodo Archive**: Long-term preservation DOI for research artifacts and replication manifests: [`https://doi.org/10.5281/zenodo.10826042`](https://doi.org/10.5281/zenodo.10826042).
 - **Croissant 1.0 Metadata**: Built-in `croissant.json` metadata conforming to the MLCommons Croissant 1.0 specification for standardized machine-readable dataset ingestion.

@@ -1,4 +1,4 @@
-# EvoEval: Autonomous Agent Evolution & Security Boundary Drift Benchmark
+﻿# EvoEval: Autonomous Agent Evolution & Security Boundary Drift Benchmark
 
 [![CI](https://github.com/Pratikjain24/EvoEval/actions/workflows/ci.yml/badge.svg)](https://github.com/Pratikjain24/EvoEval/actions)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
@@ -194,8 +194,8 @@ evoeval export-hf --run-id latest --output hf_dataset/
 
 ```bash
 # Clone repository
-git clone https://github.com/evoeval/evoeval.git
-cd evoeval
+git clone https://github.com/Pratikjain24/EvoEval.git
+cd EvoEval
 
 # Create virtual environment with uv or python
 uv venv .venv

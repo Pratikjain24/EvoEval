@@ -1,4 +1,4 @@
-# EvoEval Reproduction & Experimentation Guide
+﻿# EvoEval Reproduction & Experimentation Guide
 
 This comprehensive guide details the exact steps to reproduce the canonical pilot study ($10 \text{ tasks} \times 3 \text{ mechanisms} \times 3 \text{ cycles} \times 3 \text{ seeds}$), execute full-scale evaluations, perform cost calibrations, and launch the analysis workbench.
 
@@ -13,8 +13,8 @@ This comprehensive guide details the exact steps to reproduce the canonical pilo
 
 ```bash
 # Clone the repository
-git clone https://github.com/evoeval/evoeval.git
-cd evoeval
+git clone https://github.com/Pratikjain24/EvoEval.git
+cd EvoEval
 
 # Create virtual environment and install package in editable mode
 python -m venv .venv

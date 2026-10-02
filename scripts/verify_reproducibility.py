@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """External Verification & Reproducibility Attestation Script.
 
 Executes on Linux CI (and local environments) to rigorously verify:
@@ -527,8 +527,8 @@ def main() -> int:
         "```bash",
         "# 1. Clone repository (or download from anonymous repository during double-blind review):",
         "#    Anonymous Review Repo: https://anonymous.4open.science/r/EvoEval-NeurIPS2027/",
-        "#    Camera-Ready Repo:     git clone https://github.com/evoeval/evoeval.git && cd evoeval",
-        "git clone https://github.com/evoeval/evoeval.git && cd evoeval",
+        "#    Camera-Ready Repo:     git clone https://github.com/Pratikjain24/EvoEval.git && cd EvoEval",
+        "git clone https://github.com/Pratikjain24/EvoEval.git && cd EvoEval",
         "python -m venv .venv && source .venv/bin/activate",
         "pip install -e '.[dev]'",
         "",

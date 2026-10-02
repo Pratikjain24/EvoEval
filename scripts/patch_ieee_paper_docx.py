@@ -1,4 +1,4 @@
-"""Script to update and patch EvoEval_IEEE_Research_Paper.docx with all author corrections,
+﻿"""Script to update and patch EvoEval_IEEE_Research_Paper.docx with all author corrections,
 concurrent citations, aligned Tables VII & VIII, 187-test suite reconciliation, and reproducibility guarantees.
 """
 import sys
@@ -737,7 +737,7 @@ def patch_document():
                 new_cda = (
                     'All benchmark tasks, dual-container evaluation harnesses, trajectory datasets, human audit annotations, '
                     'and replication scripts are open-sourced under Apache-2.0 and CC-BY-4.0 licenses. Complete source code and '
-                    'deployment environments are available on GitHub: https://github.com/evoeval/evoeval. The 100-task golden '
+                    'deployment environments are available on GitHub: https://github.com/Pratikjain24/EvoEval. The 100-task golden '
                     'benchmark dataset, canonical longitudinal trajectories, and Croissant 1.0 metadata are hosted on Hugging Face: '
                     'https://huggingface.co/datasets/evoeval/evoeval-benchmark. Permanent archive: https://doi.org/10.5281/zenodo.10826042.'
                 )

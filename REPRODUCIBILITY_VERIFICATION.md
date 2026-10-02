@@ -1,4 +1,4 @@
-# EvoEval Reproducibility Verification Report
+﻿# EvoEval Reproducibility Verification Report
 
 **Verification Status**: `PASS: VERIFIED (DUAL-PLATFORM)`
 - **Timestamp (UTC)**: `2026-10-01T23:03:43.428699+00:00`
@@ -111,8 +111,8 @@ External peer reviewers are invited to inspect the full automated execution log 
 ```bash
 # 1. Clone repository (or download from anonymous repository during double-blind review):
 #    Anonymous Review Repo: https://anonymous.4open.science/r/EvoEval-NeurIPS2027/
-#    Camera-Ready Repo:     git clone https://github.com/evoeval/evoeval.git && cd evoeval
-git clone https://github.com/evoeval/evoeval.git && cd evoeval
+#    Camera-Ready Repo:     git clone https://github.com/Pratikjain24/EvoEval.git && cd EvoEval
+git clone https://github.com/Pratikjain24/EvoEval.git && cd EvoEval
 python -m venv .venv && source .venv/bin/activate
 pip install -e '.[dev]'
 

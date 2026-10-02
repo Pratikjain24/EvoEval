@@ -25,7 +25,7 @@
 
 \begin{document}
 
-\title{EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents\thanks{Code repository: \url{https://github.com/evoeval/evoeval}. HuggingFace benchmark dataset and trajectories: \url{https://huggingface.co/datasets/evoeval/evoeval-benchmark}. Permanent archive: \url{https://doi.org/10.5281/zenodo.10826042}.}}
+\title{EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents\thanks{Code repository: \url{https://github.com/Pratikjain24/EvoEval}. Benchmark dataset, canonical trajectories, and human audit annotations will be released on Hugging Face and archived on Zenodo upon paper acceptance.}}
 
 \author{
     \IEEEauthorblockN{
@@ -433,7 +433,7 @@ Crucially, we document a key architectural confound in the canonical evaluation 
 EvoEval exposes a fundamental vulnerability: unconstrained self-evolving agents inevitably trade ground-truth correctness for superficial metric satisfaction. By demonstrating that cryptographically isolated regression canary guards establish rollback-guarded state preservation---achieving 92.0\% capability with near-zero drift---EvoEval provides both the empirical benchmark standard and the architectural framework for safe lifelong autonomy. Future work will extend the golden dataset to polyglot repositories (Rust, Go, TypeScript), lengthen standard horizons to $T=25$, and scale backbones to 70B+ parameters.
 
 \section*{Code and Data Availability}
-All benchmark tasks, dual-container evaluation harnesses, trajectory datasets, human audit annotations, and replication scripts are open-sourced under Apache-2.0 and CC-BY-4.0 licenses. Source code and deployment environments are available on GitHub at \url{https://github.com/evoeval/evoeval}. The 100-task golden benchmark dataset, canonical longitudinal trajectories, and Croissant 1.0 metadata are hosted on Hugging Face at \url{https://huggingface.co/datasets/evoeval/evoeval-benchmark}. Complete replication archives are preserved via Zenodo at \url{https://doi.org/10.5281/zenodo.10826042}.
+All benchmark tasks, dual-container evaluation harnesses, trajectory datasets, human audit annotations, and replication scripts are open-sourced under Apache-2.0 and CC-BY-4.0 licenses. Source code and deployment environments are available on GitHub at \url{https://github.com/Pratikjain24/EvoEval}. The 100-task golden benchmark dataset, canonical longitudinal trajectories, and Croissant 1.0 metadata will be released on Hugging Face Hub, and a permanent replication archive will be deposited on Zenodo, upon paper acceptance.
 
 \section*{Acknowledgment}
 The authors thank the student peer evaluators and faculty mentors in the Department of Computer Engineering at Vishwakarma Institute of Technology, Pune, whose dedicated review, annotation hours, and rigorous feedback made the golden dataset curation and double-blind human audit possible.

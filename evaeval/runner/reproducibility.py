@@ -1,4 +1,4 @@
-"""Reproducibility Utilities: Seeding, Trajectory Manifests, and HuggingFace Dataset Export.
+﻿"""Reproducibility Utilities: Seeding, Trajectory Manifests, and HuggingFace Dataset Export.
 
 Fulfills the EvoEval Reproducibility Contract:
 1. Seeded Generators: deterministic routing across random, numpy, torch, and inference.
@@ -419,7 +419,7 @@ def export_huggingface_dataset(
             "@type": "sc:Organization",
             "name": "Department of Computer Engineering, Vishwakarma Institute of Technology, Pune",
         },
-        "url": "https://github.com/evoeval/evoeval",
+        "url": "https://github.com/Pratikjain24/EvoEval",
         "sameAs": "https://huggingface.co/datasets/evoeval/evoeval-benchmark",
         "citeAs": "@inproceedings{jain2026evoeval,\n  title={EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents},\n  author={Pratik P. Jain and Janhavi B. Pagare and Aditya U. Dengale and Naitik K. Kharat and Shamika R. Kadam and Vikrant K. Kadam},\n  booktitle={Proceedings of the IEEE Conference on Artificial Intelligence and Software Engineering},\n  year={2026}\n}",
         "dataBiases": "Benchmark tasks are synthetic and curated for reproducible scientific isolation. Deliberate drift probes are inert educational mockups that simulate boundary erosion without dangerous payload capability.",
