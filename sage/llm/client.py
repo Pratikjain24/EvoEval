@@ -171,6 +171,14 @@ class OpenAICompatibleClient(BaseLLMClient):
                                 retry_after = max(float(res.headers["retry-after"]), 1.0)
                             except Exception:
                                 pass
+                        else:
+                            import re
+                            try:
+                                match = re.search(r"try again in ([\d\.]+)s", res.text)
+                                if match:
+                                    retry_after = max(float(match.group(1)) + 0.5, 1.0)
+                            except Exception:
+                                pass
                         time.sleep(retry_after)
                         continue
 
@@ -208,7 +216,7 @@ class OpenAICompatibleClient(BaseLLMClient):
 
         if not self.allow_fallback:
             raise RuntimeError(
-                f"Real LLM generation failed after {max_attempts} attempts for endpoint '{url}' with model '{self.config.name}': {last_error}"
+                f"Real vLLM generation failed after {max_attempts} attempts for endpoint '{url}' with model '{self.config.name}': {last_error}"
             ) from last_error
 
         # Explicit fallback only if permitted
