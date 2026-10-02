@@ -1,4 +1,15 @@
-# EvoEval External Reproducibility Attestation Report
+# EvoEval Reproducibility Verification Report
+
+**Verification Status**: `PASS: VERIFIED (DUAL-PLATFORM)`
+- **Timestamp (UTC)**: `2026-10-01T23:03:43.428699+00:00`
+- **Attestation file generated on**: `Windows 10 AMD64` (Python 3.10.11, Local Development Host, `is_ci: false`)
+  > ⚠️ **Transparency**: `verification_attestation.json` was generated on the authors' local machine as a pre-submission integrity check. It is **not** independent third-party verification.
+  > ✅ **Independent CI verification**: The identical test suite and digest checks run on **GitHub-hosted `ubuntu-latest` runners** on every push, with public immutable logs at [github.com/Pratikjain24/EvoEval/actions](https://github.com/Pratikjain24/EvoEval/actions). JUnit XML reports are uploaded as public downloadable artifacts.
+- **GitHub-hosted CI Platform**: `ubuntu-latest` (Ubuntu 24.04 LTS, Python 3.10/3.11/3.12, Docker 26.x)
+  - **Isolation Engine**: `DockerRunner` (`evo-sandbox:1.0` / `evo-scorer:1.0`, `network: none`, `cgroups: mem=2g, pids=128`, unprivileged `user: 1000:1000`)
+- **Secondary Cross-Validation Platform**: `Windows 10 AMD64` (Python 3.10.11, `LocalSandbox` path-jail, process regex safety monitor)
+- **Git Commit**: `f582fd08a6fef2eff25f720194f744c65528d8c1` (`main`)
+
 
 **Verification Status**: `PASS: VERIFIED (DUAL-PLATFORM CERTIFIED)`
 - **Timestamp (UTC)**: `2026-10-01T23:03:43.428699+00:00`
