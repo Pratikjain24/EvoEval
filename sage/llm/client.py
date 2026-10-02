@@ -101,10 +101,23 @@ class MockLLMClient(BaseLLMClient):
 class OpenAICompatibleClient(BaseLLMClient):
     """Client for OpenAI-compatible APIs (vLLM, Ollama, llama.cpp, OpenAI, Groq)."""
 
-    def __init__(self, config: ModelConfig, allow_fallback: bool = True):
+    def __init__(self, config: ModelConfig, allow_fallback: bool = False):
+        import os
+        try:
+            from dotenv import load_dotenv
+            load_dotenv()
+        except ImportError:
+            pass
+
         self.config = config
         self.api_base = config.api_base or "http://localhost:8000/v1"
-        self.api_key = config.api_key or "EMPTY"
+        key = config.api_key or ""
+        if key.startswith("${") and key.endswith("}"):
+            var_name = key[2:-1].strip()
+            key = os.environ.get(var_name, "")
+        if not key or key == "EMPTY":
+            key = os.environ.get("GROQ_API_KEY") or os.environ.get("OPENAI_API_KEY") or "EMPTY"
+        self.api_key = key
         self.allow_fallback = allow_fallback
 
     def check_health(self) -> Dict[str, Any]:
@@ -144,45 +157,66 @@ class OpenAICompatibleClient(BaseLLMClient):
         if tools:
             payload["tools"] = tools
 
-        try:
-            with httpx.Client(timeout=60.0) as client:
-                res = client.post(url, headers=headers, json=payload)
-                res.raise_for_status()
-                data = res.json()
+        max_attempts = 6
+        last_error = None
 
-            choice = data["choices"][0]
-            message = choice["message"]
-            content = message.get("content") or ""
-            tool_calls = message.get("tool_calls") or []
+        for attempt in range(max_attempts):
+            try:
+                with httpx.Client(timeout=60.0) as client:
+                    res = client.post(url, headers=headers, json=payload)
+                    if res.status_code == 429 or res.status_code >= 500:
+                        retry_after = 2.0 * (attempt + 1)
+                        if "retry-after" in res.headers:
+                            try:
+                                retry_after = max(float(res.headers["retry-after"]), 1.0)
+                            except Exception:
+                                pass
+                        time.sleep(retry_after)
+                        continue
 
-            usage = data.get("usage", {})
-            tokens_in = usage.get("prompt_tokens", len(str(messages)) // 4)
-            tokens_out = usage.get("completion_tokens", len(content) // 4)
-            cost = PricingModel.calculate_cost(self.config.name, tokens_in, tokens_out)
-            latency_ms = int((time.time() - start) * 1000)
+                    res.raise_for_status()
+                    data = res.json()
 
-            return LLMResponse(
-                content=content,
-                tool_calls=tool_calls,
-                tokens_in=tokens_in,
-                tokens_out=tokens_out,
-                cost_usd=cost,
-                latency_ms=latency_ms,
-                is_fallback=False,
-                model_name=self.config.name,
-                raw_response=data,
-            )
-        except Exception as e:
-            if not self.allow_fallback:
-                raise RuntimeError(
-                    f"Real vLLM generation failed for endpoint '{url}' with model '{self.config.name}': {e}"
-                ) from e
-            # Fallback to mock on connection error to ensure robust execution
-            mock = MockLLMClient(self.config.name)
-            resp = mock.generate(messages, tools, temperature)
-            resp.is_fallback = True
-            resp.content = f"[Offline Fallback due to: {str(e)}]\n" + resp.content
-            return resp
+                choice = data["choices"][0]
+                message = choice["message"]
+                content = message.get("content") or ""
+                tool_calls = message.get("tool_calls") or []
+
+                usage = data.get("usage", {})
+                tokens_in = usage.get("prompt_tokens", len(str(messages)) // 4)
+                tokens_out = usage.get("completion_tokens", len(content) // 4)
+                cost = PricingModel.calculate_cost(self.config.name, tokens_in, tokens_out)
+                latency_ms = int((time.time() - start) * 1000)
+
+                return LLMResponse(
+                    content=content,
+                    tool_calls=tool_calls,
+                    tokens_in=tokens_in,
+                    tokens_out=tokens_out,
+                    cost_usd=cost,
+                    latency_ms=latency_ms,
+                    is_fallback=False,
+                    model_name=self.config.name,
+                    raw_response=data,
+                )
+            except Exception as e:
+                last_error = e
+                if attempt < max_attempts - 1:
+                    time.sleep(2.0 * (attempt + 1))
+                else:
+                    break
+
+        if not self.allow_fallback:
+            raise RuntimeError(
+                f"Real LLM generation failed after {max_attempts} attempts for endpoint '{url}' with model '{self.config.name}': {last_error}"
+            ) from last_error
+
+        # Explicit fallback only if permitted
+        mock = MockLLMClient(self.config.name)
+        resp = mock.generate(messages, tools, temperature)
+        resp.is_fallback = True
+        resp.content = f"[Offline Fallback due to: {str(last_error)}]\n" + resp.content
+        return resp
 
 
 class LocalLlamaClient(BaseLLMClient):
