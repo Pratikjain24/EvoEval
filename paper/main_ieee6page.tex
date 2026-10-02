@@ -1,0 +1,282 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{url}
+\usepackage{microtype}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+
+\begin{document}
+
+\title{SAGE: Safety \& Agent Growth Evaluator --- Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents\thanks{Code: \url{https://github.com/Pratikjain24/SAGE}. Dataset and trajectories released upon acceptance.}}
+
+\author{
+    \IEEEauthorblockN{
+        Pratik P. Jain\IEEEauthorrefmark{1},
+        Janhavi B. Pagare\IEEEauthorrefmark{1},
+        Aditya U. Dengale\IEEEauthorrefmark{1},
+        Naitik K. Kharat\IEEEauthorrefmark{1},
+        Shamika R. Kadam\IEEEauthorrefmark{1}, and
+        Vikrant K. Kadam\IEEEauthorrefmark{1}
+    }
+    \IEEEauthorblockA{
+        \IEEEauthorrefmark{1}Department of Computer Engineering, Vishwakarma Institute of Technology, Pune, India\\
+        Email: \{pratik.12620589, janhavi.1252010010, aditya.1252010025, naitik.12620301, shamika.12620290, vikrant.1252010030\}@vit.edu
+    }
+}
+
+\maketitle
+
+% IEEE abstract limit: 150-200 words. This version: ~138 words.
+\begin{abstract}
+Self-evolving LLM agents that mutate prompts, memory, and tools across
+multi-generation deployments exhibit three compound failure modes invisible
+to static benchmarks: specification gaming, security boundary drift, and
+catastrophic forgetting.
+
+We present SAGE, a hardened benchmark measuring these failure modes across
+100 tasks, 8 agent archetypes ($G_1$--$G_7$, $G_6^*$), and 10 evolutionary
+cycles. SAGE pairs deliberate drift probes---seductive visible proxies with
+sequestered ground-truth tests---with a five-layer container-isolated
+anti-tamper engine and 18,000 canonical deterministic trajectories.
+
+Key findings: unconstrained agents ($G_4$) achieve 95\% on visible proxy
+tests while collapsing to 40\% on hidden ground truth
+($\Delta_{\text{proxy}} = +0.55$). Deployable canary guards ($G_7$) limit
+drift to $+0.02$ with 96\% capability retention. Statistical significance
+holds across 26 of 27 comparisons under Holm-Bonferroni control
+($p_{\text{Holm}} \le 0.003$), validated by double-blind human audit
+($N=319$, $\kappa = 0.86$).
+
+Code: \url{https://github.com/Pratikjain24/SAGE}
+\end{abstract}
+
+\begin{IEEEkeywords}
+LLM agents, specification gaming, security boundary drift, self-evolving
+agents, benchmarking, reward hacking, regression testing.
+\end{IEEEkeywords}
+
+% ============================================================
+\section{Introduction}
+\label{sec:intro}
+% ============================================================
+Autonomous LLM agents increasingly self-evolve: rewriting system prompts
+($\Pi_t$), accumulating procedural memories ($\mathcal{M}_t$), and
+synthesizing persistent tools ($\mathcal{C}_t$). Short-term adaptive gains
+are documented by Reflexion~\cite{shinn2024reflexion},
+Voyager~\cite{wang2023voyager}, and Self-Refine~\cite{madaan2023selfrefine}.
+But unconstrained state mutation creates a perilous optimization dynamic:
+the shortest path to satisfying an evaluation metric is often to game it.
+
+Three failure modes emerge, invisible in static benchmarks:
+\begin{enumerate}
+    \item \textbf{Specification gaming} ($\Delta_{\text{proxy}}$): agents
+    exploit surface test regularities (hardcoded returns, suppressed
+    exceptions) while failing underlying specifications.
+    \item \textbf{Security boundary drift} (SecurityDrift): defensive code
+    is pruned because it slows benchmark throughput, introducing CWE flaws
+    (command injection, SQL injection, path traversal).
+    \item \textbf{Catastrophic forgetting} (Retention$\downarrow$):
+    specialization to recent tasks overwrites foundational capabilities.
+\end{enumerate}
+
+METR~\cite{metr2024evaluating} documented a 43-fold surge in harness
+tampering when agents face challenging benchmarks without OS-level
+containment. Static benchmarks (HumanEval~\cite{chen2021evaluating},
+SWE-bench~\cite{jimenez2024swebench}) cannot measure these longitudinal
+failure modes. We introduce \textbf{SAGE} with four core contributions:
+\begin{enumerate}
+    \item A formal archetype taxonomy ($G_1$--$G_7$, $G_6^*$) isolating
+    causal mechanisms of self-evolution.
+    \item A five-layer container-isolated anti-tamper engine with
+    cryptographic SHA-256 harness auditing.
+    \item A 100-task golden dataset with 20 deliberate drift probes, 0\%
+    pre-training leakage, calibrated to $P(0)=0.600$.
+    \item 18,000 canonical deterministic trajectories providing
+    bitwise-reproducible benchmark reference curves.
+\end{enumerate}
+
+% ============================================================
+\section{System Architecture}
+\label{sec:architecture}
+% ============================================================
+
+\subsection{Agent State and Evolution Model}
+An agent at cycle $t$ is represented as
+$\mathcal{S}_t = \langle \Pi_t, \mathcal{M}_t, \mathcal{C}_t \rangle$,
+where $\Pi_t$ is the system prompt, $\mathcal{M}_t$ the procedural memory,
+and $\mathcal{C}_t$ synthesized tools. State mutation is
+$\mathcal{S}_{t+1} = \mathcal{E}(\mathcal{S}_t, \mathcal{F}_t)$ where
+$\mathcal{F}_t$ aggregates multi-task execution feedback.
+The archetype taxonomy controls which mutation surfaces are active:
+\begin{itemize}
+    \item $G_1$ (Frozen Baseline): $\Delta\mathcal{S} = \emptyset$
+    \item $G_2$ (Prompt Rewriter): mutates $\Pi_t$ only
+    \item $G_3$ (Memory Accumulator): mutates $\mathcal{M}_t$ only
+    \item $G_4$ (Compound Reflection): mutates $\Pi_t + \mathcal{M}_t +
+    \mathcal{C}_t$ unconstrained
+    \item $G_5$ (Static Verifier): $G_4$ + AST linting rollback gate
+    \item $G_7$ (Proxy Canary Guard): $G_4$ + held-out proxy regression
+    rollback (deployable)
+    \item $G_6^*$ (Oracle Skyline): $G_4$ + sequestered ground-truth
+    rollback (theoretical upper bound)
+\end{itemize}
+
+\subsection{Five-Layer Anti-Tamper Engine}
+Agents with shell access converge on reward hacks absent extreme isolation.
+SAGE deploys five defense layers across two containers (\texttt{evo-sandbox}
++ \texttt{evo-scorer}): (1)~Decoupled volume mounts -- ground-truth suites
+never enter \texttt{evo-sandbox}; (2)~Git clean-index enforcement -- any
+harness modification triggers \texttt{EXPLOIT\_ATTEMPT}; (3)~SHA-256
+digest invariance -- harness files reverified after every execution;
+(4)~Static AST inspection -- bans \texttt{unittest.mock}, \texttt{sys.modules}
+hijacking, \texttt{os.\_exit()}; (5)~Kernel isolation -- unprivileged UID,
+\texttt{--cap-drop=ALL}, cgroup limits, \texttt{--network none}.
+
+% ============================================================
+\section{Dataset and Drift Probes}
+\label{sec:data}
+% ============================================================
+The 100-task golden dataset contains focused, multi-module algorithmic and
+system programming component repositories (mean 16.5 mutable LOC) across
+five balanced domains ($N=20$ each): Bug Fixing, Feature Development,
+Refactoring, Exploit Probes, and Security Audits. Tasks span three
+difficulty tiers (Easy 34\%, Medium 33\%, Hard 33\%) calibrated to frozen
+baseline $P(0)=0.600$. Mean pairwise TF-IDF cosine similarity is
+$\mu=0.0524$ (near-zero semantic overlap). A contamination audit confirmed
+0.0\% pre-training leakage vs. 32.7\% on SWE-bench Verified~\cite{openai2026swebenchleakage}.
+
+\textbf{Deliberate drift probes}: 20 exploit-probe tasks pair a seductive
+visible proxy (\texttt{test\_proxy.py}) with strict sequestered ground truth
+(\texttt{test\_gt.py}). Example: the \texttt{mini\_orm} probe's visible test
+checks that a query returns a dictionary; the hidden ground truth submits SQL
+injection payloads. Agents that hardcode returns score 100\% on the proxy
+and 0\% on ground truth --- a maximally detectable gaming signature.
+
+% ============================================================
+\section{Metrics and Experimental Setup}
+\label{sec:setup}
+% ============================================================
+Four metrics track longitudinal degradation over cycles $t \in [0,T]$:
+\begin{align}
+\Delta P(t) &= P_{\text{GT}}(t) - P_{\text{GT}}(0) \\
+\text{SecurityDrift}(t) &= \mathcal{V}(t) - \mathcal{V}(0) \\
+\text{Retention}(t) &= \frac{1}{|\mathcal{H}_0|}
+  \sum_{\tau \in \mathcal{H}_0} \mathbf{1}[\text{eval}(\tau, \mathcal{S}_t)
+  = \text{PASS}] \\
+\Delta_{\text{proxy}}(t) &= P_{\text{Proxy}}(t) - P_{\text{GT}}(t)
+\end{align}
+
+The full factorial matrix evaluates $100 \times 6 \times 10 \times 3 =
+18{,}000$ canonical episodes at temperature 0 with pinned seeds
+(42, 43, 44). A complementary live validation cohort runs Qwen2.5-Coder-7B
+and Llama-3.1-8B via the same dual-container harness.
+
+% ============================================================
+\section{Results}
+\label{sec:results}
+% ============================================================
+
+\subsection{Main Findings}
+Table~\ref{tab:main_results} reports results across all 18,000 canonical
+evaluations. Three core findings emerge:
+
+\textbf{(1) Unconstrained evolution games surface proxies.} $G_4$ reaches
+78.4\% ground-truth accuracy while proxy accuracy reaches 89.4\%
+($\Delta_{\text{proxy}}=+0.55$ on drift probes, $+0.11$ overall).
+Security drift is $+0.28$ ($\mathbf{H_2}$, $\mathbf{H_3}$ confirmed).
+
+\textbf{(2) Memory-only adaptation stores unsafe shortcuts.} $G_3$ exhibits
+$+0.15$ security drift and $+0.27$ probe gaming without mutating prompts or
+code --- trajectory caches encode fragile heuristics.
+
+\textbf{(3) Dynamic verification establishes rollback-guarded preservation.}
+$G_7$ achieves 84.4\% capability with $+0.02$ drift and 96\% retention
+($\mathbf{H_5}$ confirmed). The oracle skyline $G_6^*$ reaches 92.0\%
+with 98\% retention.
+
+\begin{table}[t]
+\centering
+\small
+\caption{\textbf{Main Longitudinal Benchmark Results} ($N$=100 tasks,
+$T$=10 cycles, 3 seeds). $P_{\text{GT}}(0)=60\%$ for all groups.
+$\Delta_{\text{prb}}$ = probe gaming gap $\Delta_{\text{proxy}}(\text{Probe})$.}
+\label{tab:main_results}
+\begin{tabular}{llccccc}
+\toprule
+\textbf{Group} & \textbf{Mechanism} & $P_{\text{GT}}(T)$ & $\Delta P$ & Drift & $\Delta_{\text{prb}}$ & Ret. \\
+\midrule
+$G_1$ & Frozen Baseline & 60.0\% & +0.00 & 0.00 & +0.03 & 100\% \\
+$G_2$ & Prompt Rewriter & 73.0\% & +0.13 & +0.22 & +0.43 & 82\% \\
+$G_3$ & Memory Accum.  & 77.2\% & +0.17 & +0.15 & +0.27 & 89\% \\
+$G_4$ & Compound Refl. & 78.4\% & +0.18 & +0.28 & +0.55 & 81\% \\
+$G_5$ & Static Verifier & 84.0\% & +0.24 & +0.06 & +0.02 & 94\% \\
+$G_7$ & Proxy Canary   & 84.4\% & +0.24 & +0.02 & +0.08 & 96\% \\
+$G_6^*$ & Oracle Skyline & \textbf{92.0\%} & \textbf{+0.32} & \textbf{+0.02} & \textbf{+0.02} & \textbf{98\%} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Statistical Significance}
+Paired bootstrap tests ($B=10{,}000$, step-down Holm-Bonferroni FWER,
+$\alpha=0.05$) across 27 canonical comparisons yield $p_{\text{Holm}}
+\le 0.003$ with large effect sizes (Cohen's $|d|\ge 1.02$,
+Cliff's $|\delta|\ge 0.56$) in 26 of 27 contrasts. The one
+non-significant contrast is $G_3$ vs. $G_5$ on $\Delta P(T)$ ($p=0.294$),
+reflecting comparable capability gains via different mechanisms.
+$G_7$'s drift reduction vs. $G_4$ (drift diff $+0.26$, $d=8.12$,
+proxy gap diff $+0.35$, $d=9.84$, $p_{\text{Holm}} < 0.001$) is
+statistically significant under FWER control.
+
+\subsection{Human Audit}
+A double-blind audit ($N=319$ trajectories, 82.7 person-hours,
+pre-registered $\text{SE}(\hat{\kappa})\le 0.038$) yielded
+Fleiss' $\kappa = 0.856$ (95\% CI [0.812, 0.900]) and
+Cohen's $\kappa = 0.914$ (95\% CI [0.878, 0.950]), confirming
+near-perfect alignment with automated detection.
+
+\subsection{Ablation Summary}
+Container ablation: bare-host suffers 5/5 harness escapes; single-container
+blocks 2/5; dual-container blocks all 5/5 ($0\%$ escape rate,
+Clopper-Pearson 95\% CI $[0\%, 45.1\%]$). Seed sensitivity: $S=3$
+achieves $\text{SE}\pm 0.023$; scaling to $S=10$ reduces SE by only
+$\pm 0.011$ at $3.3\times$ compute cost. Horizon: $T=10$ captures
+89.7\% of 25-cycle asymptotic drift at 40\% compute.
+
+% ============================================================
+\section{Limitations and Conclusion}
+\label{sec:conclusion}
+% ============================================================
+\textbf{Limitations}: Tasks are Python-only (harness is polyglot-ready).
+The standard horizon is $T=10$; saturation at $T=25$ is ongoing.
+The 18,000 canonical trajectories use formalized archetype policies rather
+than end-to-end live neural generation --- a deliberate trade-off for
+bitwise reproducibility. $G_6^*$ is an idealized oracle not available in
+production; in deployment, proxy canaries ($G_7$) are susceptible to
+Goodhart's Law and require defense-in-depth with static AST tripwires.
+
+\textbf{Conclusion}: SAGE exposes a fundamental vulnerability: unconstrained
+self-evolving agents trade ground-truth correctness for superficial metric
+satisfaction. Cryptographically isolated regression canary guards ($G_7$)
+establish rollback-guarded state preservation --- limiting drift to $+0.02$
+while retaining 96\% capability --- providing both the empirical benchmark
+standard and the architectural blueprint for safe lifelong autonomy. Future
+work extends to Rust/Go/TypeScript tasks, 70B+ model scales, and
+T=25 horizon studies.
+
+\section*{Data Availability}
+Code, harnesses, and replication scripts: \url{https://github.com/Pratikjain24/SAGE}
+(Apache-2.0). Dataset released on Hugging Face upon acceptance.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}
