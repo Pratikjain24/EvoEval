@@ -11,6 +11,8 @@
 [![Paper](https://img.shields.io/badge/IEEE-Paper%202026-blue)](paper/README.md)
 [![Dossier](https://img.shields.io/badge/System_Dossier-v1.0.0-green.svg)](PROJECT_DOSSIER.md)
 
+> **⚠️ Project Disambiguation**: This project is **not affiliated with** [`evo-eval/evoeval`](https://github.com/evo-eval/evoeval) (Xia et al., 2024), which is a separate benchmark for evolving HumanEval coding problems via LLM. This repository is an **independent research project** by Jain et al. (VIT Pune, 2026) investigating a fundamentally different problem: *security boundary drift and capability retention in self-modifying autonomous code agents*. The two projects share the "EvoEval" name because both study evolutionary evaluation of LLM-based systems, but address entirely different research questions with different methodologies, datasets, and models.
+
 > 📖 **Comprehensive Guides & Dossiers**: For quick demo and presentation resources, see the **[Complete Presentation Guide](EvoEval_Presentation_Guide.md)** and **[Step-by-Step Run Guide](How_To_Run_EvoEval.md)**. For an exhaustive, file-by-file blueprint detailing every architectural invariant, security boundary, tamper audit check, drift probe, LLM judge isolation rule, full per-suite timing benchmarks, and complete test results (201 passed, 1 skipped across 31 test files, 100% pass rate), see the **[Master Technical Dossier](PROJECT_DOSSIER.md)** and the automated **[Reproducibility Verification Attestation](REPRODUCIBILITY_VERIFICATION.md)**.
 
 **EvoEval** is a hardened benchmark and formal evaluation framework that validates agent guardrails against canonical, deterministic degradation trajectories, supplemented by live API runs. EvoEval is designed to measure **capability gain, security boundary drift (vulnerability injection rate), specification gaming (proxy gap), and capability retention** in self-modifying autonomous code agents across iterative evolutionary generations. EvoEval implements an honest, two-tiered evaluation methodology:
@@ -218,6 +220,24 @@ evoeval/
 
 ---
 
+## Authors & Institutional Affiliation
+
+This project is authored by a student research team at **Vishwakarma Institute of Technology (VIT), Pune, India**, under faculty advisory guidance.
+
+| Role | Name | Affiliation |
+|---|---|---|
+| **Lead Author** | Pratik P. Jain | Dept. of Computer Engineering, VIT Pune |
+| **Co-Author** | Janhavi B. Pagare | Dept. of Computer Engineering, VIT Pune |
+| **Co-Author** | Aditya U. Dengale | Dept. of Computer Engineering, VIT Pune |
+| **Co-Author** | Naitik K. Kharat | Dept. of Computer Engineering, VIT Pune |
+| **Co-Author** | Shamika R. Kadam | Dept. of Computer Engineering, VIT Pune |
+| **Faculty Guide** | Prof. Vikrant K. Kadam | Dept. of Computer Engineering, VIT Pune |
+
+**Submission Target**: IEEE Conference on Artificial Intelligence and Software Engineering (2026)  
+**Human Annotation**: 82.7 person-hours across 319 code tasks (pooled κ = 0.856, SE ≤ 0.038)
+
+---
+
 ## Citation
 
 If you use EvoEval in your research, please cite our IEEE conference paper:
@@ -226,10 +246,13 @@ If you use EvoEval in your research, please cite our IEEE conference paper:
 @inproceedings{jain2026evoeval,
   title     = {EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents},
   author    = {Jain, Pratik P. and Pagare, Janhavi B. and Dengale, Aditya U. and Kharat, Naitik K. and Kadam, Shamika R. and Kadam, Vikrant K.},
-  booktitle = {Proceedings of the IEEE Conference on Artificial Intelligence and Software Engineering},
-  year      = {2026}
+  booktitle  = {Proceedings of the IEEE Conference on Artificial Intelligence and Software Engineering},
+  year      = {2026},
+  institution = {Vishwakarma Institute of Technology, Pune, India}
 }
 ```
+
+> **Not to be confused with**: Xia, Deng & Zhang (2024) *"Top Leaderboard Ranking = Top Coding Proficiency, Always? EvoEval: Evolving Coding Benchmarks via LLM"* ([evo-eval/evoeval](https://github.com/evo-eval/evoeval)) — a separate, independently published benchmark with a different scope.
 
 ---
 
