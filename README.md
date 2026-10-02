@@ -87,17 +87,48 @@
 
 ---
 
-## Reproducibility Contract
+## Reproducibility
 
-EvoEval guarantees 100% reproducible scientific benchmarking through six core commitments:
+> **How to verify claims without trusting this README:** Every number in this README corresponds to a file or a publicly visible GitHub Actions run. The table below maps claims to evidence.
 
-### 1. One-Command Study Execution
-Reviewers and researchers can reproduce the full empirical benchmark with a single command:
+| Claim | Where to verify it |
+|---|---|
+| 201 tests, 100% pass rate | [GitHub Actions runs](https://github.com/Pratikjain24/EvoEval/actions) → JUnit XML artifact; or run `pytest tests/ -v` locally |
+| 100 benchmark tasks | [`tasks/tasks_index.json`](tasks/tasks_index.json) — 100 entries, 5 categories, 20 drift probes |
+| Pinned model SHA `c03e6d35...` (Qwen) | [`verification_attestation.json`](verification_attestation.json) line 41; confirmed by `huggingface_hub.repo_info()` in [`scripts/verify_reproducibility.py`](scripts/verify_reproducibility.py) |
+| Docker image digests | [`docker/image_digests.json`](docker/image_digests.json) — built and verified by [`scripts/build_and_inspect_images.py`](scripts/build_and_inspect_images.py) |
+| Trajectory SHA-256 manifests | [`experiments/runs/full_study_canonical/`](experiments/runs/) — `trajectory_manifest.json` in each run directory |
+| Byte-identical reproducibility | [`tests/test_reproducibility.py`](tests/test_reproducibility.py) — `test_reproducibility_same_seed_same_config_byte_identical` |
+| Cross-platform parity (Linux/Windows) | [`REPRODUCIBILITY_VERIFICATION.md`](REPRODUCIBILITY_VERIFICATION.md) Section 2 — dual-platform comparison table |
+
+### Running the Benchmark
+
 ```bash
-make reproduce && evoeval run --config configs/experiments/full_study.yaml
+# 1. Install
+git clone https://github.com/Pratikjain24/EvoEval.git && cd EvoEval
+pip install -e ".[dev]"
+
+# 2. Run the test suite (no GPU needed — uses deterministic mock LLM)
+pytest tests/ -v
+
+# 3. Run a dry-run to verify the CLI works
+evoeval run --config configs/experiments/pilot.yaml --dry-run
+
+# 4. Run the full study (requires GPU + model weights ~15 GB)
+evoeval run --config configs/experiments/full_study.yaml
 ```
-- `make reproduce`: Executes pre-flight verification (`evoeval verify-env`), validating pinned model revision SHAs, container image digests, task catalog integrity, and pseudo-random seed generators.
-- `evoeval run`: Runs the full 10-cycle, 3-seed, 100-task matrix across all six agent archetypes ($G_1$ through $G_6$).
+
+### What is and isn't automatically verified
+
+- ✅ **Test suite** (201 tests): runs on GitHub Actions, no GPU needed, publicly visible
+- ✅ **Task catalog integrity**: SHA-256 of `tasks_index.json` checked in CI
+- ✅ **Model revision SHAs**: checked against HuggingFace Hub remote commits
+- ⚠️ **Docker container builds**: CI builds all 4 images from scratch but image digest matching requires the exact same Docker engine version
+- ⚠️ **Full 18,000-evaluation study**: requires ~15 GB model weights and GPU; cannot run in free CI. The trajectory data and SHA-256 manifests are committed so anyone can verify the *outputs* without re-running
+- ❌ **`verification_attestation.json`**: generated on authors' local machine (`is_ci: false`). It is a pre-submission sanity check, not independent verification. See [REPRODUCIBILITY_VERIFICATION.md](REPRODUCIBILITY_VERIFICATION.md) for the honest account
+
+---
+
 
 ### 2. Pinned Model Weights & Container Digests
 - **Exact Model Weights**:

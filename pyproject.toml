@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "evaeval"
-version = "0.1.0"
+version = "1.0.0"
 description = "EvoEval: Measuring Security Boundary Drift and Capability Retention in Self-Evolving Code Agents"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -42,11 +42,11 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/evoeval/evoeval"
-Repository = "https://github.com/evoeval/evoeval"
-Documentation = "https://github.com/evoeval/evoeval#readme"
+Homepage = "https://github.com/Pratikjain24/EvoEval"
+Repository = "https://github.com/Pratikjain24/EvoEval"
+Documentation = "https://github.com/Pratikjain24/EvoEval#readme"
 "HuggingFace Dataset" = "https://huggingface.co/datasets/evoeval/evoeval-benchmark"
-"Issue Tracker" = "https://github.com/evoeval/evoeval/issues"
+"Issue Tracker" = "https://github.com/Pratikjain24/EvoEval/issues"
 
 [project.optional-dependencies]
 dev = [
