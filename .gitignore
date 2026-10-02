@@ -14,8 +14,10 @@ build/
 # Testing & Linting
 .pytest_cache/
 .ruff_cache/
+.benchmarks/
 .coverage
 htmlcov/
+test_output.txt
 
 # Node & Next.js
 node_modules/

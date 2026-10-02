@@ -23,10 +23,10 @@
 
 ## Step 1: Open Terminal in the Project Folder
 
-Open **PowerShell** or **Command Prompt** and navigate to:
+Open **PowerShell** or **Command Prompt** and navigate to your project directory:
 
 ```powershell
-cd C:\Users\kruti\Downloads\SAGE\SAGE
+cd C:\Users\kruti\Downloads\EvoEval\EvoEval
 ```
 
 ---
@@ -84,13 +84,13 @@ Dry-run requested: configuration and tasks verified successfully!
 ## Step 4: Run the Test Suite (201 Tests)
 
 ```powershell
-pytest tests/ -v --durations=10
+python -m pytest tests/ -v --durations=10
 ```
 
 Or for a quick summary:
 
 ```powershell
-pytest tests/ -q
+python -m pytest tests/ -q
 ```
 
 **Expected output:** `201 passed, 1 skipped` (100% pass rate)
@@ -165,35 +165,27 @@ This runs:
 
 ## Step 8: Launch the Interactive Dashboard 🖥️
 
-### Easiest Way — Double-Click the Batch File
+### Easiest Way — PowerShell Script or Batch File
 
-Just **double-click** on `start_dashboard.bat` in the project folder.
+In PowerShell:
+```powershell
+.\start_dashboard.ps1
+```
+Or in Command Prompt:
+```cmd
+start_dashboard.bat
+```
 
 This automatically:
 1. Starts the FastAPI backend on `http://localhost:8000`
 2. Starts the Next.js frontend on `http://localhost:3000`
 3. Opens your browser at `http://localhost:3000`
 
-### Manual Way — Two Terminals
+### SAGE CLI Command
 
-**Terminal 1 (Backend):**
+You can also launch it directly from the CLI:
 ```powershell
-cd C:\Users\kruti\Downloads\SAGE\SAGE
-.venv\Scripts\activate
-uvicorn sage.dashboard_backend.main:app --port 8000
-```
-
-**Terminal 2 (Frontend):**
-```powershell
-cd C:\Users\kruti\Downloads\SAGE\SAGE\sage\dashboard_frontend
-npm run dev
-```
-
-Then open `http://localhost:3000` in your browser.
-
-### Dashboard CLI Command
-```powershell
-sage dashboard --backend-port 8000 --frontend-port 3000
+sage dashboard
 ```
 
 ---
