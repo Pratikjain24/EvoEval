@@ -243,8 +243,8 @@ Your project already has **13 completed experiment runs** in `experiments/runs/`
 If you want to **show a live demo** in front of HOD/teachers, run these commands in order:
 
 ```powershell
-# 1. Navigate to project
-cd C:\Users\kruti\Downloads\SAGE\SAGE
+# 1. Navigate to project directory
+cd C:\Users\kruti\Downloads\EvoEval\EvoEval
 
 # 2. Activate environment
 .venv\Scripts\activate
@@ -252,17 +252,18 @@ cd C:\Users\kruti\Downloads\SAGE\SAGE
 # 3. Show the CLI (impresses people!)
 sage --help
 
-# 4. Show the 100 tasks
+# 4. Show the 100 benchmark tasks catalog
 sage tasks list
 
-# 5. Do a dry-run to prove it works
+# 5. Do a dry-run to prove the harness works
 sage run --config configs/experiments/pilot.yaml --dry-run
 
 # 6. Run the test suite (shows 201 tests passing)
-pytest tests/ -q
+python -m pytest tests/ -q
 
-# 7. Launch the dashboard (visual wow factor!)
-start_dashboard.bat
+# 7. Launch the interactive dashboard (visual wow factor!)
+.\start_dashboard.ps1
+# (or simply: sage dashboard)
 ```
 
 ---
