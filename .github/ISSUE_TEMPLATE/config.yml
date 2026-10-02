@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Ask a Question (Discussions)
+    url: https://github.com/Pratikjain24/EvoEval/discussions
+    about: Use GitHub Discussions for general questions about EvoEval, methodology, or reproducing results.
+  - name: 📄 Read the Paper
+    url: https://github.com/Pratikjain24/EvoEval/blob/main/paper/README.md
+    about: Read the full IEEE paper manuscript and technical dossier.
+  - name: 🗂️ Browse the Task Catalog
+    url: https://github.com/Pratikjain24/EvoEval/blob/main/docs/TASK_CATALOG.md
+    about: Browse all 100 benchmark tasks and drift probes.

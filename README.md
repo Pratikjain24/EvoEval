@@ -1,11 +1,15 @@
 # EvoEval: Autonomous Agent Evolution & Security Boundary Drift Benchmark
 
-[![CI](https://github.com/evoeval/evoeval/actions/workflows/ci.yml/badge.svg)](https://github.com/evoeval/evoeval/actions)
+[![CI](https://github.com/Pratikjain24/EvoEval/actions/workflows/ci.yml/badge.svg)](https://github.com/Pratikjain24/EvoEval/actions)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Datasets-yellow)](https://huggingface.co/datasets/evoeval/evoeval-benchmark)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.10826042-blue.svg)](https://doi.org/10.5281/zenodo.10826042)
-[![Dossier](https://img.shields.io/badge/System_Dossier-v1.0.0-emerald.svg)](PROJECT_DOSSIER.md)
+[![Stars](https://img.shields.io/github/stars/Pratikjain24/EvoEval?style=social)](https://github.com/Pratikjain24/EvoEval/stargazers)
+[![Last Commit](https://img.shields.io/github/last-commit/Pratikjain24/EvoEval)](https://github.com/Pratikjain24/EvoEval/commits/main)
+[![Issues](https://img.shields.io/github/issues/Pratikjain24/EvoEval)](https://github.com/Pratikjain24/EvoEval/issues)
+[![Paper](https://img.shields.io/badge/IEEE-Paper%202026-blue)](paper/README.md)
+[![Dossier](https://img.shields.io/badge/System_Dossier-v1.0.0-green.svg)](PROJECT_DOSSIER.md)
 
 > 📖 **Comprehensive Guides & Dossiers**: For quick demo and presentation resources, see the **[Complete Presentation Guide](EvoEval_Presentation_Guide.md)** and **[Step-by-Step Run Guide](How_To_Run_EvoEval.md)**. For an exhaustive, file-by-file blueprint detailing every architectural invariant, security boundary, tamper audit check, drift probe, LLM judge isolation rule, full per-suite timing benchmarks, and complete test results (201 passed, 1 skipped across 31 test files, 100% pass rate), see the **[Master Technical Dossier](PROJECT_DOSSIER.md)** and the automated **[Reproducibility Verification Attestation](REPRODUCIBILITY_VERIFICATION.md)**.
 
