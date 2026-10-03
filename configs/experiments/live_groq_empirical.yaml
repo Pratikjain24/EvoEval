@@ -18,7 +18,7 @@ sandbox:
   cpus: 2
   network: none
   max_steps: 10
-  timeout_sec: 45
+  timeout_sec: 90
   allow_local_fallback: true
 
 groups: [G1, G2, G3, G4, G5, G6, G7]

@@ -190,26 +190,30 @@ class ExperimentOrchestrator:
         timeout_sec: int,
     ) -> TaskResult:
         """Execute agent task under strict wall-clock timeout constraints."""
-        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(agent.run_task, spec, sandbox)
-            try:
-                return future.result(timeout=timeout_sec)
-            except concurrent.futures.TimeoutError:
-                return TaskResult(
-                    task_id=spec.task_id,
-                    success=False,
-                    status="timeout",
-                    error=f"Task execution timed out after {timeout_sec}s.",
-                    wall_time_ms=int(timeout_sec * 1000),
-                )
-            except Exception as exc:
-                return TaskResult(
-                    task_id=spec.task_id,
-                    success=False,
-                    status="failed",
-                    error=f"Execution error: {str(exc)}",
-                    wall_time_ms=0,
-                )
+        executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+        future = executor.submit(agent.run_task, spec, sandbox)
+        try:
+            res = future.result(timeout=timeout_sec)
+            executor.shutdown(wait=False)
+            return res
+        except concurrent.futures.TimeoutError:
+            executor.shutdown(wait=False, cancel_futures=True)
+            return TaskResult(
+                task_id=spec.task_id,
+                success=False,
+                status="timeout",
+                error=f"Task execution timed out after {timeout_sec}s.",
+                wall_time_ms=int(timeout_sec * 1000),
+            )
+        except Exception as exc:
+            executor.shutdown(wait=False)
+            return TaskResult(
+                task_id=spec.task_id,
+                success=False,
+                status="failed",
+                error=f"Execution error: {str(exc)}",
+                wall_time_ms=0,
+            )
 
     def _run_task_with_retry(
         self,
@@ -232,6 +236,10 @@ class ExperimentOrchestrator:
                     return res
 
             if res.error and ("SECURITY BLOCK" in res.error or "SandboxConfinementError" in res.error):
+                return res
+
+            # Non-retryable condition: Task timeout represents hard wall-clock budget expiration
+            if res.status == "timeout":
                 return res
 
             # If task completed normally without unhandled exceptions

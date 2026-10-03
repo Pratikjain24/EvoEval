@@ -179,6 +179,10 @@ class OpenAICompatibleClient(BaseLLMClient):
                                     retry_after = max(float(match.group(1)) + 0.5, 1.0)
                             except Exception:
                                 pass
+                        print(
+                            f"  [LLM Rate Limit] Received status {res.status_code}. Waiting {retry_after:.1f}s before attempt {attempt + 2}/{max_attempts}...",
+                            flush=True,
+                        )
                         time.sleep(retry_after)
                         continue
 
